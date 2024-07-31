@@ -1,0 +1,18 @@
+@import "../../../../styles/variables.scss";
+.footer {
+  //   clear: both;
+
+  display: block;
+  margin: auto;
+  &-container {
+    margin-top: $footer-margin-top;
+    min-height: $footer-height;
+    height: $footer-height;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: $footer-border-size solid $accent;
+    border-top-left-radius: 150%;
+    border-top-right-radius: 150%;
+  }
+}

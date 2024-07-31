@@ -1,0 +1,72 @@
+@import "./shared/styles/variables.scss";
+
+body {
+  font-family: "Roboto";
+  font-weight: 400;
+}
+
+// color
+body {
+  background-color: $background;
+}
+
+/* 16px */
+html {
+  font-size: 100%;
+}
+
+h1 {
+  font-size: 4.21rem;
+  /* 67.36px */
+}
+
+h2 {
+  font-size: 3.158rem;
+  /* 50.56px */
+}
+
+h3 {
+  font-size: 2.369rem;
+  /* 37.92px */
+}
+
+h4 {
+  font-size: 1.777rem;
+  /* 28.48px */
+}
+
+h5 {
+  font-size: 1.333rem;
+  /* 21.28px */
+}
+
+small {
+  font-size: 0.75rem;
+  /* 12px */
+}
+
+button {
+  text-transform: none !important;
+}
+.text-center {
+  text-align: center;
+}
+
+.content {
+  margin-top: 40px;
+  margin-left: 150px;
+  min-height: 70vh;
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $secondary;
+  border-radius: 6px;
+}
