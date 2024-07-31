@@ -1,0 +1,26 @@
+$title-font: "Bad script", sans-serif;
+$base-font: "Poppins", sans-serif;
+
+// color
+$primary: #4cd63a;
+$secondary: #94b5e9;
+$accent: #7d62de;
+$danger: #ef4043;
+$background: #fcfffc;
+
+// breakpoints
+$extra-small-devices: 600px; //max
+$small-devices: 600px; //min
+$medium-devices: 768px; // protrait tablets, marge phone
+$large-devices: 992px; //laptop, desktop
+$extra-large-devices: 1200px;
+
+// component
+$landing-header-height: 3rem;
+$container-box-shadow: 0px 0px 15px 3px rgba(105, 105, 105, 0.5);
+$container-s-bs: 0px 0px 5px 3px rgba(105, 105, 105, 0.5);
+
+// size
+$footer-height: 80px;
+$footer-border-size: 4px;
+$footer-margin-top: 1rem;

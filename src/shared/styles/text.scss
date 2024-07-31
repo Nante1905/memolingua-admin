@@ -1,0 +1,23 @@
+@import "../../shared/styles/variables.scss";
+
+%big-title {
+  position: relative;
+  margin-bottom: 3rem !important;
+  &::before {
+    content: "";
+    width: 40%;
+    height: 3rem;
+    position: absolute;
+    top: calc(100% - 1rem);
+    left: calc(50%);
+    background-image: url("/img/accent-arrow.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    transform: translateX(-50%);
+  }
+
+  @media (width >= $medium-devices) {
+    width: fit-content;
+  }
+}
