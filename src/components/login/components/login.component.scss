@@ -3,7 +3,6 @@
 @import "../../../shared/styles/form.scss";
 
 #login {
-  padding-top: 3rem;
   min-height: calc(
     100vh - ($footer-height + $footer-border-size + 1px) - 4rem -
       $footer-margin-top
@@ -22,6 +21,25 @@
   .form {
     @extend %form-body;
     padding-bottom: 5rem;
+    position: relative;
+
+    .blur {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      bottom: 4px;
+      background: gray;
+      opacity: 0.5;
+    }
+
+    .form-submit {
+      text-align: center;
+    }
+
+    .linear-progress {
+      position: absolute;
+      bottom: 0;
+    }
   }
   @media (width >= $medium-devices) {
     .right-side {
