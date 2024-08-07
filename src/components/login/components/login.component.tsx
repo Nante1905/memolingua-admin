@@ -29,7 +29,7 @@ const Login = () => {
     },
     onSuccess: (data) => {
       const res: ApiResponse = data.data;
-      sessionStorage.setItem("token", res.payload);
+      sessionStorage.setItem("accessToken", res.payload);
       navigate("/home");
     },
   });
