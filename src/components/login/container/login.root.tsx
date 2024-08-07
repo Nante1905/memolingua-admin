@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import { enqueueSnackbar } from "notistack";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import FooterRoot from "../../../shared/components/footer/container/footer-root/footer.root";
@@ -28,7 +28,6 @@ const LoginRoot = () => {
 
   return (
     <>
-      <SnackbarProvider />
       <QueryClientProvider client={queryClient}>
         <Login />
       </QueryClientProvider>

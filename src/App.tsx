@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SnackbarProvider } from "notistack";
 import { Fragment } from "react";
 import "./App.scss";
 import FooterRoot from "./shared/components/footer/container/footer-root/footer.root";
@@ -11,7 +10,6 @@ function App(props: { children: React.ReactNode }) {
   const queryClient = new QueryClient();
   return (
     <Fragment>
-      <SnackbarProvider />
       <AuthProtector>
         <SidebarRoot />
         <NavbarRoot />
