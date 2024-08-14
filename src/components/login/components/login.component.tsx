@@ -28,12 +28,14 @@ const Login = () => {
       return logIn(data);
     },
     onSuccess: (data) => {
-      const res: ApiResponse = data.data;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: ApiResponse<any> = data.data;
       sessionStorage.setItem("accessToken", res.payload);
       navigate("/home");
     },
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submitForm = (data: any) => {
     const { email, password: pwd } = data;
     loginMutation.mutate({ email, pwd });

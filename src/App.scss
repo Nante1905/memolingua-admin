@@ -18,16 +18,25 @@ html {
 h1 {
   font-size: 4.21rem;
   /* 67.36px */
+  @media (width < $small-devices) {
+    font-size: 3.21rem;
+  }
 }
 
 h2 {
   font-size: 3.158rem;
   /* 50.56px */
+  @media (width < $small-devices) {
+    font-size: 2.158rem;
+  }
 }
 
 h3 {
   font-size: 2.369rem;
   /* 37.92px */
+  @media (width < $small-devices) {
+    font-size: 1.369rem;
+  }
 }
 
 h4 {
@@ -60,6 +69,15 @@ button {
   margin-left: 150px;
   min-height: 70vh;
 }
+
+.inline-flex {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+// SCROLLBAR
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;

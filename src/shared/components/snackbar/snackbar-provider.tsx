@@ -4,7 +4,7 @@ import { SnackbarProvider, closeSnackbar } from "notistack";
 const AppSnackbarProvider = () => {
   return (
     <SnackbarProvider
-      maxSnack={3}
+      maxSnack={5}
       action={(snackbarId) => (
         <Close
           style={{

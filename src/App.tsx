@@ -7,7 +7,13 @@ import NavbarRoot from "./shared/components/navbar/container/navbar-root/navbar.
 import SidebarRoot from "./shared/components/sidebar/container/sidebar.root";
 
 function App(props: { children: React.ReactNode }) {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
   return (
     <Fragment>
       <AuthProtector>
