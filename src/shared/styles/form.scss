@@ -10,11 +10,28 @@
   box-sizing: border-box;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   min-height: inherit;
+  position: relative;
 
   .form-input {
     width: 90%;
     & > * {
       width: 100%;
+    }
+  }
+  &.loading {
+    .blur {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      bottom: 4px;
+      background: gray;
+      opacity: 0.25;
+    }
+
+    .linear-progress {
+      width: 100% !important;
+      position: absolute !important;
+      bottom: 0 !important;
     }
   }
 }

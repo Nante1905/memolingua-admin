@@ -3,5 +3,5 @@ export interface ApiResponse<T = any> {
   ok: boolean;
   payload: T;
   message?: string;
-  error?: string | string[];
+  error?: any;
 }

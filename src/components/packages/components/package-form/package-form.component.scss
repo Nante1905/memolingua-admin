@@ -6,9 +6,6 @@
     @extend %form-body;
     .btn-upload {
       width: 30%;
-      .css-1d6wzja-MuiButton-startIcon {
-        margin: 0;
-      }
     }
     @media (width >= $medium-devices) {
       max-width: 50% !important;

@@ -5,6 +5,7 @@ import {
   FormControl,
   FormHelperText,
   InputLabel,
+  LinearProgress,
   MenuItem,
   Select,
   TextField,
@@ -12,7 +13,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { enqueueSnackbar } from "notistack";
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { apiMessage } from "../../../../shared/constants/api.message";
 import { toBase64 } from "../../../../shared/services/upload/fileUpload.service";
@@ -20,7 +21,7 @@ import { HiddenInput } from "../../../../shared/styles/theme";
 import { ApiResponse } from "../../../../shared/types/ApiResponse";
 import { Langage } from "../../../../shared/types/Langage";
 import { Theme } from "../../../../shared/types/Theme";
-import { PackageSchema } from "../../helper/package-form.helper";
+import { imgValidation, PackageSchema } from "../../helper/package-form.helper";
 import { createPackage } from "../../services/package.service";
 import {
   initialPackageFormState,
@@ -39,7 +40,7 @@ interface PackageFormProps {
   langages: Langage[];
 }
 
-const PackageFormComponent = (props: PackageFormProps) => {
+const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
   const form = useForm({
     defaultValues: formDefaultValue,
     resolver: zodResolver(PackageSchema),
@@ -51,25 +52,27 @@ const PackageFormComponent = (props: PackageFormProps) => {
     async (event: ChangeEvent<HTMLInputElement>) => {
       if (event.target.files) {
         const file = event.target.files[0];
-        // const errorValidation = imgValidation(file);
+        const errorValidation = imgValidation(file);
+        console.log(errorValidation);
 
-        // if (errorValidation == "") {
-        const fileData = await toBase64(file);
-        setState((state) => ({
-          ...state,
-          imgPreview: URL.createObjectURL(file),
-          img: {
-            ...state.img,
-            fileName: file.name,
-            blob: fileData,
-            contentType: file.type,
-          },
-        }));
-        return file;
-        // } else {
-        //   form.setError("img", { type: "custom", message: errorValidation });
-        //   return undefined;
-        // }
+        if (errorValidation == "") {
+          const fileData = await toBase64(file);
+          setState((state) => ({
+            ...state,
+            imgPreview: URL.createObjectURL(file),
+            img: {
+              ...state.img,
+              fileName: file.name,
+              blob: fileData,
+              contentType: file.type,
+            },
+          }));
+          form.clearErrors("img");
+          return file;
+        } else {
+          form.setError("img", { type: "manual", message: errorValidation });
+          return undefined;
+        }
       }
     };
 
@@ -99,10 +102,6 @@ const PackageFormComponent = (props: PackageFormProps) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFormSubmit = (data: any) => {
-    console.log({
-      ...data,
-      img: { fileName: state.img.fileName, base64: state.img.blob },
-    });
     packageMutation.mutate({
       ...data,
       img: {
@@ -115,7 +114,10 @@ const PackageFormComponent = (props: PackageFormProps) => {
 
   return (
     <div className="package-form">
-      <form className="form" onSubmit={form.handleSubmit(onFormSubmit)}>
+      <form
+        className={`form ${packageMutation.isPending && "loading"}`}
+        onSubmit={form.handleSubmit(onFormSubmit)}
+      >
         <div className="form-input">
           <TextField
             label="Titre"
@@ -199,6 +201,7 @@ const PackageFormComponent = (props: PackageFormProps) => {
                   {state.img.fileName != "" && (
                     <small>{state.img.fileName}</small>
                   )}
+                  {form.formState.errors["img"]?.message}
                   {!!fieldState.error?.message && (
                     <FormHelperText>
                       {fieldState.error?.message as string}
@@ -219,6 +222,15 @@ const PackageFormComponent = (props: PackageFormProps) => {
             <strong>Créer</strong>
           </Button>
         </div>
+        {packageMutation.isPending && (
+          <>
+            <div className="blur" />
+            <LinearProgress
+              style={{ width: "100%" }}
+              className="linear-progress"
+            />
+          </>
+        )}
       </form>
     </div>
   );

@@ -48,7 +48,10 @@ const Login = () => {
       </div>
       <div className="right-side">
         <div className="form-container">
-          <form className="form" onSubmit={form.handleSubmit(submitForm)}>
+          <form
+            className={`form ${loginMutation.isPending && "loading"}`}
+            onSubmit={form.handleSubmit(submitForm)}
+          >
             <div className="form-input">
               <h2 className="text-center">Admin</h2>
             </div>

@@ -27,7 +27,7 @@ const AuthProtector = (props: { children: React.ReactNode }) => {
     if (isTokenVerified && !isLoggedIn) {
       navigate("/login?redirect=true");
     }
-  }, [isTokenVerified]);
+  }, [isLoggedIn, isTokenVerified, navigate]);
 
   return isLoggedIn ? (
     props.children

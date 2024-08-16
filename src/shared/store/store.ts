@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { PackageSlice } from "../../components/packages/store/package.slice";
 import { SharedSlice } from "./shared.slice";
 
 export const store = configureStore({
   reducer: {
     shared: SharedSlice.reducer,
+    package: PackageSlice.reducer,
   },
 });
 
