@@ -1,6 +1,7 @@
-export interface ApiResponse {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export interface ApiResponse<T = any> {
   ok: boolean;
-  payload: any;
+  payload: T;
   message?: string;
-  error?: string;
+  error?: any;
 }

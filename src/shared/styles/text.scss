@@ -21,3 +21,9 @@
     width: fit-content;
   }
 }
+
+%error-container {
+  background-color: rgba($danger, 0.4);
+  border-radius: 10px;
+  border: 2px solid red;
+}

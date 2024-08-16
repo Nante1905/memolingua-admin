@@ -15,31 +15,6 @@ html {
   font-size: 100%;
 }
 
-h1 {
-  font-size: 4.21rem;
-  /* 67.36px */
-}
-
-h2 {
-  font-size: 3.158rem;
-  /* 50.56px */
-}
-
-h3 {
-  font-size: 2.369rem;
-  /* 37.92px */
-}
-
-h4 {
-  font-size: 1.777rem;
-  /* 28.48px */
-}
-
-h5 {
-  font-size: 1.333rem;
-  /* 21.28px */
-}
-
 small {
   font-size: 0.75rem;
   /* 12px */
@@ -54,12 +29,29 @@ button {
 .text-danger {
   color: $danger !important;
 }
+.text-success {
+  color: $primary !important;
+}
 
 .content {
   margin-top: 40px;
-  margin-left: 150px;
+  margin-left: 130px;
   min-height: 70vh;
 }
+
+.inline-flex {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+// startIcon
+.css-1d6wzja-MuiButton-startIcon {
+  margin: 0 !important;
+}
+
+// SCROLLBAR
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;

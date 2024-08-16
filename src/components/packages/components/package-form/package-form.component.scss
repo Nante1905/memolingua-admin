@@ -1,0 +1,21 @@
+@import "../../../../shared/styles/form.scss";
+@import "../../../../shared/styles/variables.scss";
+
+.package-form {
+  .form {
+    @extend %form-body;
+    .btn-upload {
+      width: 30%;
+    }
+    @media (width >= $medium-devices) {
+      max-width: 50% !important;
+    }
+  }
+  .preview-img {
+    width: 50% !important;
+    margin: 1rem 0;
+    img {
+      width: 100%;
+    }
+  }
+}
