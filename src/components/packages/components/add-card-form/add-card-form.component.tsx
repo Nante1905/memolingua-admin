@@ -95,7 +95,20 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
     },
     onSuccess: () => {
       enqueueSnackbar("Carte(s) ajoutée(s)", { variant: "success" });
-      form.reset({ keepDefaultValues: false });
+      form.reset(
+        {
+          cards: [
+            {
+              recto: "",
+              verso: "",
+              img: "",
+              video: "",
+              audio: "",
+            },
+          ],
+        },
+        { keepDefaultValues: false }
+      );
       dispatch(resetCardMedias());
       setState((state) => ({
         ...state,
@@ -104,7 +117,6 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
     },
     onError: (err) => {
       const apiError = err as AxiosError;
-      console.log(apiError);
 
       setState((state) => ({
         ...state,
@@ -344,29 +356,29 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
                 </div>
                 <div className="div-media">
                   {/* Image */}
-                  {cardMedias[index]?.img?.preview != "" && (
+                  {cardMedias[index]?.img?.preview != undefined && (
                     <div className="preview-media">
                       <img
-                        src={cardMedias[index].img?.preview}
-                        alt={cardMedias[index].img?.fileName}
+                        src={cardMedias[index]?.img?.preview}
+                        alt={cardMedias[index]?.img?.fileName}
                       />
-                      <small>{cardMedias[index].img?.fileName}</small>
+                      <small>{cardMedias[index]?.img?.fileName}</small>
                     </div>
                   )}
 
                   {/* Video */}
                   {cardMedias[index]?.video?.preview != undefined && (
                     <div className="preview-media">
-                      <video src={cardMedias[index].video?.preview} controls />
-                      <small>{cardMedias[index].video?.fileName}</small>
+                      <video src={cardMedias[index]?.video?.preview} controls />
+                      <small>{cardMedias[index]?.video?.fileName}</small>
                     </div>
                   )}
 
                   {/* Audio */}
                   {cardMedias[index]?.audio?.preview != undefined && (
                     <div className="preview-media">
-                      <audio src={cardMedias[index].audio?.preview} controls />
-                      <small>{cardMedias[index].audio?.fileName}</small>
+                      <audio src={cardMedias[index]?.audio?.preview} controls />
+                      <small>{cardMedias[index]?.audio?.fileName}</small>
                     </div>
                   )}
                 </div>
