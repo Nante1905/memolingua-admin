@@ -27,7 +27,7 @@ export const routes = createBrowserRouter([
         element: <CreatePackageRoot />,
       },
       {
-        path: "/packages/add-cards",
+        path: "/packages/:id/add-cards",
         element: <AddCardRoot />,
       },
     ],

@@ -15,14 +15,20 @@ export const AddCardSchema = z.object({
   cards: z.array(cardSchema),
 });
 
-export const PackageSchema = z.object({
-  title: z.string().min(1, formErrors.fr.required),
-  lang: z.string().min(1, formErrors.fr.required),
-  theme: z.string().min(1, formErrors.fr.required),
-  // img: z.any().refine((file: string) => file != undefined && file != "", {
-  //   message: formErrors.fr.required,
-  // }),
-});
+export const PackageSchema = z
+  .object({
+    title: z.string().min(1, formErrors.fr.required),
+    sourceLang: z.string().min(1, formErrors.fr.required),
+    targetLang: z.string().min(1, formErrors.fr.required),
+    theme: z.string().min(1, formErrors.fr.required),
+    // img: z.any().refine((file: string) => file != undefined && file != "", {
+    //   message: formErrors.fr.required,
+    // }),
+  })
+  .refine((data) => data.sourceLang != data.targetLang, {
+    message: formErrors.fr.different("Langage cible", "Langage source"),
+    path: ["targetLang"],
+  });
 
 export const imgValidation = (file: File) => {
   console.log(file, file.size > MAX_IMG_SIZE);
