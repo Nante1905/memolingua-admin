@@ -3,6 +3,7 @@ import { Media } from "../../../shared/types/Media";
 export interface CreatePackageData {
   title: string;
   theme: string;
-  lang: string;
+  sourceLang: string;
+  targetLang: string;
   img: Media;
 }

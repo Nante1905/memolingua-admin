@@ -30,7 +30,8 @@ import {
 import "./package-form.component.scss";
 const formDefaultValue = {
   title: "",
-  lang: "",
+  sourceLang: "",
+  targetLang: "",
   theme: "",
   img: "",
 };
@@ -46,6 +47,7 @@ const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
     resolver: zodResolver(PackageSchema),
   });
   const [state, setState] = useState<PackageFormState>(initialPackageFormState);
+  const selectedSource = form.watch("sourceLang");
 
   const handleFileUpload =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -96,7 +98,6 @@ const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
       ((apiError.response?.data as ApiResponse).error as string[]).map((e) => {
         enqueueSnackbar({ message: e, variant: "error" });
       });
-      // console.log(((error as AxiosError).response?.data as ApiResponse<any>).);
     },
   });
 
@@ -127,13 +128,13 @@ const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
           />
         </div>
         <div className="form-input">
-          <FormControl fullWidth error={!!form.formState.errors["lang"]}>
-            <InputLabel>Langue</InputLabel>
+          <FormControl fullWidth error={!!form.formState.errors["sourceLang"]}>
+            <InputLabel>Langue source</InputLabel>
             <Controller
-              name="lang"
+              name="sourceLang"
               control={form.control}
               render={({ field }) => (
-                <Select label="Langue" {...field}>
+                <Select label="Langue source" {...field}>
                   {props.langages?.map((lang, index) => (
                     <MenuItem value={lang.id} key={`lang-${index}`}>
                       {lang.label}
@@ -142,9 +143,35 @@ const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
                 </Select>
               )}
             />
-            {!!form.formState.errors["lang"] && (
+            {!!form.formState.errors["sourceLang"] && (
               <FormHelperText>
-                {form.formState.errors["lang"]?.message as string}
+                {form.formState.errors["sourceLang"]?.message as string}
+              </FormHelperText>
+            )}
+          </FormControl>
+        </div>
+
+        <div className="form-input">
+          <FormControl fullWidth error={!!form.formState.errors["targetLang"]}>
+            <InputLabel>Langue cible</InputLabel>
+            <Controller
+              name="targetLang"
+              control={form.control}
+              render={({ field }) => (
+                <Select label="Langue cible" {...field}>
+                  {props.langages
+                    ?.filter((lang) => lang.id != selectedSource)
+                    .map((lang, index) => (
+                      <MenuItem value={lang.id} key={`lang-${index}`}>
+                        {lang.label}
+                      </MenuItem>
+                    ))}
+                </Select>
+              )}
+            />
+            {!!form.formState.errors["targetLang"] && (
+              <FormHelperText>
+                {form.formState.errors["targetLang"]?.message as string}
               </FormHelperText>
             )}
           </FormControl>
