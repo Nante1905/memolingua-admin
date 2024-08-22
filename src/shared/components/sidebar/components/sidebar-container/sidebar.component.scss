@@ -1,5 +1,9 @@
 @import "../../../../styles/variables.scss";
 .sidebar {
+  a {
+    color: "#000";
+    text-decoration: none;
+  }
   &-container {
     position: fixed;
     top: 100px;
@@ -11,11 +15,39 @@
     transition: min-width 0.8s ease-in-out;
     z-index: 100;
     background-color: #fff;
+    button {
+      // margin: 0 !important;
+      max-width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      min-width: unset;
+      z-index: 2000;
+    }
 
     &.close {
       border-radius: 66px;
+      .sidebar-head {
+        a {
+          width: 0;
+          height: 0;
+          display: none;
+        }
+      }
       .sidebar-items-container {
         max-height: 400px;
+      }
+      button {
+        min-width: unset;
+      }
+      .logout-btn {
+        width: 0;
+        height: 0;
+        margin: 0 !important;
+        display: none;
+        small {
+          width: 0;
+          height: 0;
+        }
       }
     }
 
@@ -28,7 +60,7 @@
       margin-block: 20px;
       max-width: 350px;
       max-height: 200px;
-      transition: max-width 0.5s ease-in-out, max-height 0.5s ease-in-out,
+      transition: max-width 0.3s ease-in-out, max-height 0.5s ease-in-out,
         opacity 0.3s ease-in;
       .img-container {
         width: 100px;
@@ -67,15 +99,18 @@
     &.close {
       max-height: 0;
       min-height: 0;
-      top: 70px;
-      .sidebar-content {
-        display: none;
+      top: 50px;
+      box-shadow: none;
+      // transition: max-width 0.8s ease-in-out;
+
+      // .sidebar-content {
+      //   display: none;
+      // }
+      .sidebar-items-container {
+        visibility: hidden;
       }
       button {
         margin: 0 !important;
-        max-width: 30px;
-        height: 30px;
-        border-radius: 15px;
       }
     }
   }

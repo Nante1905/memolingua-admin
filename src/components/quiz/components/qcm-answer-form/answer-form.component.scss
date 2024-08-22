@@ -1,0 +1,16 @@
+@import "../../../../shared/styles/variables.scss";
+
+.qcm-answer {
+  &-form-input {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+    .answer-input {
+      display: flex;
+      flex: 2;
+      @media (width >= $large-devices) {
+        width: 90%;
+      }
+    }
+  }
+}
