@@ -1,81 +1,23 @@
-import HomeIcon from "@mui/icons-material/Home";
-import React from "react";
+import { IconProp, library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { SidebarItem } from "../types/sidebarItem";
 
-export const sidebarItems: { title: string; icon?: React.ReactNode }[] = [
+library.add(fas);
+export const sidebarItems: SidebarItem[] = [
   {
-    title: "Home",
-    icon: <HomeIcon />,
+    title: "Accueil",
+    icon: <FontAwesomeIcon icon={"fa-solid fa-house" as IconProp} />,
+    link: "/home",
   },
   {
-    title: "Home",
-    icon: <HomeIcon />,
+    title: "Paquets",
+    icon: <FontAwesomeIcon icon={"fa-solid fa-box-open" as IconProp} />,
+    link: "/packages",
   },
   {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Home",
-    icon: <HomeIcon />,
+    title: "Quiz",
+    icon: <FontAwesomeIcon icon={"fa-solid fa-clipboard-list" as IconProp} />,
+    link: "/quiz",
   },
 ];

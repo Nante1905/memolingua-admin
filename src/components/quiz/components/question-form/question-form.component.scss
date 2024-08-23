@@ -1,0 +1,14 @@
+@import "../../../../shared/styles/form.scss";
+@import "../../../../shared/styles/variables.scss";
+
+.question-form {
+  .form {
+    // @extend %form-body;
+    h3 {
+      margin: 0;
+    }
+  }
+  .right {
+    margin: 1rem 0;
+  }
+}
