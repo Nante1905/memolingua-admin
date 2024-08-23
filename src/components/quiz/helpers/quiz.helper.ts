@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { formErrors } from "../../../shared/constants/form-errors.constant";
+import { strRequired } from "../../../shared/constants/validator.constant";
 
 export const answerSchema = z.object({
   answer: z.string().min(1),
@@ -8,7 +8,7 @@ export const answerSchema = z.object({
 
 export const questionSchema = z
   .object({
-    question: z.string().min(1, formErrors["fr"].required),
+    question: strRequired,
     isQcm: z.any(),
     correctAns: z.string({
       message: "Please provide at leat 1 correct answers",
@@ -31,4 +31,13 @@ export const addQuestionSchema = z.object({
   questions: z
     .array(questionSchema)
     .nonempty({ message: "Ajoutez des questions" }),
+});
+
+export const quizSchema = z.object({
+  title: strRequired,
+  description: strRequired,
+  idLanguageSource: strRequired,
+  idLanguageTarget: strRequired,
+  idLevel: strRequired,
+  idTheme: strRequired,
 });

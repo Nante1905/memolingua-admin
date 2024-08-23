@@ -33,11 +33,11 @@ export const routes = createBrowserRouter([
         element: <AddCardRoot />,
       },
       {
-        path: "/quiz/create",
+        path: "/quizs/create",
         element: <QuizCreationRoot />,
       },
       {
-        path: "/quiz/add-question",
+        path: "/quizs/add-question",
         element: <QuizAddQuestionRoot />,
       },
     ],
