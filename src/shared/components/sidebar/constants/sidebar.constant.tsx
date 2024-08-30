@@ -18,6 +18,6 @@ export const sidebarItems: SidebarItem[] = [
   {
     title: "Quiz",
     icon: <FontAwesomeIcon icon={"fa-solid fa-clipboard-list" as IconProp} />,
-    link: "/quiz",
+    link: "/quizs",
   },
 ];

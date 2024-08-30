@@ -10,7 +10,7 @@ const LoginRoot = () => {
   const queryClient = new QueryClient();
   const navigate = useNavigate();
   const [searchParam] = useSearchParams();
-  const authRedirect = searchParam.get("redirect");
+  const authRedirect = searchParam.get("from");
 
   useEffect(() => {
     if (sessionStorage.getItem("accessToken") != null) {
@@ -22,7 +22,7 @@ const LoginRoot = () => {
       }
       navigate("/home");
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (authRedirect == "true") {
@@ -36,7 +36,7 @@ const LoginRoot = () => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <Login />
+        <Login from={authRedirect} />
       </QueryClientProvider>
       <FooterRoot />
     </>

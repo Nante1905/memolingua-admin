@@ -16,7 +16,7 @@ import { loginSchema } from "../helpers/login.helper";
 import { logIn } from "../service/login.service";
 import "./login.component.scss";
 
-const Login = () => {
+const Login: React.FC<{ from?: string | null }> = (props) => {
   const [viewPassword, setViewPassword] = useState(false);
   const navigate = useNavigate();
   const form = useForm({
@@ -31,7 +31,11 @@ const Login = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const res: ApiResponse<any> = data.data;
       sessionStorage.setItem("accessToken", res.payload);
-      navigate("/home");
+      if (props.from == null) {
+        navigate("/home");
+      } else {
+        navigate(`/${props.from}`);
+      }
     },
   });
 
