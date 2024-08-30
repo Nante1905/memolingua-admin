@@ -1,6 +1,7 @@
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { http } from "../api/interceptor/axios.interceptor";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const decodeJWT = (token: string | null): any => {
   if (token) {
     const decoded = jwtDecode(token);

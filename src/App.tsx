@@ -15,6 +15,7 @@ function App(props: { children: React.ReactNode }) {
   });
   return (
     <Fragment>
+      {/* TODO: uncoomment */}
       {/* <AuthProtector> */}
       <SidebarRoot />
       <NavbarRoot />

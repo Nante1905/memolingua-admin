@@ -1,7 +1,7 @@
 import { CircularProgress } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   getIsLoggedIn,
   getIsTokenVerified,
@@ -14,20 +14,21 @@ const AuthProtector = (props: { children: React.ReactNode }) => {
   const isLoggedIn = useSelector(getIsLoggedIn);
   const isTokenVerified = useSelector(getIsTokenVerified);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (accessToken == null) {
-      navigate("/login?redirect=true");
+      navigate(`/login?from=${location.pathname.substring(1)}`);
     } else {
       verifyToken(dispatch);
     }
-  }, []);
+  }, [accessToken, dispatch, location.pathname, navigate]);
 
   useEffect(() => {
     if (isTokenVerified && !isLoggedIn) {
-      navigate("/login?redirect=true");
+      navigate(`/login?from=${location.pathname.substring(1)}`);
     }
-  }, [isLoggedIn, isTokenVerified, navigate]);
+  }, [isLoggedIn, isTokenVerified, navigate, location]);
 
   return isLoggedIn ? (
     props.children

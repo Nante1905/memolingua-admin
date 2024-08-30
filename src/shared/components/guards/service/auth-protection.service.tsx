@@ -10,17 +10,23 @@ export const verifyToken = (dispatch: Dispatch) => {
     if (decodedAccessToken.role != ADMIN_ROLE) {
       sessionStorage.removeItem("accessToken");
       dispatch(setIsLoggedIn(false));
+      dispatch(setIsTokenVerified(true));
+
       return;
     } else if (isTokenExpired(decodedAccessToken)) {
       sessionStorage.removeItem("accessToken");
       dispatch(setIsLoggedIn(false));
+      dispatch(setIsTokenVerified(true));
+
       return;
     } else {
       dispatch(setIsLoggedIn(true));
+      dispatch(setIsTokenVerified(true));
     }
   } else {
     dispatch(setIsLoggedIn(false));
+    dispatch(setIsTokenVerified(true));
   }
-  dispatch(setIsTokenVerified(true));
+
   return;
 };

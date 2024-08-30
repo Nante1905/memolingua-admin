@@ -23,12 +23,13 @@ const AppPagination: FC<AppPaginationProps> = (props) => {
         onChange={(_, page) => props.onPageChange(page)}
       />
       <TextField
-        label="Rows per page"
+        label="Lignes"
         type="number"
         size="small"
         sx={{
           width: "100px",
         }}
+        defaultValue={props.pageSize}
         onChange={(e) => props.onPageSizeChange(Number(e.target.value))}
       />
     </div>
