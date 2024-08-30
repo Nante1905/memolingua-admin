@@ -1,8 +1,35 @@
 import { createTheme, styled } from "@mui/material";
 
+declare module "@mui/material/styles" {
+  interface Palette {
+    accent: Palette["primary"];
+  }
+
+  interface PaletteOptions {
+    accent?: PaletteOptions["primary"];
+  }
+}
+
+declare module "@mui/material/Button" {
+  interface ButtonPropsColorOverrides {
+    accent: true;
+  }
+}
+
+declare module "@mui/material/LinearProgress" {
+  interface LinearProgressPropsColorOverrides {
+    accent: true;
+  }
+}
+declare module "@mui/material/Chip" {
+  interface ChipPropsColorOverrides {
+    accent: true;
+  }
+}
+
 export const theme = createTheme({
   typography: {
-    fontFamily: "Roboto",
+    fontFamily: "Poppins",
   },
   palette: {
     contrastThreshold: 3,
@@ -16,6 +43,12 @@ export const theme = createTheme({
     },
     error: {
       main: "#ef4043",
+    },
+    accent: {
+      main: "#7d62de",
+      dark: "#58469a",
+      light: "#9581dc",
+      contrastText: "#fff",
     },
   },
 });

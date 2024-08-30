@@ -4,9 +4,32 @@ import { Card } from "../../../shared/types/Card";
 import { Langage } from "../../../shared/types/Langage";
 import { Media } from "../../../shared/types/Media";
 import { Package } from "../../../shared/types/Package";
+import { Paginated } from "../../../shared/types/Paginated";
 import { Theme } from "../../../shared/types/Theme";
 import { CardMedia } from "../types/CardMedia";
 import { CreatePackageData } from "../types/CreatePackageData";
+import { PackageLib } from "../types/PackageLib";
+
+export const getAllPackages = (
+  page: { page: number; pageSize: number },
+  filter?: { keyword?: string; author?: string; deleted?: boolean }
+) => {
+  let url = `/admin/packages?page=${page.page}&pageSize=${page.pageSize}`;
+  if (filter) {
+    if (filter.keyword) {
+      if (filter.keyword.trim() != "") {
+        url += `&keyword=${filter.keyword}`;
+      }
+    }
+    if (filter.author) {
+      url += `&author=${filter.author}`;
+    }
+    if (filter.deleted) {
+      url += `&state=deleted`;
+    }
+  }
+  return http.get<ApiResponse<Paginated<PackageLib>>>(url);
+};
 
 export const addCardsToPackage = (
   idPackage: string,
