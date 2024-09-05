@@ -21,30 +21,30 @@ interface QuizListComponentProps {
 
 const QuizListComponent: FC<QuizListComponentProps> = (props) => {
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "title", headerName: "Titre", width: 130 },
-    { field: "description", headerName: "Description", width: 130 },
+    { field: "id", headerName: "ID", width: 200 },
+    { field: "title", headerName: "Titre", width: 250 },
+    { field: "description", headerName: "Description", width: 250 },
     {
       field: "creationDate",
       headerName: "Date Création",
-      width: 90,
+      width: 120,
       valueFormatter: (value) => formatDate(new Date(value)),
     },
     {
       field: "state",
       headerName: "État",
-      width: 160,
+      width: 100,
     },
     {
       field: "levelLabel",
       headerName: "Level",
-      width: 160,
+      width: 100,
       renderCell: (value) => <Chip label={(value.row as Quiz).level} />,
     },
     {
       field: "themeLabel",
       headerName: "Theme",
-      width: 160,
+      width: 100,
       renderCell: (value) => <Chip label={(value.row as Quiz).theme} />,
     },
   ];

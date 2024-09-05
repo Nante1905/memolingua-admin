@@ -8,17 +8,17 @@ import "./quiz-list.root.scss";
 const QuizListRoot = () => {
   const [pagination, setPagination] = useState({
     page: 1,
-    pageSize: 5,
   });
+
+  const [pageSize, setPageSize] = useDebounceValue(10, 1000);
 
   const [debouncedValue, setValue] = useDebounceValue("", 500);
 
   //   const [currentPage, setCurrentPage] = useState(1);
 
   const quizQuery = useQuery({
-    queryKey: ["quizs", pagination, debouncedValue],
-    queryFn: () =>
-      findAllQuizs(pagination.page, pagination.pageSize, debouncedValue),
+    queryKey: ["quizs", pagination, pageSize, debouncedValue],
+    queryFn: () => findAllQuizs(pagination.page, pageSize, debouncedValue),
   });
 
   return (
@@ -29,9 +29,7 @@ const QuizListRoot = () => {
       <QuizListComponent
         quizsLoading={quizQuery.isFetching}
         onPageChange={(page) => setPagination((p) => ({ ...p, page }))}
-        onPageSizeChange={(pageSize) =>
-          setPagination((p) => ({ ...p, pageSize }))
-        }
+        onPageSizeChange={(pageSize) => setPageSize(pageSize)}
         onSearchChange={(s) => setValue(s)}
         quizs={quizQuery.data?.data.payload}
         page={pagination.page}

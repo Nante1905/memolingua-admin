@@ -15,7 +15,6 @@ http.interceptors.request.use(
     if (config.url?.includes("login")) return config;
     else {
       const token = sessionStorage.getItem("accessToken");
-      console.log(token);
 
       if (token) {
         config.headers.Authorization = "Bearer " + token;

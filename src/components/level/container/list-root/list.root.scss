@@ -1,0 +1,17 @@
+@import "../../../../shared/styles/variables.scss";
+
+.list-root {
+  padding: 0 40px;
+
+  header {
+    display: flex;
+    flex-direction: column;
+    margin: 30px 0;
+
+    @media (width >= $medium-devices) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
