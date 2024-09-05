@@ -1,6 +1,9 @@
 import { Outlet, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import HomeRoot from "./components/home/home.root";
+import LevelFormComponent from "./components/level/components/level-form/level-form.component";
+import LevelListRoot from "./components/level/container/list-root/list.root";
+import LevelUpdateFormRoot from "./components/level/container/update-form/update-form.root";
 import LoginRoot from "./components/login/container/login.root";
 import AddCardRoot from "./components/packages/containers/add-card/add-card.root";
 import CreatePackageRoot from "./components/packages/containers/create-package/create-package.root";
@@ -49,6 +52,18 @@ export const routes = createBrowserRouter([
       {
         path: "/packages",
         element: <PackageListRoot />,
+      },
+      {
+        path: "/levels",
+        element: <LevelListRoot />,
+      },
+      {
+        path: "/levels/create",
+        element: <LevelFormComponent />,
+      },
+      {
+        path: "/levels/:id/update",
+        element: <LevelUpdateFormRoot />,
       },
     ],
   },

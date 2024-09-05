@@ -34,6 +34,7 @@ const QuizAddQuestionRoot = () => {
     mutationFn: (data) => addQuestionToQuiz(data),
     onSuccess: () => {
       enqueueSnackbar({ message: "Question(s) ajoutés", variant: "success" });
+      form.reset();
     },
     onError: (e) => {
       enqueueSnackbar({ message: e.message, variant: "error" });
@@ -66,17 +67,23 @@ const QuizAddQuestionRoot = () => {
                   control={form.control}
                   render={({ field }) => (
                     <Select
-                      label="Quiz"
                       {...field}
+                      label="Quiz"
                       style={{
                         width: "100%",
                       }}
                     >
-                      {quizQuery.data?.data.payload?.map((e: any) => (
-                        <MenuItem value={e.id}>
-                          {e.id} - {e.title}
-                        </MenuItem>
-                      ))}
+                      {quizQuery.data?.data.payload?.map(
+                        (e: any, i: number) => (
+                          <MenuItem
+                            value={e.id}
+                            key={e.id}
+                            defaultChecked={i === 0}
+                          >
+                            {e.id} - {e.title}
+                          </MenuItem>
+                        )
+                      )}
                     </Select>
                   )}
                 />

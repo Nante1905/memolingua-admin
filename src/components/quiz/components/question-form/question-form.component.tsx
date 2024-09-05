@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, FormControl, FormHelperText, RadioGroup } from "@mui/material";
-import React from "react";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  Button,
+  FormControl,
+  FormHelperText,
+  RadioGroup,
+  styled,
+} from "@mui/material";
+
+import React, { ChangeEvent, useCallback } from "react";
 import {
   Controller,
   FieldValues,
@@ -8,10 +17,23 @@ import {
   useFieldArray,
 } from "react-hook-form";
 import RichText from "../../../../shared/components/rich-text/rich-text.component";
+import { toBase64 } from "../../../../shared/services/upload/fileUpload.service";
+import { Media } from "../../../../shared/types/Media";
 import AnswerComponent from "../qcm-answer-form/answer-form.component";
 import RadioComponent from "../radio-text/radio.component";
 import "./question-form.component.scss";
 
+export const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 interface QuestionFormComponentProps {
   field: Record<"id", string>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,10 +44,29 @@ interface QuestionFormComponentProps {
 
 const QuestionFormComponent: React.FC<QuestionFormComponentProps> = (props) => {
   const isQcm = props.form.watch(`questions.${props.index}.isQcm`);
+  const img: Media = props.form.watch(`questions.${props.index}.img`);
+  const vid: Media = props.form.watch(`questions.${props.index}.video`);
   const answersFields = useFieldArray({
     name: `questions.${props.index}.answers`,
     control: props.form.control,
   });
+
+  const handleChangeUpload = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>, name: string) => {
+      const file = event.target.files?.[0] as File;
+      const blob = await toBase64(file);
+
+      const media: Media = {
+        blob,
+        fileName: file.name as string,
+        contentType: file.type as string,
+        size: file.size as number,
+      };
+
+      props.form.setValue(name, media);
+    },
+    [props.form]
+  );
 
   return (
     <div className="question-form">
@@ -65,6 +106,82 @@ const QuestionFormComponent: React.FC<QuestionFormComponentProps> = (props) => {
               </FormHelperText>
             )} */}
           </FormControl>
+        </div>
+        <div className="form-input">
+          <Controller
+            control={props.form.control}
+            name={`questions.${props.index}.img`}
+            render={({ field, fieldState }) => (
+              <div className="media-input">
+                <div className="media-input_actions">
+                  <Button
+                    component="label"
+                    color="secondary"
+                    variant="outlined"
+                    tabIndex={-1}
+                    startIcon={<CloudUploadIcon sx={{ padding: "0 5px" }} />}
+                  >
+                    {img ? img.fileName : " Importer une photo"}
+                    <VisuallyHiddenInput
+                      onChange={(e: any) => handleChangeUpload(e, field.name)}
+                      type="file"
+                    />
+                  </Button>
+                  <Button
+                    color="error"
+                    onClick={() => {
+                      props.form.resetField(field.name);
+                    }}
+                  >
+                    <DeleteIcon />
+                  </Button>
+                </div>
+                {!!fieldState.error && (
+                  <FormHelperText sx={{ color: "red" }}>
+                    {fieldState.error.message}
+                  </FormHelperText>
+                )}
+              </div>
+            )}
+          />
+        </div>
+        <div className="form-input">
+          <Controller
+            control={props.form.control}
+            name={`questions.${props.index}.video`}
+            render={({ field, fieldState }) => (
+              <div className="media-input">
+                <div className="media-input_actions">
+                  <Button
+                    component="label"
+                    color="secondary"
+                    variant="outlined"
+                    tabIndex={-1}
+                    startIcon={<CloudUploadIcon sx={{ padding: "0 5px" }} />}
+                  >
+                    {vid ? vid.fileName : " Importer une vidéo"}
+                    <VisuallyHiddenInput
+                      onChange={(e: any) => handleChangeUpload(e, field.name)}
+                      type="file"
+                    />
+                  </Button>
+                  <Button
+                    color="error"
+                    onClick={() => {
+                      props.form.resetField(field.name);
+                    }}
+                  >
+                    <DeleteIcon />
+                  </Button>
+                </div>
+                {!!fieldState.error && (
+                  <FormHelperText sx={{ color: "red" }}>
+                    {fieldState.error.message}
+                  </FormHelperText>
+                )}
+              </div>
+            )}
+          />
         </div>
         <div className="form-input">
           <div className="answers">

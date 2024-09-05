@@ -10,7 +10,9 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setIsLoggedIn } from "../../../shared/store/shared.slice";
 import { ApiResponse } from "../../../shared/types/ApiResponse";
 import { loginSchema } from "../helpers/login.helper";
 import { logIn } from "../service/login.service";
@@ -19,6 +21,7 @@ import "./login.component.scss";
 const Login: React.FC<{ from?: string | null }> = (props) => {
   const [viewPassword, setViewPassword] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const form = useForm({
     resolver: zodResolver(loginSchema),
   });
@@ -31,6 +34,7 @@ const Login: React.FC<{ from?: string | null }> = (props) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const res: ApiResponse<any> = data.data;
       sessionStorage.setItem("accessToken", res.payload);
+      dispatch(setIsLoggedIn(true));
       if (props.from == null) {
         navigate("/home");
       } else {

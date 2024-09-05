@@ -39,13 +39,13 @@ export const addCardsToPackage = (
   const data = cards.map((c, index) => {
     const media: Record<string, Media> = {};
     if (medias[index].img) {
-      media.img = medias[index].img;
+      media.img = medias[index].img as Media;
     }
     if (medias[index].audio) {
-      media.audio = medias[index].audio;
+      media.audio = medias[index].audio as Media;
     }
     if (medias[index].video) {
-      media.video = medias[index].video;
+      media.video = medias[index].video as Media;
     }
     return { verso: c.verso, recto: c.recto, medias: media };
   });
