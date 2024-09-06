@@ -1,4 +1,5 @@
 import {
+  Button,
   FormControl,
   FormHelperText,
   InputLabel,
@@ -15,6 +16,8 @@ interface SelectInputComponentProps extends FormInputProps {
   loading: boolean;
   valueGetter: (item: any) => string;
   labelGetter: (item: any) => string;
+  paginated?: boolean;
+  onLoadMore?: () => void;
 }
 
 const SelectInputComponent: FC<SelectInputComponentProps> = (props) => {
@@ -31,11 +34,22 @@ const SelectInputComponent: FC<SelectInputComponentProps> = (props) => {
                 label={props.label}
                 onChange={(e) => field.onChange(e.target.value)}
               >
-                {props.items?.map((element, index) => (
+                {props.items?.flat()?.map((element, index) => (
                   <MenuItem value={props.valueGetter(element)} key={`${index}`}>
                     {props.labelGetter(element)}
                   </MenuItem>
                 ))}
+                {props.paginated && (
+                  <Button
+                    fullWidth
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (props.onLoadMore) props.onLoadMore();
+                    }}
+                  >
+                    Load more
+                  </Button>
+                )}
               </Select>
               {!!fieldState.error && (
                 <FormHelperText>

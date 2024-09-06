@@ -1,9 +1,10 @@
 import { CircularProgress } from "@mui/material";
+import { ReactNode } from "react";
 import "./app-loader.component.scss";
 
 interface AppLoaderProps {
   loading: boolean;
-  children: JSX.Element;
+  children: ReactNode;
   className?: string;
   width?: string;
   heigth?: string;
