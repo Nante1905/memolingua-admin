@@ -1,8 +1,9 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Chip, InputAdornment, TextField } from "@mui/material";
+import { Button, Chip, InputAdornment, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { FC } from "react";
+import { Link } from "react-router-dom";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
 import { formatDate } from "../../../../shared/helpers/formatter";
@@ -46,6 +47,18 @@ const QuizListComponent: FC<QuizListComponentProps> = (props) => {
       headerName: "Theme",
       width: 100,
       renderCell: (value) => <Chip label={(value.row as Quiz).theme} />,
+    },
+    {
+      field: "",
+      headerName: "Actions",
+      width: 200,
+      renderCell: (value) => (
+        <Link to={`/quizs/questions?id=${(value.row as Quiz).id}`}>
+          <Button variant="contained" color="secondary">
+            Voir les questions
+          </Button>
+        </Link>
+      ),
     },
   ];
 

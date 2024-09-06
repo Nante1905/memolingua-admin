@@ -1,5 +1,6 @@
 import { Quiz } from "./Quiz";
 import { QuizAnswer } from "./QuizAnswer";
+import { QuizQuestionMedia } from "./QuizQuestionMedia";
 
 export interface QuizQuestion {
   id: string;
@@ -8,5 +9,6 @@ export interface QuizQuestion {
   idQuiz: string;
   isQcm: boolean;
   quiz: Quiz;
+  medias: QuizQuestionMedia[];
   answers: QuizAnswer[];
 }

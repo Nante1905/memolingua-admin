@@ -8,6 +8,8 @@ import LoginRoot from "./components/login/container/login.root";
 import AddCardRoot from "./components/packages/containers/add-card/add-card.root";
 import CreatePackageRoot from "./components/packages/containers/create-package/create-package.root";
 import PackageListRoot from "./components/packages/containers/package-list/package-list.root";
+import AnswerListRoot from "./components/quiz/containers/answer-list-root/answer-list.root";
+import QuestionListRoot from "./components/quiz/containers/question-list-root/question-list.root";
 import QuizAddQuestionRoot from "./components/quiz/containers/quiz-add-question-root/quiz-add-question.root";
 import QuizCreationRoot from "./components/quiz/containers/quiz-creation-root/quiz-creation.root";
 import QuizListRoot from "./components/quiz/containers/quiz-list-root/quiz-list.root";
@@ -48,6 +50,14 @@ export const routes = createBrowserRouter([
       {
         path: "/quizs",
         element: <QuizListRoot />,
+      },
+      {
+        path: "/quizs/questions",
+        element: <QuestionListRoot />,
+      },
+      {
+        path: "/quizs/answers",
+        element: <AnswerListRoot />,
       },
       {
         path: "/packages",
