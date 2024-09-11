@@ -27,6 +27,12 @@ declare module "@mui/material/Chip" {
   }
 }
 
+declare module "@mui/material/Badge" {
+  interface BadgePropsColorOverrides {
+    accent: true;
+  }
+}
+
 export const theme = createTheme({
   typography: {
     fontFamily: "Poppins",

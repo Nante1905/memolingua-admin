@@ -1,14 +1,22 @@
 import { http } from "../../../shared/services/api/interceptor/axios.interceptor";
 import { ApiResponse } from "../../../shared/types/ApiResponse";
 import { Card } from "../../../shared/types/Card";
-import { Langage } from "../../../shared/types/Langage";
+import { Course } from "../../../shared/types/Course";
 import { Media } from "../../../shared/types/Media";
 import { Package } from "../../../shared/types/Package";
 import { Paginated } from "../../../shared/types/Paginated";
 import { Theme } from "../../../shared/types/Theme";
 import { CardMedia } from "../types/CardMedia";
 import { CreatePackageData } from "../types/CreatePackageData";
-import { PackageLib } from "../types/PackageLib";
+import { PackageContent, PackageLib } from "../types/PackageLib";
+
+export const getCourses = () => {
+  return http.get<ApiResponse<Course>>(`admin/langs/course`);
+};
+
+export const getDetailsPackage = (id: string) => {
+  return http.get<ApiResponse<PackageContent>>(`admin/packages/${id}`);
+};
 
 export const getAllPackages = (
   page: { page: number; pageSize: number },
@@ -58,7 +66,7 @@ export const getPackageById = (id: string) => {
 };
 
 export const getPackageDependances = () => {
-  return http.get<ApiResponse<{ themes: Theme[]; langages: Langage[] }>>(
+  return http.get<ApiResponse<{ themes: Theme[]; courses: Course[] }>>(
     "/admin/packages/create/dependances"
   );
 };

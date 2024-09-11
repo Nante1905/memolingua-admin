@@ -1,6 +1,7 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -12,6 +13,7 @@ import {
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import ConfirmationDialogComponent from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
@@ -44,6 +46,11 @@ const PackageListRoot = () => {
       <div className="header">
         <h1>Liste des paquets</h1>
       </div>
+      <Link to={`/packages/create`}>
+        <Button color="secondary" variant="contained">
+          Créer
+        </Button>
+      </Link>
       <div className="filter-content">
         <div className="left">
           <TextField

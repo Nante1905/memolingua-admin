@@ -1,10 +1,13 @@
-import { DeleteForever, Edit } from "@mui/icons-material";
+import { DeleteForever, Edit, Visibility } from "@mui/icons-material";
 import { Chip, IconButton, Tooltip } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales";
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ADMIN_ROLE } from "../../../../shared/constants/api.constant";
+import {
+  ADMIN_ROLE,
+  ENTITY_DELETED,
+} from "../../../../shared/constants/api.constant";
 import { PackageLib } from "../../types/PackageLib";
 import "./package-list.component.scss";
 
@@ -44,11 +47,11 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
       {
         field: "state",
         headerName: "État",
-        width: 120,
+        width: 100,
         align: "center",
         renderCell: (value) =>
-          value.row.state == -1 ? (
-            <Chip label={`Supprimé`} color="error" />
+          value.row.state == ENTITY_DELETED ? (
+            <Chip label={`Suppr.`} color="error" size="small" />
           ) : (
             <></>
           ),
@@ -57,7 +60,6 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
         field: "authorRole",
         headerName: "Auteur",
         align: "center",
-
         width: 80,
         renderCell: (value) => (
           <Tooltip title={value.row.authorName}>
@@ -66,27 +68,39 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
               color={
                 value.row.authorRole == ADMIN_ROLE ? "secondary" : "accent"
               }
+              size="small"
             />
           </Tooltip>
         ),
       },
       {
         field: "",
-        headerName: "Action",
-        width: 100,
+        headerName: "Actions",
+        width: 120,
         align: "center",
-
         renderCell: (value) => (
           <div className="actions">
-            <Link to={`/packages/${value.row.id}/update`}>
-              <IconButton>
+            <Link to={`/packages/${value.row.id}/content`}>
+              <IconButton size="small">
                 {" "}
-                <Edit />{" "}
+                <Visibility />
               </IconButton>
             </Link>
+            {value.row.authorRole == ADMIN_ROLE ? (
+              <Link to={`/packages/${value.row.id}/update`}>
+                <IconButton size="small">
+                  {" "}
+                  <Edit />{" "}
+                </IconButton>
+              </Link>
+            ) : (
+              <></>
+            )}
+
             <IconButton
               color="error"
               onClick={() => props.onClickDelete(value.row as PackageLib)}
+              size="small"
             >
               {" "}
               <DeleteForever />{" "}
@@ -95,7 +109,7 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
         ),
       },
     ],
-    []
+    [props]
   );
 
   return (

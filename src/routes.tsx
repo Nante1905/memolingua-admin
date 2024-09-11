@@ -7,6 +7,7 @@ import LevelUpdateFormRoot from "./components/level/container/update-form/update
 import LoginRoot from "./components/login/container/login.root";
 import AddCardRoot from "./components/packages/containers/add-card/add-card.root";
 import CreatePackageRoot from "./components/packages/containers/create-package/create-package.root";
+import PackageDetailsRoot from "./components/packages/containers/package-details/package-details.root";
 import PackageListRoot from "./components/packages/containers/package-list/package-list.root";
 import AnswerListRoot from "./components/quiz/containers/answer-list-root/answer-list.root";
 import QuestionListRoot from "./components/quiz/containers/question-list-root/question-list.root";
@@ -32,7 +33,7 @@ export const routes = createBrowserRouter([
         element: <HomeRoot />,
       },
       {
-        path: "/create-package",
+        path: "/packages/create",
         element: <CreatePackageRoot />,
       },
       {
@@ -74,6 +75,10 @@ export const routes = createBrowserRouter([
       {
         path: "/levels/:id/update",
         element: <LevelUpdateFormRoot />,
+      },
+      {
+        path: "/packages/:id/content",
+        element: <PackageDetailsRoot />,
       },
     ],
   },
