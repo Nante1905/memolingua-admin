@@ -55,6 +55,34 @@ export const PackageSchema = z.object({
     ),
 });
 
+export const updatePackageSchema = z.object({
+  title: z.string().min(1, formErrors.fr.required),
+  img: cardMediaValidator
+    .optional()
+    .refine(
+      (img) => {
+        if (img?.media) {
+          return img.media?.size < MAX_IMG_SIZE;
+        }
+        return true;
+      },
+      {
+        message: formErrors["fr"].maxSize(MAX_IMG_SIZE / 1000000, "Mo"),
+      }
+    )
+    .refine(
+      (img) => {
+        if (img?.media) {
+          return ALLOWED_IMG_EXT.includes(
+            img.media?.fileName.split(".").pop() as string
+          );
+        }
+        return true;
+      },
+      { message: formErrors["fr"].unallowedType }
+    ),
+});
+
 export const imgValidation = (file: File) => {
   console.log(file, file.size > MAX_IMG_SIZE);
   if (!file) {

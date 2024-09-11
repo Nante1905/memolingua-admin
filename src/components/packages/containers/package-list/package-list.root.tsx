@@ -11,7 +11,8 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
@@ -19,7 +20,7 @@ import ConfirmationDialogComponent from "../../../../shared/components/confirmat
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
 import PackageListComponent from "../../components/package-list/package-list.component";
-import { getAllPackages } from "../../services/package.service";
+import { deletePackage, getAllPackages } from "../../services/package.service";
 import {
   initialPackageListState,
   PackageListState,
@@ -31,6 +32,7 @@ const PackageListRoot = () => {
   const [state, setState] = useState<PackageListState>(initialPackageListState);
   const [pageSize, setPageSize] = useDebounceValue(10, 800);
   const [keyword, setKeyword] = useDebounceValue("", 800);
+  const queryClient = useQueryClient();
 
   const packageQuery = useQuery({
     queryKey: ["packages", pageSize, keyword, state],
@@ -39,6 +41,24 @@ const PackageListRoot = () => {
         { page: state.page, pageSize },
         { keyword, author: state.authorFilter, deleted: state.deleteFilter }
       ),
+  });
+
+  const deleteMutation = useMutation({
+    mutationKey: ["delete-package"],
+    mutationFn: (id: string) => deletePackage(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["packages"] });
+
+      enqueueSnackbar({
+        message: `Paquet ${state.package?.title ?? ""} supprimé`,
+        variant: "success",
+        autoHideDuration: 3000,
+      });
+      setState((state) => ({
+        ...state,
+        package: undefined,
+      }));
+    },
   });
 
   return (
@@ -157,10 +177,11 @@ const PackageListRoot = () => {
       {state.package && (
         <ConfirmationDialogComponent
           title="Etes vous sûr?"
-          onConfirm={() => {}}
+          onConfirm={() => deleteMutation.mutate(state.package?.id as string)}
           onClose={() => {
             setState((state) => ({ ...state, package: undefined }));
           }}
+          loading={deleteMutation.isPending}
         >
           <p>
             Voulez-vous vraiment supprimer le paquet{" "}

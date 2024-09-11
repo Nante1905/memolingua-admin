@@ -7,7 +7,7 @@ export interface PackageLib {
   state: number;
   creationDate: string;
   nb: number;
-  theme: string;
+  themeLabel: string;
   lTarget: string;
   lTargetCode: string;
   lSource: string;

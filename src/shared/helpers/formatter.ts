@@ -20,5 +20,5 @@ export const formatDateTime = (date: Date) => {
 };
 
 export const getFullName = (user: { firstname: string; lastname: string }) => {
-  return [user.lastname ?? "", user.firstname ?? ""].join(" ");
+  return [user?.lastname ?? "", user?.firstname ?? ""].join(" ");
 };

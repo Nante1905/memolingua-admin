@@ -9,7 +9,6 @@ import {
   API_BASE_URL,
   ENTITY_DELETED,
 } from "../../../../shared/constants/api.constant";
-import { getFullName } from "../../../../shared/helpers/formatter";
 import { PackageContent } from "../../types/PackageLib";
 import "./package-details.component.scss";
 
@@ -67,7 +66,7 @@ const PackageDetails: React.FC<PackageDetailsProps> = (props) => {
                 mediaPath: string;
               }[]
             ).map((m) => (
-              <Fragment>
+              <Fragment key={m.id}>
                 <Link
                   key={m.id}
                   to={`${API_BASE_URL}/${m.mediaPath}`}
@@ -105,18 +104,6 @@ const PackageDetails: React.FC<PackageDetailsProps> = (props) => {
 
   return (
     <div className="package-details-body">
-      <div className="infos">
-        <p>
-          <strong>Id:</strong> {props.pack.id}{" "}
-          {props.pack.state == ENTITY_DELETED && (
-            <Chip label={`Supprimé`} color="error" />
-          )}
-        </p>
-
-        <p>
-          <strong>Auteur: </strong> {getFullName(props.pack.author)}
-        </p>
-      </div>
       <div className="package-tab package-details-tab">
         <DataGrid
           columns={columns}

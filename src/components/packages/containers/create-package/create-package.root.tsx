@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
@@ -15,6 +15,8 @@ import {
 
 const CreatePackageRoot = () => {
   const [resetForm, setResetForm] = useState<boolean>(false);
+  const queryClient = useQueryClient();
+
   const dependancesQuery = useQuery({
     queryKey: ["packagesDep"],
     queryFn: getPackageDependances,
@@ -34,13 +36,14 @@ const CreatePackageRoot = () => {
     mutationFn: createPackage,
     onSuccess: () => {
       setResetForm(true);
+      queryClient.invalidateQueries({ queryKey: ["packages"] });
+
       enqueueSnackbar({
         message: apiMessage["fr"].created("Paquet"),
         variant: "success",
       });
     },
     onError(error) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const apiError = error as AxiosError;
       ((apiError.response?.data as ApiResponse).error as string[]).map((e) => {
         enqueueSnackbar({ message: e, variant: "error" });

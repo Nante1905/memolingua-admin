@@ -10,12 +10,33 @@ import { CardMedia } from "../types/CardMedia";
 import { CreatePackageData } from "../types/CreatePackageData";
 import { PackageContent, PackageLib } from "../types/PackageLib";
 
+export const deletePackage = (id: string) => {
+  return http.delete<ApiResponse>(`/admin/packages/${id}`);
+};
+
+export const updatePackage = (data: {
+  id: string;
+  title: string;
+  img?: Media;
+  removeImg?: boolean;
+}) => {
+  return http.put(`/admin/packages/${data.id}`, {
+    title: data.title,
+    img: data.img,
+    removeImg: data.removeImg,
+  });
+};
+
+export const getPackageById = (id: string) => {
+  return http.get<ApiResponse<Package>>(`admin/packages/${id}`);
+};
+
 export const getCourses = () => {
   return http.get<ApiResponse<Course>>(`admin/langs/course`);
 };
 
 export const getDetailsPackage = (id: string) => {
-  return http.get<ApiResponse<PackageContent>>(`admin/packages/${id}`);
+  return http.get<ApiResponse<PackageContent>>(`admin/packages/${id}?type=lib`);
 };
 
 export const getAllPackages = (
@@ -61,8 +82,10 @@ export const addCardsToPackage = (
   return http.post(`/admin/packages/${idPackage}/add-cards`, { cards: data });
 };
 
-export const getPackageById = (id: string) => {
-  return http.get<ApiResponse<Partial<Package>>>(`/packages/${id}`);
+export const getDetailsPackageById = (id: string) => {
+  return http.get<ApiResponse<Partial<Package>>>(
+    `/admin/packages/${id}?type=lib`
+  );
 };
 
 export const getPackageDependances = () => {

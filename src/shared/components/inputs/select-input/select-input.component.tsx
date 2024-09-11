@@ -19,6 +19,7 @@ interface SelectInputComponentProps extends FormInputProps {
   paginated?: boolean;
   onLoadMore?: () => void;
   defaultValue?: any;
+  readonly?: boolean;
 }
 
 const SelectInputComponent: FC<SelectInputComponentProps> = (props) => {
@@ -37,6 +38,7 @@ const SelectInputComponent: FC<SelectInputComponentProps> = (props) => {
                 // onChange={(e) => field.onChange(e.target.value)}
                 // value={field.value}
                 {...field}
+                readOnly={!!props.readonly}
               >
                 {props.items?.flat()?.map((element, index) => (
                   <MenuItem value={props.valueGetter(element)} key={`${index}`}>
