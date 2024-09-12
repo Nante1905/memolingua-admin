@@ -8,7 +8,7 @@ import { getPackageById } from "../../services/package.service";
 const AddCardRoot = () => {
   const idPackage = useParams().id;
 
-  const packageQuery = useQuery({
+  const { data: pack, ...packageQuery } = useQuery({
     queryKey: ["packageById", idPackage],
     queryFn: () => getPackageById(idPackage as string),
     enabled: idPackage != undefined,
@@ -21,12 +21,13 @@ const AddCardRoot = () => {
           {packageQuery.isSuccess && (
             <>
               <h1 className="text-center text-success">
-                Ajout de carte(s) à{" "}
-                <u>{packageQuery.data?.data?.payload?.title}</u>
+                Ajout de carte(s) à <u>{pack?.data.payload.title}</u>
               </h1>
-              <AddCardForm
-                idPackage={packageQuery.data?.data?.payload?.id as string}
-              />
+              <p className="text-center">
+                <strong>{pack?.data.payload.languageSource.label}</strong> vers{" "}
+                <strong>{pack?.data.payload.languageTarget.label}</strong>
+              </p>
+              <AddCardForm idPackage={pack?.data?.payload?.id as string} />
             </>
           )}
           {packageQuery.isError && (

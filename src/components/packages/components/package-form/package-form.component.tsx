@@ -1,210 +1,142 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DeleteForever } from "@mui/icons-material";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import {
   Button,
   FormControl,
   FormHelperText,
-  InputLabel,
+  IconButton,
   LinearProgress,
-  MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { enqueueSnackbar } from "notistack";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { apiMessage } from "../../../../shared/constants/api.message";
+import SelectInputComponent from "../../../../shared/components/inputs/select-input/select-input.component";
+import { API_BASE_URL } from "../../../../shared/constants/api.constant";
 import { toBase64 } from "../../../../shared/services/upload/fileUpload.service";
 import { HiddenInput } from "../../../../shared/styles/theme";
-import { ApiResponse } from "../../../../shared/types/ApiResponse";
-import { Langage } from "../../../../shared/types/Langage";
+import { Course } from "../../../../shared/types/Course";
+import { Media } from "../../../../shared/types/Media";
+import { Package } from "../../../../shared/types/Package";
 import { Theme } from "../../../../shared/types/Theme";
-import { imgValidation, PackageSchema } from "../../helper/package-form.helper";
-import { createPackage } from "../../services/package.service";
 import {
-  initialPackageFormState,
-  PackageFormState,
-} from "../../state/package-form.state";
+  PackageSchema,
+  updatePackageSchema,
+} from "../../helper/package-form.helper";
 import "./package-form.component.scss";
-const formDefaultValue = {
-  title: "",
-  sourceLang: "",
-  targetLang: "",
-  theme: "",
-  img: "",
-};
 
 interface PackageFormProps {
   theme: Theme[];
-  langages: Langage[];
+  courses: Course[];
+  formSubmitting: boolean;
+  onFormSubmit: (data: any) => void;
+  reset?: [boolean, () => void];
+  pack?: Package;
 }
 
 const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
   const form = useForm({
-    defaultValues: formDefaultValue,
-    resolver: zodResolver(PackageSchema),
+    resolver: zodResolver(props.pack ? updatePackageSchema : PackageSchema),
   });
-  const [state, setState] = useState<PackageFormState>(initialPackageFormState);
-  const selectedSource = form.watch("sourceLang");
+  const img = form.watch("img");
 
-  const handleFileUpload =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async (event: ChangeEvent<HTMLInputElement>) => {
-      if (event.target.files) {
-        const file = event.target.files[0];
-        const errorValidation = imgValidation(file);
-        console.log(errorValidation);
-
-        if (errorValidation == "") {
-          const fileData = await toBase64(file);
-          setState((state) => ({
-            ...state,
-            imgPreview: URL.createObjectURL(file),
-            img: {
-              ...state.img,
-              fileName: file.name,
-              blob: fileData,
-              contentType: file.type,
-            },
-          }));
-          form.clearErrors("img");
-          return file;
-        } else {
-          form.setError("img", { type: "manual", message: errorValidation });
-          return undefined;
-        }
-      }
-    };
-
-  const packageMutation = useMutation({
-    mutationKey: ["createPackage"],
-    mutationFn: createPackage,
-    onSuccess: () => {
-      form.reset(formDefaultValue, { keepDefaultValues: false });
-      setState((state) => ({
-        ...state,
-        img: initialPackageFormState.img,
-      }));
-      enqueueSnackbar({
-        message: apiMessage["fr"].created("Paquet"),
-        variant: "success",
-      });
-    },
-    onError(error) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const apiError = error as AxiosError;
-      ((apiError.response?.data as ApiResponse).error as string[]).map((e) => {
-        enqueueSnackbar({ message: e, variant: "error" });
-      });
-    },
-  });
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onFormSubmit = (data: any) => {
-    packageMutation.mutate({
-      ...data,
-      img: {
-        fileName: state.img.fileName,
-        blob: state.img.blob,
-        contentType: state.img.contentType,
-      },
+  useEffect(() => {
+    const subscription = form.watch(() => {
+      form.trigger(["img"]);
     });
-  };
+    return () => subscription.unsubscribe();
+  }, [form]);
+
+  useEffect(() => {
+    if (props.reset && props.reset[0]) {
+      form.reset({}, { keepDefaultValues: false });
+      props.reset[1]();
+    }
+  }, [props.reset, form]);
+
+  const handleFileUpload = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0] as File;
+      const blob = await toBase64(file);
+
+      const media: Media = {
+        blob,
+        fileName: file.name as string,
+        contentType: file.type as string,
+        size: file.size as number,
+      };
+      form.setValue("img", { preview: URL.createObjectURL(file), media });
+    },
+    [form]
+  );
+
+  const onSubmit = useCallback(
+    (data: any) => {
+      const { img, ...pack } = data;
+      props.onFormSubmit({ ...pack, img: img?.media });
+    },
+    [props]
+  );
 
   return (
     <div className="package-form">
       <form
-        className={`form ${packageMutation.isPending && "loading"}`}
-        onSubmit={form.handleSubmit(onFormSubmit)}
+        className={`form ${props.formSubmitting && "loading"}`}
+        onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="form-input">
           <TextField
             label="Titre"
             {...form.register("title")}
+            defaultValue={props.pack?.title ?? ""}
             error={!!form.formState.errors["title"]}
             helperText={form.formState.errors["title"]?.message as string}
           />
         </div>
-        <div className="form-input">
-          <FormControl fullWidth error={!!form.formState.errors["sourceLang"]}>
-            <InputLabel>Langue source</InputLabel>
-            <Controller
-              name="sourceLang"
-              control={form.control}
-              render={({ field }) => (
-                <Select label="Langue source" {...field}>
-                  {props.langages?.map((lang, index) => (
-                    <MenuItem value={lang.id} key={`lang-${index}`}>
-                      {lang.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-            />
-            {!!form.formState.errors["sourceLang"] && (
-              <FormHelperText>
-                {form.formState.errors["sourceLang"]?.message as string}
-              </FormHelperText>
-            )}
-          </FormControl>
-        </div>
 
         <div className="form-input">
-          <FormControl fullWidth error={!!form.formState.errors["targetLang"]}>
-            <InputLabel>Langue cible</InputLabel>
-            <Controller
-              name="targetLang"
+          {props.pack ? (
+            <div className="langs inline-flex">
+              <p>Langues:</p>
+              <p>
+                {props.pack.languageSource.label} {"->"}{" "}
+                {props.pack.languageTarget.label}{" "}
+              </p>
+            </div>
+          ) : (
+            <SelectInputComponent
               control={form.control}
-              render={({ field }) => (
-                <Select label="Langue cible" {...field}>
-                  {props.langages
-                    ?.filter((lang) => lang.id != selectedSource)
-                    .map((lang, index) => (
-                      <MenuItem value={lang.id} key={`lang-${index}`}>
-                        {lang.label}
-                      </MenuItem>
-                    ))}
-                </Select>
-              )}
+              items={props.courses}
+              loading={false}
+              valueGetter={(item: Course) => item.id}
+              labelGetter={(item: Course) =>
+                `${item.sourceLabel} -> ${item.targetLabel}`
+              }
+              name={"course"}
+              label={"Cours"}
+              defaultValue={""}
             />
-            {!!form.formState.errors["targetLang"] && (
-              <FormHelperText>
-                {form.formState.errors["targetLang"]?.message as string}
-              </FormHelperText>
-            )}
-          </FormControl>
+          )}
         </div>
         <div className="form-input">
-          <FormControl fullWidth error={!!form.formState.errors["theme"]}>
-            <InputLabel>Thème</InputLabel>
-            <Controller
-              name="theme"
-              control={form.control}
-              render={({ field }) => (
-                <Select label="Thème" {...field}>
-                  {props.theme?.map((theme, index) => (
-                    <MenuItem value={theme.id} key={`theme-${index}`}>
-                      {theme.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-            />
-            {!!form.formState.errors["theme"] && (
-              <FormHelperText>
-                {form.formState.errors["theme"]?.message as string}
-              </FormHelperText>
-            )}
-          </FormControl>
+          <SelectInputComponent
+            control={form.control}
+            items={props.theme}
+            loading={false}
+            valueGetter={(item: Theme) => item.id}
+            labelGetter={(item: Theme) => item.label}
+            name={"theme"}
+            label={"Thème"}
+            defaultValue={props.pack?.theme.id ?? ""}
+            readonly={!!props.pack}
+          />
         </div>
         <div className="form-input">
           <FormControl error={!!form.formState.errors["img"]}>
             <Controller
               control={form.control}
               name="img"
-              render={({ field, fieldState }) => (
+              render={({ fieldState }) => (
                 <div className="inline-flex">
                   <Button
                     startIcon={<InsertPhotoIcon />}
@@ -212,44 +144,57 @@ const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
                     color="secondary"
                     component="label"
                     className="btn-upload"
+                    tabIndex={-1}
                   >
                     <HiddenInput
                       type="file"
-                      {...field}
-                      onChange={async (
-                        event: ChangeEvent<HTMLInputElement>
-                      ) => {
-                        await handleFileUpload(event);
-
-                        field.onChange("");
+                      onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                        handleFileUpload(event);
                       }}
                     />
                   </Button>
-                  {state.img.fileName != "" && (
-                    <small>{state.img.fileName}</small>
-                  )}
-                  {form.formState.errors["img"]?.message}
+
+                  {img && <small>{img.media.fileName}</small>}
                   {!!fieldState.error?.message && (
-                    <FormHelperText>
+                    <FormHelperText error>
                       {fieldState.error?.message as string}
                     </FormHelperText>
                   )}
                 </div>
               )}
             />
-            {state.imgPreview != "" && (
-              <div className="preview-img">
-                <img src={state.imgPreview} alt={state.img.fileName} />
-              </div>
-            )}
+            <div className="previews">
+              {props.pack?.imgPath && (
+                <div className="now-img">
+                  <p>Ancien: </p>
+                  <img
+                    src={`${API_BASE_URL}/${props.pack.imgPath}`}
+                    alt={"Image"}
+                    style={{ opacity: img ? 0.25 : 1 }}
+                  />
+                </div>
+              )}
+              {img && (
+                <div className="preview-img">
+                  <p>Nouvelle image</p>
+                  <img src={img.preview} alt={img.media.fileName} />
+                  <IconButton
+                    color="error"
+                    onClick={() => form.resetField("img")}
+                  >
+                    <DeleteForever />
+                  </IconButton>
+                </div>
+              )}
+            </div>
           </FormControl>
         </div>
         <div className="form-submit">
           <Button color="primary" variant="contained" type="submit">
-            <strong>Créer</strong>
+            {props.pack ? "Modifier" : "Créer"}
           </Button>
         </div>
-        {packageMutation.isPending && (
+        {props.formSubmitting && (
           <>
             <div className="blur" />
             <LinearProgress
