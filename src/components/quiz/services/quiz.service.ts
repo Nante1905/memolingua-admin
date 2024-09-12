@@ -8,11 +8,21 @@ export const addQuestionToQuiz = (data: any) =>
   http.post("/admin/quizs/add-question", data);
 
 export const createQuiz = (data: unknown) => http.post("/admin/quizs", data);
+export const updateQuiz = (id: string, data: unknown) =>
+  http.put(`/admin/quizs/${id}`, data);
 export const findAllQuizs = (
   page: number,
   pageSize: number,
-  search: string = ""
-) => http.get(`/admin/quizs?page=${page}&limit=${pageSize}&search=${search}`);
+  search: string = "",
+  sortField: string = "",
+  sortMode: string = ""
+) =>
+  http.get(
+    `/admin/quizs?page=${page}&limit=${pageSize}&search=${search}&sortField=${sortField}&sortMode=${sortMode}`
+  );
+
+export const findQuizById = (id: string) => http.get(`/admin/quizs/${id}`);
+
 export const findAllQuizsSelect = ({ pageParam = 1 }) =>
   http.get<ApiResponse<Paginated<any>>>(`/admin/quizs?page=${pageParam}`);
 
@@ -28,3 +38,5 @@ export const findAllAnswers = (page: number, idQuestion?: string) =>
 export const findAllLangs = () => http.get("/langs");
 export const findAllThemes = () => http.get("/themes");
 export const findAllLevels = () => http.get("/levels");
+
+export const deleteQuiz = (id: string) => http.delete(`/admin/quizs/${id}`);

@@ -32,6 +32,7 @@ const LevelListComponent: FC<LevelListComponentProps> = (props) => {
       field: "state",
       headerName: "État",
       width: 100,
+      // TODO : Ampiana anle entity chip state component iny
     },
     {
       field: "actions",

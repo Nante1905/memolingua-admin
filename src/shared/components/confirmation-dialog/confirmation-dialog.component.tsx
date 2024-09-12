@@ -13,13 +13,14 @@ interface ConfirmationDialogComponentProps {
   children: React.ReactNode;
   onConfirm: () => void;
   onClose: () => void;
+  openDialog?: boolean;
 }
 
 const ConfirmationDialogComponent: FC<ConfirmationDialogComponentProps> = (
   props
 ) => {
   return (
-    <Dialog open={true}>
+    <Dialog open={true} onClose={() => props.onClose()}>
       <DialogTitle>{props?.title}</DialogTitle>
 
       <DialogContent>{props.children}</DialogContent>

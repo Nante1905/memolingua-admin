@@ -13,6 +13,7 @@ import QuestionListRoot from "./components/quiz/containers/question-list-root/qu
 import QuizAddQuestionRoot from "./components/quiz/containers/quiz-add-question-root/quiz-add-question.root";
 import QuizCreationRoot from "./components/quiz/containers/quiz-creation-root/quiz-creation.root";
 import QuizListRoot from "./components/quiz/containers/quiz-list-root/quiz-list.root";
+import QuizUpdateRoot from "./components/quiz/containers/quiz-update-root/quiz-update.root";
 
 export const routes = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const routes = createBrowserRouter([
       {
         path: "/quizs",
         element: <QuizListRoot />,
+      },
+      {
+        path: "/quizs/:id/update",
+        element: <QuizUpdateRoot />,
       },
       {
         path: "/quizs/questions",
