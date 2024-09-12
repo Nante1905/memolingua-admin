@@ -429,10 +429,6 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
           <Button variant="contained" type="submit">
             <strong>Enregistrer</strong>
           </Button>
-          <Button onClick={() => console.log(form.getValues())}>Valeur</Button>
-          <Button onClick={() => console.log(form.formState.errors)}>
-            Erreur
-          </Button>
         </div>
         {addCardMutation.isPending && (
           <>

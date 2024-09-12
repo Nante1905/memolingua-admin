@@ -193,12 +193,6 @@ const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
           <Button color="primary" variant="contained" type="submit">
             {props.pack ? "Modifier" : "Créer"}
           </Button>
-          <Button
-            onClick={() => form.reset(undefined, { keepDefaultValues: false })}
-          >
-            Reset
-          </Button>
-          <Button onClick={() => console.log(form.getValues())}>Valeur</Button>
         </div>
         {props.formSubmitting && (
           <>

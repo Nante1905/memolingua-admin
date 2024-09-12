@@ -28,7 +28,7 @@ const UpdatePackageRoot = () => {
         message: `Paquet ${packQuery.data?.data.payload.title} modifié`,
         variant: "success",
       });
-      navigate("/packages");
+      navigate(`/packages/${idPackage}/content`);
     },
     onError(error) {
       const apiError = error as AxiosError;

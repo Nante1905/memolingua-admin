@@ -91,18 +91,19 @@ const PackageDetails: React.FC<PackageDetailsProps> = (props) => {
         headerName: "Actions",
         width: 80,
         align: "center",
-        renderCell: (value) => (
-          <div>
-            <IconButton
-              color="error"
-              onClick={() => setCard(value.row)}
-              size="small"
-            >
-              {" "}
-              <DeleteForever />{" "}
-            </IconButton>
-          </div>
-        ),
+        renderCell: (value) =>
+          value.row.state != ENTITY_DELETED && (
+            <div>
+              <IconButton
+                color="error"
+                onClick={() => setCard(value.row)}
+                size="small"
+              >
+                {" "}
+                <DeleteForever />{" "}
+              </IconButton>
+            </div>
+          ),
       },
     ],
     []
@@ -112,7 +113,7 @@ const PackageDetails: React.FC<PackageDetailsProps> = (props) => {
     mutationKey: ["delete-card"],
     mutationFn: (id: string) => deleteCard(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["packages", props.pack?.id] });
+      queryClient.invalidateQueries({ queryKey: ["package", props.pack?.id] });
 
       enqueueSnackbar({
         message: `Carte supprimée`,
