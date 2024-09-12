@@ -20,6 +20,7 @@ export const uploadFile = async (file: File) => {
       fileName: file.name,
       blob: fileData,
       contentType: file.type,
+      size: file.size,
     },
   };
 };
