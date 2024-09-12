@@ -1,0 +1,7 @@
+@import "../../../../shared/styles/form.scss";
+
+.lang-form {
+  .form {
+    @extend %form-body;
+  }
+}

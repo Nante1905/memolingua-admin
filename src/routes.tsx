@@ -1,6 +1,9 @@
 import { Outlet, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import HomeRoot from "./components/home/home.root";
+import LangCreateRoot from "./components/langs/container/lang-create-root/lang-create.root";
+import LangListRoot from "./components/langs/container/lang-list-root/lang-list.root";
+import LangUpdateRoot from "./components/langs/container/lang-update-root/lang-update.root";
 import LevelFormComponent from "./components/level/components/level-form/level-form.component";
 import LevelListRoot from "./components/level/container/list-root/list.root";
 import LevelUpdateFormRoot from "./components/level/container/update-form/update-form.root";
@@ -74,6 +77,18 @@ export const routes = createBrowserRouter([
       {
         path: "/levels/:id/update",
         element: <LevelUpdateFormRoot />,
+      },
+      {
+        path: "/langs",
+        element: <LangListRoot />,
+      },
+      {
+        path: "/langs/create",
+        element: <LangCreateRoot />,
+      },
+      {
+        path: "/langs/:id/update",
+        element: <LangUpdateRoot />,
       },
     ],
   },
