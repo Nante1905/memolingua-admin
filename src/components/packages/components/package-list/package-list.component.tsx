@@ -15,6 +15,7 @@ interface PackageListComponentProps {
   packages: PackageLib[];
   onKeyWordChange: (keyWord: string) => void;
   onClickDelete: (pack: PackageLib) => void;
+  loading: boolean;
 }
 
 const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
@@ -131,14 +132,19 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
     <div className="package-list">
       <div className="package-tab">
         <DataGrid
+          loading={props.loading}
           columns={columns}
           rows={props.packages}
           hideFooterPagination={true}
-          localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
+          localeText={{
+            noRowsLabel: "Aucune donnée",
+            ...frFR.components.MuiDataGrid.defaultProps.localeText,
+          }}
           className="package-grid"
           onRowClick={(params) =>
             navigate(`/packages/${params.row.id}/content`)
           }
+          autoHeight
         />
       </div>
     </div>

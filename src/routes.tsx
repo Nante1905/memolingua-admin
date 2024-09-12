@@ -15,6 +15,7 @@ import QuestionListRoot from "./components/quiz/containers/question-list-root/qu
 import QuizAddQuestionRoot from "./components/quiz/containers/quiz-add-question-root/quiz-add-question.root";
 import QuizCreationRoot from "./components/quiz/containers/quiz-creation-root/quiz-creation.root";
 import QuizListRoot from "./components/quiz/containers/quiz-list-root/quiz-list.root";
+import ThemeListRoot from "./components/themes/containers/theme-list/theme-list.root";
 
 export const routes = createBrowserRouter([
   {
@@ -84,6 +85,10 @@ export const routes = createBrowserRouter([
       {
         path: "/packages/:id/update",
         element: <UpdatePackageRoot />,
+      },
+      {
+        path: "/themes",
+        element: <ThemeListRoot />,
       },
     ],
   },

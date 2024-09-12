@@ -17,7 +17,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import ConfirmationDialogComponent from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
-import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
 import PackageListComponent from "../../components/package-list/package-list.component";
 import { deletePackage, getAllPackages } from "../../services/package.service";
@@ -67,9 +66,7 @@ const PackageListRoot = () => {
         <h1>Liste des paquets</h1>
       </div>
       <Link to={`/packages/create`}>
-        <Button color="secondary" variant="contained">
-          Créer
-        </Button>
+        <Button variant="contained">Créer</Button>
       </Link>
       <div className="filter-content">
         <div className="left">
@@ -141,21 +138,21 @@ const PackageListRoot = () => {
           />
         </div>
       </div>
-      <AppLoaderComponent loading={packageQuery.isFetching}>
-        <PackageListComponent
-          packages={packageQuery.data?.data.payload.items as PackageLib[]}
-          onKeyWordChange={(word) => setKeyword(word)}
-          onClickDelete={(pack) =>
-            setState((state) => ({
-              ...state,
-              package: {
-                id: pack.id,
-                title: pack.title,
-              },
-            }))
-          }
-        />
-      </AppLoaderComponent>
+
+      <PackageListComponent
+        loading={packageQuery.isFetching}
+        packages={packageQuery.data?.data.payload.items as PackageLib[]}
+        onKeyWordChange={(word) => setKeyword(word)}
+        onClickDelete={(pack) =>
+          setState((state) => ({
+            ...state,
+            package: {
+              id: pack.id,
+              title: pack.title,
+            },
+          }))
+        }
+      />
       <AppPagination
         currentPage={state.page}
         pageSize={pageSize}
