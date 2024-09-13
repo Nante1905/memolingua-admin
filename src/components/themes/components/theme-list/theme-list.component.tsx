@@ -1,14 +1,13 @@
-import { IconProp, library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DeleteForever, Edit } from "@mui/icons-material";
+import { CheckCircle, DeleteForever, Edit, Error } from "@mui/icons-material";
 import { Chip, IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales";
-import React, { Fragment, useEffect, useMemo } from "react";
+import React, { Fragment, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ENTITY_DELETED } from "../../../shared/constants/api.constant";
-import { Theme } from "../../../shared/types/Theme";
+import { ENTITY_DELETED } from "../../../../shared/constants/api.constant";
+import { Theme } from "../../../../shared/types/Theme";
 import "./theme-list.component.scss";
 
 interface ThemeListProps {
@@ -41,6 +40,24 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
         headerName: "Contenu",
         align: "right",
         renderCell: (value) => `${value.row.nbr} paquets`,
+      },
+      {
+        field: "a",
+        headerName: "Internationalisation",
+        width: 150,
+        align: "right",
+        renderCell: (value) => (
+          <div className="theme-langs">
+            <span>
+              {value.row.langExist}/{value.row.totalLang}
+            </span>
+            {value.row.langExist < value.row.totalLang ? (
+              <Error color="error" />
+            ) : (
+              <CheckCircle color="primary" />
+            )}
+          </div>
+        ),
       },
       {
         field: "state",
@@ -98,9 +115,6 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
     []
   );
 
-  useEffect(() => {
-    library.add(fas);
-  }, []);
   return (
     <div className="theme-tab">
       <DataGrid

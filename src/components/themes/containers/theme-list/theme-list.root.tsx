@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
-import ThemeListComponent from "../../components/theme-list.component";
+import ThemeListComponent from "../../components/theme-list/theme-list.component";
 import { getAllThemes } from "../../services/theme.service";
 import "./theme-list.root.scss";
 
