@@ -11,9 +11,10 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
+import { GridSortModel } from "@mui/x-data-grid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import ConfirmationDialogComponent from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
@@ -38,9 +39,27 @@ const PackageListRoot = () => {
     queryFn: () =>
       getAllPackages(
         { page: state.page, pageSize },
-        { keyword, author: state.authorFilter, deleted: state.deleteFilter }
+        {
+          keyword,
+          author: state.authorFilter,
+          notDeleted: state.isNotDeleted,
+          sort: state.sort,
+          order: state.order ?? "asc",
+        }
       ),
   });
+
+  const onSortChange = useCallback((model: GridSortModel) => {
+    if (model[0]) {
+      console.log(model[0]);
+
+      setState((state) => ({
+        ...state,
+        sort: model[0].field,
+        order: model[0].sort,
+      }));
+    }
+  }, []);
 
   const deleteMutation = useMutation({
     mutationKey: ["delete-package"],
@@ -123,7 +142,7 @@ const PackageListRoot = () => {
           </FormControl>
         </div>
         <div className="right">
-          Est supprimé
+          Non supprimé
           <Checkbox
             size="small"
             color="error"
@@ -131,7 +150,7 @@ const PackageListRoot = () => {
               setState((state) => ({
                 ...state,
                 page: 1,
-                deleteFilter: event.target.checked,
+                isNotDeleted: event.target.checked,
               }));
             }}
             value={true}
@@ -143,6 +162,7 @@ const PackageListRoot = () => {
         loading={packageQuery.isFetching}
         packages={packageQuery.data?.data.payload.items as PackageLib[]}
         onKeyWordChange={(word) => setKeyword(word)}
+        onSortModelChange={onSortChange}
         onClickDelete={(pack) =>
           setState((state) => ({
             ...state,

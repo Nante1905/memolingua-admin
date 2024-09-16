@@ -1,3 +1,4 @@
+import { GridSortDirection } from "@mui/x-data-grid";
 import { http } from "../../../shared/services/api/interceptor/axios.interceptor";
 import { ApiResponse } from "../../../shared/types/ApiResponse";
 import { Langage } from "../../../shared/types/Langage";
@@ -41,8 +42,32 @@ export const createTheme = (data: {
   return http.post(`/admin/themes`, data);
 };
 
-export const getAllThemes = (page: number, pageSize: number) => {
-  return http.get<ApiResponse<Paginated<Theme>>>(
-    `/admin/themes?page=${page}&pageSize=${pageSize}`
-  );
+export const getAllThemes = (
+  page: number,
+  pageSize: number,
+  filter: {
+    isNotDeleted: boolean;
+    keyword: string;
+    order?: GridSortDirection;
+    sort?: string;
+  } = {
+    isNotDeleted: false,
+    keyword: "",
+    order: "asc",
+    sort: undefined,
+  }
+) => {
+  let req = `/admin/themes?page=${page}&pageSize=${pageSize}`;
+  if (filter.isNotDeleted) {
+    req += `&state=exist`;
+  }
+  if (filter.keyword != "") {
+    req += `&keyword=${filter.keyword.trim()}`;
+  }
+  if (filter.sort) {
+    req += `&sort=${filter.sort.trim()}&order=${filter.order
+      ?.trim()
+      .toUpperCase()}`;
+  }
+  return http.get<ApiResponse<Paginated<Theme>>>(req);
 };

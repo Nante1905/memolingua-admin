@@ -1,6 +1,6 @@
 import { AddCardOutlined, DeleteForever, Edit } from "@mui/icons-material";
 import { Chip, IconButton, Tooltip } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales";
 import React, { Fragment, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ interface PackageListComponentProps {
   onKeyWordChange: (keyWord: string) => void;
   onClickDelete: (pack: PackageLib) => void;
   loading: boolean;
+  onSortModelChange: (model: GridSortModel) => void;
 }
 
 const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
@@ -25,8 +26,13 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
       { field: "id", headerName: "ID", width: 120 },
       { field: "title", headerName: "Titre", width: 200 },
       { field: "themeLabel", headerName: "Thème", width: 150 },
-      { field: "lSource", headerName: "L. Source", width: 140 },
-      { field: "lTarget", headerName: "L. Cible", width: 140 },
+      {
+        field: "lSource",
+        headerName: "L. Source",
+        width: 140,
+        sortable: false,
+      },
+      { field: "lTarget", headerName: "L. Cible", width: 140, sortable: false },
       {
         field: "nb",
         headerName: "Contenu",
@@ -51,6 +57,7 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
         headerName: "État",
         width: 100,
         align: "center",
+        sortable: false,
         renderCell: (value) =>
           value.row.state == ENTITY_DELETED ? (
             <Chip label={`Suppr.`} color="error" size="small" />
@@ -63,6 +70,7 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
         headerName: "Auteur",
         align: "center",
         width: 80,
+        sortable: false,
         renderCell: (value) => (
           <Tooltip title={value.row.authorName}>
             <Chip
@@ -80,6 +88,7 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
         headerName: "Actions",
         width: 120,
         align: "center",
+        sortable: false,
         renderCell: (value) => (
           <div className="actions">
             {value.row.authorRole == ADMIN_ROLE &&
@@ -144,6 +153,9 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
           onRowClick={(params) =>
             navigate(`/packages/${params.row.id}/content`)
           }
+          disableColumnFilter
+          filterMode="server"
+          onSortModelChange={props.onSortModelChange}
           autoHeight
         />
       </div>

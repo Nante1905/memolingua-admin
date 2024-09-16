@@ -2,7 +2,7 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CheckCircle, DeleteForever, Edit, Error } from "@mui/icons-material";
 import { Chip, IconButton } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales";
 import React, { Fragment, useMemo } from "react";
 import { Link } from "react-router-dom";
@@ -14,6 +14,7 @@ interface ThemeListProps {
   themes: Theme[];
   loading: boolean;
   onDelete: (theme: Theme) => void;
+  onSortModelChange: (model: GridSortModel) => void;
 }
 
 const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
@@ -31,7 +32,6 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
         headerName: "Icône",
         align: "center",
         sortable: false,
-        filterable: false,
         renderCell: (value) => (
           <FontAwesomeIcon icon={value.row.icon ?? ("tag" as IconProp)} />
         ),
@@ -43,10 +43,11 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
         renderCell: (value) => `${value.row.nbr} paquets`,
       },
       {
-        field: "a",
+        field: "intl",
         headerName: "Internationalisation",
         width: 150,
         align: "right",
+        sortable: false,
         renderCell: (value) => (
           <div className="theme-langs">
             <span>
@@ -66,6 +67,7 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
         headerName: "État",
         align: "center",
         width: 120,
+        sortable: false,
         renderCell: (value) =>
           value.row.state == ENTITY_DELETED ? (
             <Chip label="Suppr." color="error" />
@@ -79,7 +81,6 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
         width: 150,
         headerAlign: "center",
         sortable: false,
-        filterable: false,
         align: "center",
         renderCell: (value) => (
           <div className="actions">
@@ -113,7 +114,7 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
         ),
       },
     ],
-    []
+    [props]
   );
 
   return (
@@ -123,10 +124,12 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
         columns={columns}
         rows={props.themes}
         hideFooterPagination
+        disableColumnFilter
         localeText={{
           noRowsLabel: "Aucune donnée",
           ...frFR.components.MuiDataGrid.defaultProps.localeText,
         }}
+        onSortModelChange={props.onSortModelChange}
         autoHeight
       />
     </div>
