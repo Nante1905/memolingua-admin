@@ -90,6 +90,13 @@ const PackageDetailsRoot: React.FC = () => {
                 <strong>Auteur: </strong>{" "}
                 {getFullName(detailsQuery.data?.data.payload.author as User)}
               </p>
+              {detailsQuery.data?.data.payload.state != ENTITY_DELETED && (
+                <Link to={`/packages/${idPackage}/add-cards`}>
+                  <Button color="accent" variant="contained">
+                    Ajouter un carte
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
 
