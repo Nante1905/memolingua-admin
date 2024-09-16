@@ -51,8 +51,6 @@ const PackageListRoot = () => {
 
   const onSortChange = useCallback((model: GridSortModel) => {
     if (model[0]) {
-      console.log(model[0]);
-
       setState((state) => ({
         ...state,
         sort: model[0].field,

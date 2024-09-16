@@ -4,6 +4,7 @@ import { Button, Chip, InputAdornment, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { FC } from "react";
 import { Link } from "react-router-dom";
+import EntityChipStateComponent from "../../../../shared/components/entity-chip-state/entity-chip-state.component";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
 import { formatDate } from "../../../../shared/helpers/formatter";
@@ -35,6 +36,9 @@ const QuizListComponent: FC<QuizListComponentProps> = (props) => {
       field: "state",
       headerName: "État",
       width: 100,
+      renderCell: (value) => (
+        <EntityChipStateComponent entityState={value.row.state} />
+      ),
     },
     {
       field: "levelLabel",
