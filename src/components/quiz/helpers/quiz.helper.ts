@@ -10,8 +10,8 @@ import {
 } from "../../../shared/constants/validator.constant";
 
 export const answerSchema = z.object({
-  answer: z.string().min(1),
-  // isCorrect: z.boolean(),
+  answer: strRequired,
+  isCorrect: z.coerce.boolean(),
 });
 
 const mediaValidationSchema = z

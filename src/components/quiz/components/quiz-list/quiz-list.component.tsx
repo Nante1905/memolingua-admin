@@ -40,13 +40,14 @@ interface QuizListComponentProps {
 
 const QuizListComponent: FC<QuizListComponentProps> = (props) => {
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 200 },
-    { field: "title", headerName: "Titre", width: 250 },
+    { field: "id", headerName: "ID", width: 200, display: "flex" },
+    { field: "title", headerName: "Titre", width: 250, display: "flex" },
     {
       field: "description",
       headerName: "Description",
       width: 250,
       sortable: false,
+      display: "flex",
 
       renderCell: (param) => <div>{parse(param.row.description)}</div>,
     },
@@ -54,33 +55,39 @@ const QuizListComponent: FC<QuizListComponentProps> = (props) => {
       field: "creationDate",
       headerName: "Date Création",
       width: 120,
+      display: "flex",
       valueFormatter: (value) => formatDate(new Date(value)),
     },
     {
       field: "state",
       headerName: "État",
       width: 100,
+      display: "flex",
     },
     {
       field: "languageSource",
       headerName: "Language source",
       width: 100,
+      display: "flex",
     },
     {
       field: "languageTarget",
       headerName: "Language du cours",
       width: 100,
+      display: "flex",
     },
     {
       field: "level",
       headerName: "Level",
       width: 100,
+      display: "flex",
       renderCell: (value) => <Chip label={(value.row as Quiz).level} />,
     },
     {
       field: "theme",
       headerName: "Theme",
       width: 100,
+      display: "flex",
       renderCell: (value) => <Chip label={(value.row as Quiz).theme} />,
       valueGetter: (_, row) => row.theme,
     },
@@ -89,6 +96,7 @@ const QuizListComponent: FC<QuizListComponentProps> = (props) => {
       headerName: "Actions",
       width: 300,
       sortable: false,
+      display: "flex",
       filterable: false,
       renderCell: (value) => (
         <div className="actions">

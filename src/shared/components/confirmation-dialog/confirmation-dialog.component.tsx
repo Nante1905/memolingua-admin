@@ -30,9 +30,9 @@ const ConfirmationDialogComponent: FC<ConfirmationDialogComponentProps> = (
           justifyContent: "space-around",
         }}
       >
-        <Button onClick={() => props?.onConfirm()}>Yes</Button>
+        <Button onClick={() => props?.onConfirm()}>Confirmer</Button>
         <Button color="error" onClick={() => props?.onClose()}>
-          No
+          Annuler
         </Button>
       </DialogActions>
     </Dialog>

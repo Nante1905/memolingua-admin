@@ -56,3 +56,10 @@ export const findQuestionById = (id: string) =>
 
 export const updateQuestion = (id: string, data: object) =>
   http.put(`/admin/questions/${id}`, data);
+
+export const findAnswerById = (id: string) => http.get(`/admin/answers/${id}`);
+export const updateAnswer = (id: string, answer: object) =>
+  http.put(`/admin/answers/${id}`, answer);
+
+export const deleteQuestion = (id: string) =>
+  http.delete(`/admin/questions/${id}`);
