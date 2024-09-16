@@ -1,7 +1,9 @@
+import { Button } from "@mui/material";
 import { GridFilterItem, GridSortItem } from "@mui/x-data-grid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import { useCallback, useState } from "react";
+import { Link } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import ConfirmationDialogComponent from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import { AppReponseError } from "../../../../shared/types/Error";
@@ -75,8 +77,13 @@ const QuizListRoot = () => {
 
   return (
     <div className="quiz-list-root">
-      <header>
+      <header className="list-header">
         <h1>Liste des quiz</h1>
+        <div className="actions">
+          <Link to={`/quizs/create`}>
+            <Button variant="contained">Créer</Button>
+          </Link>
+        </div>
       </header>
       <QuizListComponent
         quizsLoading={quizQuery.isFetching}

@@ -1,13 +1,18 @@
 import { Outlet, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import HomeRoot from "./components/home/home.root";
+import LangCreateRoot from "./components/langs/container/lang-create-root/lang-create.root";
+import LangListRoot from "./components/langs/container/lang-list-root/lang-list.root";
+import LangUpdateRoot from "./components/langs/container/lang-update-root/lang-update.root";
 import LevelFormComponent from "./components/level/components/level-form/level-form.component";
 import LevelListRoot from "./components/level/container/list-root/list.root";
 import LevelUpdateFormRoot from "./components/level/container/update-form/update-form.root";
 import LoginRoot from "./components/login/container/login.root";
 import AddCardRoot from "./components/packages/containers/add-card/add-card.root";
 import CreatePackageRoot from "./components/packages/containers/create-package/create-package.root";
+import PackageDetailsRoot from "./components/packages/containers/package-details/package-details.root";
 import PackageListRoot from "./components/packages/containers/package-list/package-list.root";
+import UpdatePackageRoot from "./components/packages/containers/update-package/update-package.root";
 import AnswerListRoot from "./components/quiz/containers/answer-list-root/answer-list.root";
 import AnswerUpdateRoot from "./components/quiz/containers/answer-update-root/answer-update.root";
 import QuestionListRoot from "./components/quiz/containers/question-list-root/question-list.root";
@@ -16,6 +21,9 @@ import QuizAddQuestionRoot from "./components/quiz/containers/quiz-add-question-
 import QuizCreationRoot from "./components/quiz/containers/quiz-creation-root/quiz-creation.root";
 import QuizListRoot from "./components/quiz/containers/quiz-list-root/quiz-list.root";
 import QuizUpdateRoot from "./components/quiz/containers/quiz-update-root/quiz-update.root";
+import ThemeCreateRoot from "./components/themes/containers/theme-create/theme-create.root";
+import ThemeListRoot from "./components/themes/containers/theme-list/theme-list.root";
+import ThemeUpdateRoot from "./components/themes/containers/theme-update/theme-update.root";
 
 export const routes = createBrowserRouter([
   {
@@ -35,7 +43,7 @@ export const routes = createBrowserRouter([
         element: <HomeRoot />,
       },
       {
-        path: "/create-package",
+        path: "/packages/create",
         element: <CreatePackageRoot />,
       },
       {
@@ -89,6 +97,38 @@ export const routes = createBrowserRouter([
       {
         path: "/questions/:id/update",
         element: <QuestionUpdateRoot />,
+      },
+      {
+        path: "/langs",
+        element: <LangListRoot />,
+      },
+      {
+        path: "/langs/create",
+        element: <LangCreateRoot />,
+      },
+      {
+        path: "/langs/:id/update",
+        element: <LangUpdateRoot />,
+      },
+      {
+        path: "/packages/:id/content",
+        element: <PackageDetailsRoot />,
+      },
+      {
+        path: "/packages/:id/update",
+        element: <UpdatePackageRoot />,
+      },
+      {
+        path: "/themes",
+        element: <ThemeListRoot />,
+      },
+      {
+        path: "/themes/create",
+        element: <ThemeCreateRoot />,
+      },
+      {
+        path: "/themes/:id/update",
+        element: <ThemeUpdateRoot />,
       },
     ],
   },

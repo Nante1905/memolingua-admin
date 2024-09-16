@@ -1,0 +1,11 @@
+@import "../../../../shared/styles/variables.scss";
+
+.lang-list {
+  @media (width >= $large-devices) {
+    width: 50%;
+    margin: auto;
+  }
+  .flag-code {
+    justify-content: space-between;
+  }
+}

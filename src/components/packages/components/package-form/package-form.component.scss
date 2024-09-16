@@ -18,4 +18,18 @@
       width: 100%;
     }
   }
+  .previews {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+    & > * {
+      width: 50% !important;
+      margin: 1rem 0;
+      img {
+        width: 100%;
+        aspect-ratio: 1;
+      }
+    }
+  }
 }

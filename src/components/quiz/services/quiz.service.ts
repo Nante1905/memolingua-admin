@@ -44,7 +44,8 @@ export const findAllAnswers = (page: number, idQuestion?: string) =>
   http.get(`/admin/quizs/answers?page=${page}&id=${idQuestion ?? ""}`);
 
 export const findAllLangs = () => http.get("/langs");
-
+export const findPaginatedLangs = (page: number, limit: number) =>
+  http.get(`/langs?page=${page}&limit=${limit}`);
 export const findAllThemes = () => http.get("/themes");
 
 export const findAllLevels = () => http.get("/levels");

@@ -1,10 +1,13 @@
-import { DeleteForever, Edit } from "@mui/icons-material";
+import { AddCardOutlined, DeleteForever, Edit } from "@mui/icons-material";
 import { Chip, IconButton, Tooltip } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales";
-import React, { useMemo } from "react";
-import { Link } from "react-router-dom";
-import { ADMIN_ROLE } from "../../../../shared/constants/api.constant";
+import React, { Fragment, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  ADMIN_ROLE,
+  ENTITY_DELETED,
+} from "../../../../shared/constants/api.constant";
 import { PackageLib } from "../../types/PackageLib";
 import "./package-list.component.scss";
 
@@ -12,16 +15,24 @@ interface PackageListComponentProps {
   packages: PackageLib[];
   onKeyWordChange: (keyWord: string) => void;
   onClickDelete: (pack: PackageLib) => void;
+  loading: boolean;
+  onSortModelChange: (model: GridSortModel) => void;
 }
 
 const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
+  const navigate = useNavigate();
   const columns: GridColDef[] = useMemo(
     (): GridColDef[] => [
       { field: "id", headerName: "ID", width: 120 },
       { field: "title", headerName: "Titre", width: 200 },
-      { field: "theme", headerName: "Thème", width: 150 },
-      { field: "lSource", headerName: "L. Source", width: 140 },
-      { field: "lTarget", headerName: "L. Cible", width: 140 },
+      { field: "themeLabel", headerName: "Thème", width: 150 },
+      {
+        field: "lSource",
+        headerName: "L. Source",
+        width: 140,
+        sortable: false,
+      },
+      { field: "lTarget", headerName: "L. Cible", width: 140, sortable: false },
       {
         field: "nb",
         headerName: "Contenu",
@@ -44,11 +55,12 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
       {
         field: "state",
         headerName: "État",
-        width: 120,
+        width: 100,
         align: "center",
+        sortable: false,
         renderCell: (value) =>
-          value.row.state == -1 ? (
-            <Chip label={`Supprimé`} color="error" />
+          value.row.state == ENTITY_DELETED ? (
+            <Chip label={`Suppr.`} color="error" size="small" />
           ) : (
             <></>
           ),
@@ -57,8 +69,8 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
         field: "authorRole",
         headerName: "Auteur",
         align: "center",
-
         width: 80,
+        sortable: false,
         renderCell: (value) => (
           <Tooltip title={value.row.authorName}>
             <Chip
@@ -66,47 +78,85 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
               color={
                 value.row.authorRole == ADMIN_ROLE ? "secondary" : "accent"
               }
+              size="small"
             />
           </Tooltip>
         ),
       },
       {
         field: "",
-        headerName: "Action",
-        width: 100,
+        headerName: "Actions",
+        width: 120,
         align: "center",
-
+        sortable: false,
         renderCell: (value) => (
           <div className="actions">
-            <Link to={`/packages/${value.row.id}/update`}>
-              <IconButton>
+            {value.row.authorRole == ADMIN_ROLE &&
+            value.row.state != ENTITY_DELETED ? (
+              <Fragment>
+                <Link
+                  to={`/packages/${value.row.id}/add-cards`}
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <IconButton size="small">
+                    {" "}
+                    <AddCardOutlined />
+                  </IconButton>
+                </Link>
+                <Link
+                  to={`/packages/${value.row.id}/update`}
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <IconButton size="small">
+                    {" "}
+                    <Edit />{" "}
+                  </IconButton>
+                </Link>
+              </Fragment>
+            ) : (
+              <></>
+            )}
+
+            {value.row.state != ENTITY_DELETED && (
+              <IconButton
+                color="error"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  props.onClickDelete(value.row as PackageLib);
+                }}
+                size="small"
+              >
                 {" "}
-                <Edit />{" "}
+                <DeleteForever />{" "}
               </IconButton>
-            </Link>
-            <IconButton
-              color="error"
-              onClick={() => props.onClickDelete(value.row as PackageLib)}
-            >
-              {" "}
-              <DeleteForever />{" "}
-            </IconButton>
+            )}
           </div>
         ),
       },
     ],
-    []
+    [props]
   );
 
   return (
     <div className="package-list">
       <div className="package-tab">
         <DataGrid
+          loading={props.loading}
           columns={columns}
           rows={props.packages}
           hideFooterPagination={true}
-          localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
+          localeText={{
+            noRowsLabel: "Aucune donnée",
+            ...frFR.components.MuiDataGrid.defaultProps.localeText,
+          }}
           className="package-grid"
+          onRowClick={(params) =>
+            navigate(`/packages/${params.row.id}/content`)
+          }
+          disableColumnFilter
+          filterMode="server"
+          onSortModelChange={props.onSortModelChange}
+          autoHeight
         />
       </div>
     </div>

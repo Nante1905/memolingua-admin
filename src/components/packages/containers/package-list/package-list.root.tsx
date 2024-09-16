@@ -1,6 +1,7 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -10,14 +11,16 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { GridSortModel } from "@mui/x-data-grid";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { enqueueSnackbar } from "notistack";
+import { useCallback, useState } from "react";
+import { Link } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import ConfirmationDialogComponent from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
-import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
 import PackageListComponent from "../../components/package-list/package-list.component";
-import { getAllPackages } from "../../services/package.service";
+import { deletePackage, getAllPackages } from "../../services/package.service";
 import {
   initialPackageListState,
   PackageListState,
@@ -29,21 +32,62 @@ const PackageListRoot = () => {
   const [state, setState] = useState<PackageListState>(initialPackageListState);
   const [pageSize, setPageSize] = useDebounceValue(10, 800);
   const [keyword, setKeyword] = useDebounceValue("", 800);
+  const queryClient = useQueryClient();
 
   const packageQuery = useQuery({
     queryKey: ["packages", pageSize, keyword, state],
     queryFn: () =>
       getAllPackages(
         { page: state.page, pageSize },
-        { keyword, author: state.authorFilter, deleted: state.deleteFilter }
+        {
+          keyword,
+          author: state.authorFilter,
+          notDeleted: state.isNotDeleted,
+          sort: state.sort,
+          order: state.order ?? "asc",
+        }
       ),
+  });
+
+  const onSortChange = useCallback((model: GridSortModel) => {
+    if (model[0]) {
+      setState((state) => ({
+        ...state,
+        sort: model[0].field,
+        order: model[0].sort,
+      }));
+    }
+  }, []);
+
+  const deleteMutation = useMutation({
+    mutationKey: ["delete-package"],
+    mutationFn: (id: string) => deletePackage(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["packages"] });
+
+      enqueueSnackbar({
+        message: `Paquet ${state.package?.title ?? ""} supprimé`,
+        variant: "success",
+        autoHideDuration: 3000,
+      });
+      setState((state) => ({
+        ...state,
+        package: undefined,
+      }));
+    },
   });
 
   return (
     <div id="package-list-root">
-      <div className="header">
+      <header className="list-header">
         <h1>Liste des paquets</h1>
-      </div>
+        <div className="actions">
+          <Link to={`/packages/create`}>
+            <Button variant="contained">Créer</Button>
+          </Link>
+        </div>
+      </header>
+
       <div className="filter-content">
         <div className="left">
           <TextField
@@ -99,7 +143,7 @@ const PackageListRoot = () => {
           </FormControl>
         </div>
         <div className="right">
-          Est supprimé
+          Non supprimé
           <Checkbox
             size="small"
             color="error"
@@ -107,28 +151,29 @@ const PackageListRoot = () => {
               setState((state) => ({
                 ...state,
                 page: 1,
-                deleteFilter: event.target.checked,
+                isNotDeleted: event.target.checked,
               }));
             }}
             value={true}
           />
         </div>
       </div>
-      <AppLoaderComponent loading={packageQuery.isFetching}>
-        <PackageListComponent
-          packages={packageQuery.data?.data.payload.items as PackageLib[]}
-          onKeyWordChange={(word) => setKeyword(word)}
-          onClickDelete={(pack) =>
-            setState((state) => ({
-              ...state,
-              package: {
-                id: pack.id,
-                title: pack.title,
-              },
-            }))
-          }
-        />
-      </AppLoaderComponent>
+
+      <PackageListComponent
+        loading={packageQuery.isFetching}
+        packages={packageQuery.data?.data.payload.items as PackageLib[]}
+        onKeyWordChange={(word) => setKeyword(word)}
+        onSortModelChange={onSortChange}
+        onClickDelete={(pack) =>
+          setState((state) => ({
+            ...state,
+            package: {
+              id: pack.id,
+              title: pack.title,
+            },
+          }))
+        }
+      />
       <AppPagination
         currentPage={state.page}
         pageSize={pageSize}
@@ -150,10 +195,11 @@ const PackageListRoot = () => {
       {state.package && (
         <ConfirmationDialogComponent
           title="Etes vous sûr?"
-          onConfirm={() => {}}
+          onConfirm={() => deleteMutation.mutate(state.package?.id as string)}
           onClose={() => {
             setState((state) => ({ ...state, package: undefined }));
           }}
+          loading={deleteMutation.isPending}
         >
           <p>
             Voulez-vous vraiment supprimer le paquet{" "}

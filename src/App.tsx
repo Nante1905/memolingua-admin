@@ -4,6 +4,7 @@ import "./App.scss";
 import FooterRoot from "./shared/components/footer/container/footer-root/footer.root";
 import AuthProtector from "./shared/components/guards/container/auth-protection.root";
 import NavbarRoot from "./shared/components/navbar/container/navbar-root/navbar.root";
+import ScrollTopRoute from "./shared/components/scroll-top/scroll-top.component";
 import SidebarRoot from "./shared/components/sidebar/container/sidebar.root";
 
 function App(props: { children: React.ReactNode }) {
@@ -17,6 +18,7 @@ function App(props: { children: React.ReactNode }) {
   return (
     <Fragment>
       {/* TODO: uncoomment */}
+      <ScrollTopRoute />
       <AuthProtector>
         <SidebarRoot />
         <NavbarRoot />

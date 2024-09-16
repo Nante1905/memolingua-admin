@@ -18,3 +18,7 @@ export const formatDateTime = (date: Date) => {
     second: "numeric",
   });
 };
+
+export const getFullName = (user: { firstname: string; lastname: string }) => {
+  return [user?.lastname ?? "", user?.firstname ?? ""].join(" ");
+};

@@ -1,6 +1,7 @@
-import axios, { InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { enqueueSnackbar } from "notistack";
 import { API_BASE_URL } from "../../../constants/api.constant";
+import { ApiResponse } from "../../../types/ApiResponse";
 
 export const http = axios.create({
   baseURL: API_BASE_URL,
@@ -36,15 +37,24 @@ http.interceptors.response.use(
         ? err.response?.data.error
         : err.response?.data.message;
 
-    if (err.code == "ERR_NETWORK") {
+    if (err.code == "ERR_NETWORK" || err.code == "ERR_CONNECTION_REFUSED") {
       err.message = "Connexion au serveur impossible";
     } else if (err.response.status == 401) {
-      enqueueSnackbar({ message: "Unauthorized", variant: "error" });
+      err.message =
+        (err as AxiosError<ApiResponse>).response?.data.error ?? "Accès refusé";
+      sessionStorage.removeItem("accessToken");
+      window.location.href = `/login`;
+    } else if (err.response?.status === 403) {
+      err.message =
+        (err as AxiosError<ApiResponse>).response?.data.error ??
+        "Action interdite";
     } else {
-      if (!err.message) {
-        err.message = "Une erreur s'est produite";
+      const apiError = (err as AxiosError<ApiResponse>).response?.data.error;
+      if (typeof apiError == "string") {
+        err.message = apiError;
       }
     }
+    enqueueSnackbar({ message: err.message, variant: "error", persist: true });
     return Promise.reject(err);
   }
 );

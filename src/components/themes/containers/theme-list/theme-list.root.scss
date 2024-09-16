@@ -1,0 +1,14 @@
+#theme-list-root {
+  padding-inline: 50px;
+  .app-pagination {
+    width: 60%;
+    margin: 2rem auto;
+  }
+  .filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 80%;
+    margin: 2rem auto;
+  }
+}

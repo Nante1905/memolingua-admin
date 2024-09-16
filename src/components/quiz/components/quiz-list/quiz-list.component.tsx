@@ -19,6 +19,7 @@ import { frFR } from "@mui/x-data-grid/locales";
 import parse from "html-react-parser";
 import { FC, useState } from "react";
 import { Link } from "react-router-dom";
+import EntityChipStateComponent from "../../../../shared/components/entity-chip-state/entity-chip-state.component";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
 import { formatDate } from "../../../../shared/helpers/formatter";
@@ -63,6 +64,9 @@ const QuizListComponent: FC<QuizListComponentProps> = (props) => {
       headerName: "État",
       width: 100,
       display: "flex",
+      renderCell: (value) => (
+        <EntityChipStateComponent entityState={value.row.state} />
+      ),
     },
     {
       field: "languageSource",
