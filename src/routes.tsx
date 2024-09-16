@@ -14,10 +14,13 @@ import PackageDetailsRoot from "./components/packages/containers/package-details
 import PackageListRoot from "./components/packages/containers/package-list/package-list.root";
 import UpdatePackageRoot from "./components/packages/containers/update-package/update-package.root";
 import AnswerListRoot from "./components/quiz/containers/answer-list-root/answer-list.root";
+import AnswerUpdateRoot from "./components/quiz/containers/answer-update-root/answer-update.root";
 import QuestionListRoot from "./components/quiz/containers/question-list-root/question-list.root";
+import QuestionUpdateRoot from "./components/quiz/containers/question-update-root/question-update.root";
 import QuizAddQuestionRoot from "./components/quiz/containers/quiz-add-question-root/quiz-add-question.root";
 import QuizCreationRoot from "./components/quiz/containers/quiz-creation-root/quiz-creation.root";
 import QuizListRoot from "./components/quiz/containers/quiz-list-root/quiz-list.root";
+import QuizUpdateRoot from "./components/quiz/containers/quiz-update-root/quiz-update.root";
 import ThemeCreateRoot from "./components/themes/containers/theme-create/theme-create.root";
 import ThemeListRoot from "./components/themes/containers/theme-list/theme-list.root";
 import ThemeUpdateRoot from "./components/themes/containers/theme-update/theme-update.root";
@@ -60,12 +63,20 @@ export const routes = createBrowserRouter([
         element: <QuizListRoot />,
       },
       {
-        path: "/quizs/questions",
+        path: "/quizs/:id/update",
+        element: <QuizUpdateRoot />,
+      },
+      {
+        path: "/questions",
         element: <QuestionListRoot />,
       },
       {
-        path: "/quizs/answers",
+        path: "/answers",
         element: <AnswerListRoot />,
+      },
+      {
+        path: "/answers/:id/update",
+        element: <AnswerUpdateRoot />,
       },
       {
         path: "/packages",
@@ -84,6 +95,10 @@ export const routes = createBrowserRouter([
         element: <LevelUpdateFormRoot />,
       },
       {
+        path: "/questions/:id/update",
+        element: <QuestionUpdateRoot />,
+      },
+      {
         path: "/langs",
         element: <LangListRoot />,
       },
@@ -94,8 +109,8 @@ export const routes = createBrowserRouter([
       {
         path: "/langs/:id/update",
         element: <LangUpdateRoot />,
-},
-        { 
+      },
+      {
         path: "/packages/:id/content",
         element: <PackageDetailsRoot />,
       },

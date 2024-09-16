@@ -1,11 +1,22 @@
 import { MenuItem } from "@mui/material";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { enqueueSnackbar } from "notistack";
+import { useCallback, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useDebounceValue } from "usehooks-ts";
+import ConfirmationDialogComponent from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import SelectInputControlledComponent from "../../../../shared/components/inputs/select-input/select-input-controlled.component";
+import { AppReponseError } from "../../../../shared/types/Error";
 import { Quiz } from "../../../../shared/types/Quiz";
+import { AppResponse } from "../../../../shared/types/Response";
 import QuestionListComponent from "../../components/question-list/question-list.component";
 import {
+  deleteQuestion,
   findAllQuestions,
   findAllQuizsSelect,
 } from "../../services/quiz.service";
@@ -17,6 +28,8 @@ interface QuestionListRootState {
   pageSize?: number;
   search?: string;
   idQuiz?: string;
+  openDialog: boolean;
+  idDelete: string;
 }
 
 const QuestionListRoot = () => {
@@ -25,17 +38,17 @@ const QuestionListRoot = () => {
     page: 1,
     quizPage: 1,
     idQuiz: searchParams.get("id") ?? "",
+    openDialog: false,
+    idDelete: "",
   });
 
-  // useLayoutEffect(() => {
-  //   setState((state) => ({
-  //     ...state,
-  //     idQuiz: searchParams.get("id") ?? "",
-  //   }));
-  // }, [searchParams]);
+  const queryClient = useQueryClient();
+
+  const [pageSize, setPageSize] = useDebounceValue(8, 800);
+
   const questionQuery = useQuery({
-    queryKey: ["quiz/question", state.page, state.idQuiz],
-    queryFn: () => findAllQuestions(state.page, state.idQuiz),
+    queryKey: ["quiz/question", state.page, pageSize, state.idQuiz],
+    queryFn: () => findAllQuestions(state.page, pageSize, state.idQuiz),
   });
   const quizQuery = useInfiniteQuery({
     queryKey: ["quiz/all"],
@@ -48,7 +61,39 @@ const QuestionListRoot = () => {
     },
   });
 
-  // console.log();
+  const questionDeleteMutation = useMutation({
+    mutationKey: ["question/delete"],
+    mutationFn: (id: string) => deleteQuestion(id),
+    onSuccess: (res: AppResponse<unknown>) => {
+      enqueueSnackbar({ message: res.data.message, variant: "success" });
+      queryClient.invalidateQueries({ queryKey: ["quiz/question"] });
+      closeDialog();
+    },
+    onError: (err: AppReponseError<unknown>) => {
+      enqueueSnackbar({
+        message: err.response?.data.error ?? err.message,
+        variant: "error",
+      });
+    },
+  });
+
+  const onDelete = useCallback(
+    (id: string) => {
+      questionDeleteMutation.mutate(id);
+    },
+    [questionDeleteMutation]
+  );
+
+  const closeDialog = useCallback(() => {
+    setState((state) => ({ ...state, openDialog: false, idDelete: "" }));
+  }, [setState]);
+
+  const onDeleteClick = useCallback(
+    (id: string) => {
+      setState((state) => ({ ...state, idDelete: id, openDialog: true }));
+    },
+    [setState]
+  );
 
   return (
     <div className="question-list-root">
@@ -92,10 +137,7 @@ const QuestionListRoot = () => {
             }));
           }}
           onPageSizeChange={function (pageSize: number): void {
-            setState((state) => ({
-              ...state,
-              pageSize,
-            }));
+            setPageSize(pageSize);
           }}
           onSearchChange={function (search: string): void {
             setState((state) => ({
@@ -103,8 +145,28 @@ const QuestionListRoot = () => {
               search,
             }));
           }}
+          onDeleteClick={onDeleteClick}
         />
       </section>
+      {state.openDialog && (
+        <ConfirmationDialogComponent
+          title={"Êtes vous sur de supprimer cette question"}
+          onConfirm={(): void => {
+            onDelete(state.idDelete);
+          }}
+          onClose={(): void => {
+            setState((state) => ({
+              ...state,
+              openDialog: false,
+              idDelete: "",
+            }));
+          }}
+        >
+          Supprimer cette question ({state.idDelete}) effacera également toutes
+          ses réponses. Les utilisateurs ne verront plus cette question dans les
+          quiz.
+        </ConfirmationDialogComponent>
+      )}
     </div>
   );
 };

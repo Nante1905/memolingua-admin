@@ -1,7 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { AxiosError, AxiosResponse } from "axios";
+import { enqueueSnackbar } from "notistack";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
+import { ApiResponse } from "../../../../shared/types/ApiResponse";
 import QuizFormComponent from "../../components/quiz-form/quiz-form.component";
 import {
+  createQuiz,
   findAllLangs,
   findAllLevels,
   findAllThemes,
@@ -22,6 +26,17 @@ const QuizCreationRoot = () => {
     queryFn: findAllLevels,
   });
 
+  const quizCreateMutation = useMutation({
+    mutationKey: ["quiz-create"],
+    mutationFn: (data: unknown) => createQuiz(data),
+    onSuccess(res: AxiosResponse<ApiResponse>) {
+      enqueueSnackbar({ message: res.data.message, variant: "success" });
+    },
+    onError(err: AxiosError<ApiResponse>) {
+      enqueueSnackbar({ message: err.response?.data.error, variant: "error" });
+    },
+  });
+
   return (
     <div className="quiz-creation-root">
       <header>
@@ -39,6 +54,10 @@ const QuizCreationRoot = () => {
             langs={langsQuery.data?.data.payload}
             levels={levelsQuery.data?.data.payload}
             themes={themesQuery.data?.data.payload}
+            onSubmit={(data) => {
+              quizCreateMutation.mutate(data);
+            }}
+            action="Créer"
           />
         </AppLoaderComponent>
       </div>

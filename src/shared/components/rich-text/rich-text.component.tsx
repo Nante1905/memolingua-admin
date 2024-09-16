@@ -17,16 +17,20 @@ interface RichTextProps {
   onContentChange: (content: string) => void;
   label: string;
   className?: string;
+  defaultValue?: string;
 }
 
 const RichText: React.FC<RichTextProps> = (props) => {
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content: "",
-    onUpdate: ({ editor }) => {
-      props.onContentChange(editor.getHTML());
+  const editor = useEditor(
+    {
+      extensions: [StarterKit],
+      content: props.defaultValue ?? "",
+      onUpdate: ({ editor }) => {
+        props.onContentChange(editor.getHTML());
+      },
     },
-  });
+    [props.defaultValue]
+  );
 
   return (
     <div

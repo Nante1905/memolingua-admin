@@ -1,0 +1,8 @@
+@import "../../../../shared/styles/form.scss";
+@import "../../../../shared/styles/variables.scss";
+
+.question-form-update {
+  .form {
+    @extend %form-body;
+  }
+}

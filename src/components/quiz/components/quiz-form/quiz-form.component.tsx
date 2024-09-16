@@ -8,53 +8,56 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError, AxiosResponse } from "axios";
-import { enqueueSnackbar } from "notistack";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import RichText from "../../../../shared/components/rich-text/rich-text.component";
-import { ApiResponse } from "../../../../shared/types/ApiResponse";
 import { Langage } from "../../../../shared/types/Langage";
 import { Level } from "../../../../shared/types/Level";
+import { Quiz } from "../../../../shared/types/Quiz";
 import { Theme } from "../../../../shared/types/Theme";
 import { quizSchema } from "../../helpers/quiz.helper";
-import { createQuiz } from "../../services/quiz.service";
 import "./quiz-form.component.scss";
 
 interface QuizFormComponentProps {
   langs: Langage[];
   levels: Level[];
   themes: Theme[];
+  defaultValues?: Partial<Quiz>;
+  title?: string;
+  action?: string;
+  onSubmit: (data: object) => void;
+  update?: boolean;
 }
 
 const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
   const form = useForm({
     resolver: zodResolver(quizSchema),
+    defaultValues: { ...props.defaultValues },
   });
 
-  const quizCreateMutation = useMutation({
-    mutationKey: ["quiz-create"],
-    mutationFn: (data: unknown) => createQuiz(data),
-    onSuccess(res: AxiosResponse<ApiResponse>) {
-      enqueueSnackbar({ message: res.data.message, variant: "success" });
-    },
-    onError(err: AxiosError<ApiResponse>) {
-      enqueueSnackbar({ message: err.response?.data.error, variant: "error" });
-    },
-  });
+  // const quizCreateMutation = useMutation({
+  //   mutationKey: ["quiz-create"],
+  //   mutationFn: (data: unknown) => createQuiz(data),
+  //   onSuccess(res: AxiosResponse<ApiResponse>) {
+  //     enqueueSnackbar({ message: res.data.message, variant: "success" });
+  //   },
+  //   onError(err: AxiosError<ApiResponse>) {
+  //     enqueueSnackbar({ message: err.response?.data.error, variant: "error" });
+  //   },
+  // });
 
   const selectedSource = form.watch("idLanguageSource");
   const selectedTarget = form.watch("idLanguageTarget");
 
-  const onSubmit = (data: unknown) => {
-    console.log(data);
-    quizCreateMutation.mutate(data);
-  };
+  // const onSubmit = (data: unknown) => {
+  //   console.log(data);
+  //   quizCreateMutation.mutate(data);
+  // };
 
   return (
     <div className="quiz-form">
-      <form className="form" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="form" onSubmit={form.handleSubmit(props.onSubmit)}>
+        <h1>{props.title}</h1>
         <div className="form-input">
           <Controller
             control={form.control}
@@ -65,6 +68,7 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
                 {...form.register("title")}
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
+                // defaultValue={props.defaultValues?.title}
               />
             )}
           />
@@ -74,11 +78,12 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
             <Controller
               control={form.control}
               name={`description`}
-              render={({ field, fieldState }) => (
+              render={({ field, fieldState, formState }) => (
                 <>
                   <RichText
                     label="Description"
                     {...field}
+                    defaultValue={formState.defaultValues?.description}
                     onContentChange={(content: string) =>
                       field.onChange(content)
                     }
@@ -98,7 +103,6 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
           <Controller
             name="idLanguageSource"
             control={form.control}
-            //   defaultValue={props.user?.gender}
             render={({ field: { onChange, value }, fieldState }) => (
               <FormControl className="form-control">
                 <InputLabel>Langue source</InputLabel>
@@ -116,7 +120,9 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
                     onChange(event);
                   }}
                   value={value}
+                  // defaultValue={props.defaultValues?.idLanguageSource}
                   error={!!fieldState.error}
+                  disabled={props.update ?? false}
                 >
                   {props.langs
                     ?.filter((l) => l.id != selectedTarget)
@@ -139,7 +145,6 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
           <Controller
             name="idLanguageTarget"
             control={form.control}
-            //   defaultValue={props.user?.gender}
             render={({ field: { onChange, value }, fieldState }) => (
               <FormControl className="form-control">
                 <InputLabel>Langue du cours</InputLabel>
@@ -156,8 +161,10 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
                     // );
                     onChange(event);
                   }}
+                  // defaultValue={props.defaultValues?.idLanguageTarget}
                   value={value}
                   error={!!fieldState.error}
+                  disabled={props.update ?? false}
                 >
                   {props.langs
                     ?.filter((l) => l.id != selectedSource)
@@ -180,7 +187,6 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
           <Controller
             name="idLevel"
             control={form.control}
-            //   defaultValue={props.user?.gender}
             render={({ field: { onChange, value }, fieldState }) => (
               <FormControl className="form-control">
                 <InputLabel>Level</InputLabel>
@@ -197,8 +203,10 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
                     // );
                     onChange(event);
                   }}
+                  // defaultValue={props.defaultValues?.idLevel}
                   value={value}
                   error={!!fieldState.error}
+                  disabled={props.update ?? false}
                 >
                   {props.levels?.map((e, index) => (
                     <MenuItem key={`selected-target-${index}`} value={e.id}>
@@ -219,7 +227,6 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
           <Controller
             name="idTheme"
             control={form.control}
-            //   defaultValue={props.user?.gender}
             render={({ field: { onChange, value }, fieldState }) => (
               <FormControl className="form-control">
                 <InputLabel>Theme</InputLabel>
@@ -238,6 +245,9 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
                   }}
                   value={value}
                   error={!!fieldState.error}
+                  disabled={props.update ?? false}
+
+                  // defaultValue={props.defaultValues?.idTheme}
                 >
                   {props.themes?.map((e, index) => (
                     <MenuItem key={`selected-target-${index}`} value={e.id}>
@@ -256,7 +266,7 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
         </div>
         <div className="form-input">
           <Button variant="contained" type="submit">
-            Creer
+            {props.action}
           </Button>
         </div>
       </form>

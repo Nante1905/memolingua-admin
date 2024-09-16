@@ -14,4 +14,6 @@ export interface Quiz {
   level: string;
   nbQuestion: number;
   finished: boolean;
+  idLanguageSource: string;
+  idLanguageTarget: string;
 }
