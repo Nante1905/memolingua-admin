@@ -28,15 +28,31 @@ export const findAllQuizsSelect = ({ pageParam = 1 }) =>
 
 export const findAllQuestionsSelect = ({ pageParam = 1 }) =>
   http.get<ApiResponse<Paginated<any>>>(
-    `/admin/quizs/questions?page=${pageParam}&limit=2`
+    `/admin/questions?page=${pageParam}&limit=8`
   );
 
-export const findAllQuestions = (page: number, idQuiz?: string) =>
-  http.get(`/admin/quizs/questions?page=${page}&idQuiz=${idQuiz ?? ""}`);
+export const findAllQuestions = (
+  page: number,
+  pageSize: number,
+  idQuiz?: string
+) =>
+  http.get(
+    `/admin/questions?page=${page}&idQuiz=${idQuiz ?? ""}&limit=${pageSize}`
+  );
+
 export const findAllAnswers = (page: number, idQuestion?: string) =>
   http.get(`/admin/quizs/answers?page=${page}&id=${idQuestion ?? ""}`);
+
 export const findAllLangs = () => http.get("/langs");
+
 export const findAllThemes = () => http.get("/themes");
+
 export const findAllLevels = () => http.get("/levels");
 
 export const deleteQuiz = (id: string) => http.delete(`/admin/quizs/${id}`);
+
+export const findQuestionById = (id: string) =>
+  http.get(`/admin/questions/${id}`);
+
+export const updateQuestion = (id: string, data: object) =>
+  http.put(`/admin/questions/${id}`, data);

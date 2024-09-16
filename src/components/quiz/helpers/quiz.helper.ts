@@ -4,7 +4,10 @@ import {
   ALLOWED_IMG_EXT,
   ALLOWED_VID_EXT,
 } from "../../../shared/constants/media.constant";
-import { strRequired } from "../../../shared/constants/validator.constant";
+import {
+  richTextRequired,
+  strRequired,
+} from "../../../shared/constants/validator.constant";
 
 export const answerSchema = z.object({
   answer: z.string().min(1),
@@ -22,7 +25,7 @@ const mediaValidationSchema = z
 
 export const questionSchema = z
   .object({
-    question: strRequired,
+    question: richTextRequired,
     isQcm: z.any(),
     correctAns: z.string({
       message: "Please provide at leat 1 correct answers",
@@ -92,4 +95,48 @@ export const quizSchema = z.object({
   idLanguageTarget: strRequired,
   idLevel: strRequired,
   idTheme: strRequired,
+});
+
+export const questionUpdateSchema = z.object({
+  question: richTextRequired,
+  deleteImg: z.coerce.boolean().optional(),
+  deleteVid: z.coerce.boolean().optional(),
+  img: mediaValidationSchema
+    .refine(
+      (img) => {
+        if (img?.size && img?.size > 3500000) return false;
+        else return true;
+      },
+      { message: formErrors["fr"].maxSize(3, "Mo") }
+    )
+    .refine(
+      (img) => {
+        if (
+          img &&
+          !ALLOWED_IMG_EXT.includes(img?.fileName?.split(".").pop() as string)
+        )
+          return false;
+        else return true;
+      },
+      { message: formErrors["fr"].unallowedType }
+    ),
+  video: mediaValidationSchema
+    .refine(
+      (vid) => {
+        if (vid?.size && vid?.size > 6000000) return false;
+        else return true;
+      },
+      { message: formErrors["fr"].maxSize(6, "Mo") }
+    )
+    .refine(
+      (vid) => {
+        if (
+          vid &&
+          !ALLOWED_VID_EXT.includes(vid?.fileName?.split(".").pop() as string)
+        )
+          return false;
+        else return true;
+      },
+      { message: formErrors["fr"].unallowedType }
+    ),
 });

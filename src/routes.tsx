@@ -10,6 +10,7 @@ import CreatePackageRoot from "./components/packages/containers/create-package/c
 import PackageListRoot from "./components/packages/containers/package-list/package-list.root";
 import AnswerListRoot from "./components/quiz/containers/answer-list-root/answer-list.root";
 import QuestionListRoot from "./components/quiz/containers/question-list-root/question-list.root";
+import QuestionUpdateRoot from "./components/quiz/containers/question-update-root/question-update.root";
 import QuizAddQuestionRoot from "./components/quiz/containers/quiz-add-question-root/quiz-add-question.root";
 import QuizCreationRoot from "./components/quiz/containers/quiz-creation-root/quiz-creation.root";
 import QuizListRoot from "./components/quiz/containers/quiz-list-root/quiz-list.root";
@@ -57,11 +58,11 @@ export const routes = createBrowserRouter([
         element: <QuizUpdateRoot />,
       },
       {
-        path: "/quizs/questions",
+        path: "/questions",
         element: <QuestionListRoot />,
       },
       {
-        path: "/quizs/answers",
+        path: "/answers",
         element: <AnswerListRoot />,
       },
       {
@@ -79,6 +80,10 @@ export const routes = createBrowserRouter([
       {
         path: "/levels/:id/update",
         element: <LevelUpdateFormRoot />,
+      },
+      {
+        path: "/questions/:id/update",
+        element: <QuestionUpdateRoot />,
       },
     ],
   },

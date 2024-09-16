@@ -2,6 +2,7 @@ import { MenuItem } from "@mui/material";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useDebounceValue } from "usehooks-ts";
 import SelectInputControlledComponent from "../../../../shared/components/inputs/select-input/select-input-controlled.component";
 import { Quiz } from "../../../../shared/types/Quiz";
 import QuestionListComponent from "../../components/question-list/question-list.component";
@@ -27,6 +28,8 @@ const QuestionListRoot = () => {
     idQuiz: searchParams.get("id") ?? "",
   });
 
+  const [pageSize, setPageSize] = useDebounceValue(8, 800);
+
   // useLayoutEffect(() => {
   //   setState((state) => ({
   //     ...state,
@@ -34,8 +37,8 @@ const QuestionListRoot = () => {
   //   }));
   // }, [searchParams]);
   const questionQuery = useQuery({
-    queryKey: ["quiz/question", state.page, state.idQuiz],
-    queryFn: () => findAllQuestions(state.page, state.idQuiz),
+    queryKey: ["quiz/question", state.page, pageSize, state.idQuiz],
+    queryFn: () => findAllQuestions(state.page, pageSize, state.idQuiz),
   });
   const quizQuery = useInfiniteQuery({
     queryKey: ["quiz/all"],
@@ -92,10 +95,7 @@ const QuestionListRoot = () => {
             }));
           }}
           onPageSizeChange={function (pageSize: number): void {
-            setState((state) => ({
-              ...state,
-              pageSize,
-            }));
+            setPageSize(pageSize);
           }}
           onSearchChange={function (search: string): void {
             setState((state) => ({

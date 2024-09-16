@@ -1,4 +1,7 @@
+import { Edit } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { frFR } from "@mui/x-data-grid/locales";
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
@@ -47,7 +50,9 @@ const QuestionListComponent: FC<QuestionListComponentProps> = (props) => {
       //   valueGetter: (value: QuizQuestionMedia) => value?.mediaPath,
       renderCell: (params) =>
         params.row.img && (
-          <Link to={API_BASE_URL + params.row.img?.mediaPath}></Link>
+          <Link to={API_BASE_URL + params.row.img?.mediaPath} target="_blank">
+            VOIR
+          </Link>
         ),
     },
     {
@@ -57,8 +62,23 @@ const QuestionListComponent: FC<QuestionListComponentProps> = (props) => {
       //   valueGetter: (value: QuizQuestionMedia) => value?.mediaPath,
       renderCell: (params) =>
         params.row.vid && (
-          <Link to={API_BASE_URL + params.row.vid?.mediaPath}>VOIR</Link>
+          <Link to={API_BASE_URL + params.row.vid?.mediaPath} target="_blank">
+            VOIR
+          </Link>
         ),
+    },
+    {
+      field: "actions",
+      headerName: "",
+      width: 70,
+      //   valueGetter: (value: QuizQuestionMedia) => value?.mediaPath,
+      renderCell: (params) => (
+        <Link to={`/questions/${params.row.id}/update`}>
+          <IconButton>
+            <Edit />
+          </IconButton>
+        </Link>
+      ),
     },
   ];
 
@@ -69,6 +89,7 @@ const QuestionListComponent: FC<QuestionListComponentProps> = (props) => {
           <DataGrid
             localeText={{
               noRowsLabel: "Aucune donnée",
+              ...frFR.components.MuiDataGrid.defaultProps.localeText,
             }}
             columns={columns}
             rows={props.questions?.items.map((e) => ({

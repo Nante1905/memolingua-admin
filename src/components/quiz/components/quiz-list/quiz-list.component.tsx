@@ -62,6 +62,16 @@ const QuizListComponent: FC<QuizListComponentProps> = (props) => {
       width: 100,
     },
     {
+      field: "languageSource",
+      headerName: "Language source",
+      width: 100,
+    },
+    {
+      field: "languageTarget",
+      headerName: "Language du cours",
+      width: 100,
+    },
+    {
       field: "level",
       headerName: "Level",
       width: 100,
@@ -82,7 +92,7 @@ const QuizListComponent: FC<QuizListComponentProps> = (props) => {
       filterable: false,
       renderCell: (value) => (
         <div className="actions">
-          <Link to={`/quizs/questions?id=${(value.row as Quiz).id}`}>
+          <Link to={`/questions?id=${(value.row as Quiz).id}`}>
             <Button variant="contained" color="secondary">
               Questions
             </Button>

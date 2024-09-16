@@ -1,4 +1,7 @@
+import { Check, Close, Edit } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { frFR } from "@mui/x-data-grid/locales";
 import { FC } from "react";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
@@ -31,6 +34,13 @@ const AnswerListComponent: FC<AnswerListComponentProps> = (props) => {
       field: "isCorrect",
       headerName: "Est correct",
       width: 300,
+      display: "flex",
+      renderCell: (params) =>
+        params.row.isCorrect ? (
+          <Check color="primary" />
+        ) : (
+          <Close color="error" />
+        ),
     },
 
     {
@@ -43,6 +53,19 @@ const AnswerListComponent: FC<AnswerListComponentProps> = (props) => {
       headerName: "Question",
       width: 120,
     },
+    {
+      field: "actions",
+      headerName: "",
+      width: 70,
+      //   valueGetter: (value: QuizQuestionMedia) => value?.mediaPath,
+      renderCell: (params) => (
+        // <Link to={``}>
+        <IconButton>
+          <Edit />
+        </IconButton>
+        // </Link>
+      ),
+    },
   ];
 
   return (
@@ -52,6 +75,7 @@ const AnswerListComponent: FC<AnswerListComponentProps> = (props) => {
           <DataGrid
             localeText={{
               noRowsLabel: "Aucune donnée",
+              ...frFR.components.MuiDataGrid.defaultProps.localeText,
             }}
             columns={columns}
             rows={props.answers?.items}
