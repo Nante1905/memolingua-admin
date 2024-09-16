@@ -103,7 +103,7 @@ const LangFormComponent: FC<LangFormComponentProps> = (props) => {
                 </a>
               </small>
             </div>
-            <div className="form-actions">
+            <div className="form-input">
               <Button type="submit" color="primary" variant="contained">
                 {props.update ? "Mettre à jour" : "Créer"}
               </Button>

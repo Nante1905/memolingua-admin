@@ -3,6 +3,7 @@ import { IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { FC } from "react";
 import { Link } from "react-router-dom";
+import EntityChipStateComponent from "../../../../shared/components/entity-chip-state/entity-chip-state.component";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { Level } from "../../../../shared/types/Level";
 import "./level-list.component.scss";
@@ -32,6 +33,9 @@ const LevelListComponent: FC<LevelListComponentProps> = (props) => {
       field: "state",
       headerName: "État",
       width: 100,
+      renderCell: (value) => (
+        <EntityChipStateComponent entityState={value.row.state} />
+      ),
     },
     {
       field: "actions",
