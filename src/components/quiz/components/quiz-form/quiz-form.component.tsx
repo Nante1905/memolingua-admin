@@ -44,8 +44,8 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
     },
   });
 
-  const selectedSource = form.watch("sourceLanguage");
-  const selectedTarget = form.watch("targetLanguage");
+  const selectedSource = form.watch("idLanguageSource");
+  const selectedTarget = form.watch("idLanguageTarget");
 
   const onSubmit = (data: unknown) => {
     console.log(data);
