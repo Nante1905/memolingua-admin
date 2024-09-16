@@ -1,5 +1,7 @@
+import { Button } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import QuizListComponent from "../../components/quiz-list/quiz-list.component";
 import { findAllQuizs } from "../../services/quiz.service";
@@ -23,8 +25,13 @@ const QuizListRoot = () => {
 
   return (
     <div className="quiz-list-root">
-      <header>
+      <header className="list-header">
         <h1>Liste des quiz</h1>
+        <div className="actions">
+          <Link to={`/quizs/create`}>
+            <Button variant="contained">Créer</Button>
+          </Link>
+        </div>
       </header>
       <QuizListComponent
         quizsLoading={quizQuery.isFetching}

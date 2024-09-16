@@ -109,7 +109,7 @@ const ThemeFormComponent: React.FC<ThemeFormProps> = (props) => {
             ))}
           </div>
         </div>
-        <div>
+        <div className="form-input">
           <Button variant="contained" type="submit">
             Créer
           </Button>

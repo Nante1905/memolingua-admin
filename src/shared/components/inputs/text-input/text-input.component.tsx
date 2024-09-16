@@ -9,7 +9,7 @@ interface InputComponentProps extends FormInputProps {
 
 const InputComponent: FC<InputComponentProps> = (props) => {
   return (
-    <div className={`form-input ${props.className}`}>
+    <div className={`form-input ${props.className ?? ""}`}>
       <FormControl fullWidth>
         <Controller
           control={props?.control}

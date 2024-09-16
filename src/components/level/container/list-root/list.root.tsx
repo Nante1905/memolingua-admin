@@ -15,12 +15,10 @@ const LevelListRoot = () => {
 
   return (
     <div className="list-root">
-      <header>
+      <header className="list-header">
         <h1>Liste des niveaux</h1>
         <Link to={"/levels/create"}>
-          <Button color="secondary" variant="contained">
-            Creer un niveau
-          </Button>
+          <Button variant="contained">Créer un niveau</Button>
         </Link>
       </header>
       <section className="container">

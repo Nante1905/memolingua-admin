@@ -1,13 +1,15 @@
 import { Edit } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
+import { frFR } from "@mui/x-data-grid/locales/frFR";
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import EntityChipStateComponent from "../../../../shared/components/entity-chip-state/entity-chip-state.component";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
+import { getFlagLink } from "../../../../shared/services/api/flags/flag-api.service";
 import { Langage } from "../../../../shared/types/Langage";
 import { Paginated } from "../../../../shared/types/Paginated";
+import "./lang-list.component.scss";
 
 interface LangListComponentProps {
   langs: Paginated<Langage>;
@@ -15,25 +17,32 @@ interface LangListComponentProps {
   page: number;
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
+  onSortModelChange: (model: GridSortModel) => void;
 }
 
 const LangListComponent: FC<LangListComponentProps> = (props) => {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 200 },
     { field: "label", headerName: "Label", width: 250 },
-    { field: "code", headerName: "Code", width: 250 },
     {
-      field: "state",
-      headerName: "État",
+      field: "code",
+      headerName: "Code",
+      headerAlign: "center",
       width: 100,
-      renderCell: (params) => (
-        <EntityChipStateComponent entityState={params.row.state} />
+      renderCell: (value) => (
+        <div className="inline-flex flag-code">
+          {value.row.code}{" "}
+          <img src={getFlagLink(value.row.code, 24)} alt={value.row.code} />{" "}
+        </div>
       ),
     },
     {
       field: "actions",
       headerName: "Actions",
+      headerAlign: "center",
+      align: "center",
       width: 100,
+      sortable: false,
       renderCell: (value) => (
         <Link to={`/langs/${value.row.id}/update`}>
           <IconButton>
@@ -54,6 +63,14 @@ const LangListComponent: FC<LangListComponentProps> = (props) => {
             rows={props.langs?.items}
             loading={props.langsLoading}
             hideFooterPagination={true}
+            localeText={{
+              noRowsLabel: "Aucune donnée",
+              ...frFR.components.MuiDataGrid.defaultProps.localeText,
+            }}
+            disableColumnFilter
+            filterMode="server"
+            onSortModelChange={props.onSortModelChange}
+            autoHeight
           />
         </AppLoaderComponent>
         <AppPagination
