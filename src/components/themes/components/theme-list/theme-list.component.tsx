@@ -13,6 +13,7 @@ import "./theme-list.component.scss";
 interface ThemeListProps {
   themes: Theme[];
   loading: boolean;
+  onDelete: (theme: Theme) => void;
 }
 
 const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
@@ -97,7 +98,7 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
                   color="error"
                   onClick={(event) => {
                     event.stopPropagation();
-                    // props.onClickDelete(value.row as PackageLib);
+                    props.onDelete(value.row as Theme);
                   }}
                   size="small"
                 >

@@ -79,12 +79,12 @@ const PackageDetailsRoot: React.FC = () => {
               </Badge>
             </div>
             <div className="infos">
-              <p>
+              <div>
                 <strong>Id:</strong> {detailsQuery.data?.data.payload.id}{" "}
                 {detailsQuery.data?.data.payload.state == ENTITY_DELETED && (
                   <Chip label={`Supprimé`} color="error" />
                 )}
-              </p>
+              </div>
 
               <p>
                 <strong>Auteur: </strong>{" "}

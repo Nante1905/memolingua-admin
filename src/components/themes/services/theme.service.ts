@@ -8,6 +8,8 @@ import {
   ThemeLabel,
 } from "../../../shared/types/Theme";
 
+export const deleteTheme = (id: string) => http.delete(`/admin/themes/${id}`);
+
 export const updateTheme = (data: {
   id: string;
   form: {
