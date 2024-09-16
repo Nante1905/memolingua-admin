@@ -30,4 +30,9 @@ export const sidebarItems: SidebarItem[] = [
     icon: <FontAwesomeIcon icon={"fa-solid fa-tag" as IconProp} />,
     link: "/themes",
   },
+  {
+    title: "Langues",
+    icon: <FontAwesomeIcon icon={"fa-solid fa-language" as IconProp} />,
+    link: "/langs",
+  },
 ];

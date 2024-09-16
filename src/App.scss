@@ -99,3 +99,14 @@ a {
     margin: 0;
   }
 }
+.list-header {
+  display: flex;
+  flex-direction: column;
+  margin: 30px 0;
+
+  @media (width >= $medium-devices) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

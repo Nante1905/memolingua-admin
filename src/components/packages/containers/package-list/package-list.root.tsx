@@ -79,12 +79,15 @@ const PackageListRoot = () => {
 
   return (
     <div id="package-list-root">
-      <div className="header">
+      <header className="list-header">
         <h1>Liste des paquets</h1>
-      </div>
-      <Link to={`/packages/create`}>
-        <Button variant="contained">Créer</Button>
-      </Link>
+        <div className="actions">
+          <Link to={`/packages/create`}>
+            <Button variant="contained">Créer</Button>
+          </Link>
+        </div>
+      </header>
+
       <div className="filter-content">
         <div className="left">
           <TextField

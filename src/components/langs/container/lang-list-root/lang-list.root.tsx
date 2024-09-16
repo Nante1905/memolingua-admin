@@ -60,7 +60,7 @@ const LangListRoot = () => {
 
   return (
     <div className="lang-list-root">
-      <header>
+      <header className="list-header">
         <h1>Liste des langues</h1>
         <div className="actions">
           <Link to={"/langs/create"}>

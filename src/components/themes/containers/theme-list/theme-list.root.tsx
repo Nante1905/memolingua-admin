@@ -74,10 +74,14 @@ const ThemeListRoot = () => {
 
   return (
     <div id="theme-list-root">
-      <h1>Liste des thèmes</h1>
-      <Link to={`/themes/create`}>
-        <Button variant="contained">Créer</Button>
-      </Link>
+      <header className="list-header">
+        <h1>Liste des thèmes</h1>
+        <div className="actions">
+          <Link to={`/themes/create`}>
+            <Button variant="contained">Créer</Button>
+          </Link>
+        </div>
+      </header>
       <div className="filter">
         <div className="left">
           <TextField
