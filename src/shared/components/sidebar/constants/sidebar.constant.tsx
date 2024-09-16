@@ -21,8 +21,13 @@ export const sidebarItems: SidebarItem[] = [
     link: "/quizs",
   },
   {
-    title: "Level",
+    title: "Niveau",
     icon: <FontAwesomeIcon icon={"fa-solid fa-clipboard-list" as IconProp} />,
     link: "/levels",
+  },
+  {
+    title: "Thèmes",
+    icon: <FontAwesomeIcon icon={"fa-solid fa-tag" as IconProp} />,
+    link: "/themes",
   },
 ];

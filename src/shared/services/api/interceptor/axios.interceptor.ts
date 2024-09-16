@@ -54,7 +54,7 @@ http.interceptors.response.use(
         err.message = apiError;
       }
     }
-    enqueueSnackbar({ message: err.message, variant: "error" });
+    enqueueSnackbar({ message: err.message, variant: "error", persist: true });
     return Promise.reject(err);
   }
 );

@@ -40,7 +40,13 @@ export const getDetailsPackage = (id: string) => {
 
 export const getAllPackages = (
   page: { page: number; pageSize: number },
-  filter?: { keyword?: string; author?: string; deleted?: boolean }
+  filter?: {
+    keyword?: string;
+    author?: string;
+    notDeleted?: boolean;
+    sort?: string;
+    order?: string;
+  }
 ) => {
   let url = `/admin/packages?page=${page.page}&pageSize=${page.pageSize}`;
   if (filter) {
@@ -52,8 +58,13 @@ export const getAllPackages = (
     if (filter.author) {
       url += `&author=${filter.author}`;
     }
-    if (filter.deleted) {
-      url += `&state=deleted`;
+    if (filter.notDeleted) {
+      url += `&state=exist`;
+    }
+    if (filter.sort) {
+      url += `&sort=${filter.sort.trim()}&order=${filter.order
+        ?.trim()
+        .toUpperCase()}`;
     }
   }
   return http.get<ApiResponse<Paginated<PackageLib>>>(url);
