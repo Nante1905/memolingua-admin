@@ -19,25 +19,17 @@ import { AxiosError } from "axios";
 import { enqueueSnackbar } from "notistack";
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
 import RichText from "../../../../shared/components/rich-text/rich-text.component";
 import { uploadFile } from "../../../../shared/helpers/fileupload.helper";
 import { HiddenInput } from "../../../../shared/styles/theme";
 import { ApiResponse } from "../../../../shared/types/ApiResponse";
+import { CardWithMedia } from "../../../../shared/types/Card";
 import { AddCardSchema } from "../../helper/package-form.helper";
 import { addCardsToPackage } from "../../services/package.service";
 import {
   AddCardFormState,
   initialAddCardFormState,
 } from "../../state/add-card-form.state";
-import { getCardsMedia } from "../../store/package.selector";
-import {
-  addEmptyCardMedia,
-  deleteCardMediaAt,
-  resetCardMedias,
-  setCardMediaAt,
-} from "../../store/package.slice";
-import { CardMedia } from "../../types/CardMedia";
 import "./add-card-form.component.scss";
 
 interface AddCardProps {
@@ -46,8 +38,6 @@ interface AddCardProps {
 
 const AddCardForm: React.FC<AddCardProps> = (props) => {
   const [state, setState] = useState<AddCardFormState>(initialAddCardFormState);
-  const dispatch = useDispatch();
-  const cardMedias = useSelector(getCardsMedia);
 
   const form = useForm({
     resolver: zodResolver(AddCardSchema),
@@ -56,42 +46,51 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
     control: form.control,
     name: "cards",
   });
+  const cardsInput = form.watch("cards");
 
-  const handleFileUpload = async (
-    event: ChangeEvent<HTMLInputElement>,
-    type: "IMG" | "AUD" | "VID",
-    index: number
-  ) => {
-    if (event.target.files) {
-      const data = event.target.files[0];
+  useEffect(() => {
+    const sub = form.watch(() => {
+      cardFields.fields.forEach((_, i) => {
+        form.trigger([`cards.${i}.medias`]);
+      });
+    });
+    return () => sub.unsubscribe();
+  }, [form, cardFields]);
 
-      const { preview, file } = await uploadFile(data);
-      if (type == "IMG") {
-        dispatch(
-          setCardMediaAt({ index, media: { img: { ...file, preview } } })
-        );
-      } else if (type == "VID") {
-        dispatch(
-          setCardMediaAt({ index, media: { video: { ...file, preview } } })
-        );
-      } else if (type == "AUD") {
-        dispatch(
-          setCardMediaAt({ index, media: { audio: { ...file, preview } } })
-        );
-      } else {
-        throw new Error("Invalid Media type");
+  const handleFileUpload = useCallback(
+    async (
+      event: ChangeEvent<HTMLInputElement>,
+      type: "IMG" | "AUD" | "VID",
+      index: number
+    ) => {
+      if (event.target.files) {
+        const data = event.target.files[0];
+
+        const { preview, file } = await uploadFile(data);
+        if (type == "IMG") {
+          form.setValue(`cards.${index}.medias.img`, { preview, media: file });
+        } else if (type == "VID") {
+          form.setValue(`cards.${index}.medias.video`, {
+            preview,
+            media: file,
+          });
+        } else if (type == "AUD") {
+          form.setValue(`cards.${index}.medias.audio`, {
+            preview,
+            media: file,
+          });
+        } else {
+          throw new Error("Invalid Media type");
+        }
       }
-    }
-  };
+    },
+    [form]
+  );
 
   const addCardMutation = useMutation({
     mutationKey: ["addCard"],
-    mutationFn: async (data: {
-      idPackage: string;
-      cards: any;
-      medias: CardMedia[];
-    }) => {
-      return addCardsToPackage(data.idPackage, data.cards, data.medias);
+    mutationFn: async (data: { idPackage: string; cards: CardWithMedia[] }) => {
+      return addCardsToPackage(data.idPackage, data.cards);
     },
     onSuccess: () => {
       enqueueSnackbar("Carte(s) ajoutée(s)", { variant: "success" });
@@ -101,37 +100,32 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
             {
               recto: "",
               verso: "",
-              img: "",
-              video: "",
-              audio: "",
+              medias: undefined,
             },
           ],
         },
         { keepDefaultValues: false }
       );
-      dispatch(resetCardMedias());
-      setState((state) => ({
-        ...state,
-        error: undefined,
-      }));
     },
     onError: (err) => {
-      const apiError = err as AxiosError;
-
-      setState((state) => ({
-        ...state,
-        error: (apiError.response?.data as ApiResponse).error,
-      }));
+      const apiError = ((err as AxiosError).response?.data as ApiResponse)
+        .error;
+      if (Array.isArray(apiError)) {
+        setState((state) => ({
+          ...state,
+          error: apiError,
+        }));
+        window.scrollTo({ top: 0 });
+      } else {
+        enqueueSnackbar({ message: apiError, variant: "error" });
+      }
     },
   });
 
-  const submitForm = (data: any) => {
-    console.log(data);
-
+  const submitForm = () => {
     addCardMutation.mutate({
       idPackage: props.idPackage,
-      cards: data.cards,
-      medias: cardMedias,
+      cards: form.getValues().cards,
     });
   };
 
@@ -139,19 +133,15 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
     cardFields.append({
       recto: "",
       verso: "",
-      img: "",
-      video: "",
-      audio: "",
+      medias: undefined,
     });
-    dispatch(addEmptyCardMedia());
-  }, [cardFields, dispatch]);
+  }, [cardFields]);
 
   const deleteCardField = useCallback(
     (index: number) => {
       cardFields.remove(index);
-      dispatch(deleteCardMediaAt(index));
     },
-    [cardFields, dispatch]
+    [cardFields]
   );
 
   //   first cardField
@@ -180,17 +170,7 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
           </List>
         </div>
       )}
-      <div className="add-card-info">
-        <p>
-          <small>Taille maximale image: 2 Mo</small>
-        </p>
-        <p>
-          <small>Taille maximale vidéo: 4 Mo</small>
-        </p>
-        <p>
-          <small>Taille maximale audio: 2 Mo</small>
-        </p>
-      </div>
+
       <form
         className={`form ${addCardMutation.isPending && "loading"}`}
         onSubmit={form.handleSubmit(submitForm)}
@@ -250,9 +230,9 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
                   <FormControl>
                     <Controller
                       control={form.control}
-                      name={`cards.${index}.img`}
-                      render={({ field, fieldState }) => (
-                        <div className="inline-flex">
+                      name={`cards.${index}.medias.img`}
+                      render={({ field }) => (
+                        <div className="inline-flex" style={{ gap: "0rem" }}>
                           <Button
                             startIcon={<InsertPhotoIcon />}
                             variant="contained"
@@ -262,20 +242,23 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
                           >
                             <HiddenInput
                               type="file"
-                              {...field}
                               onChange={async (
                                 event: ChangeEvent<HTMLInputElement>
                               ) => {
                                 await handleFileUpload(event, "IMG", index);
-                                field.onChange(event);
                               }}
                             />
                           </Button>
-
-                          {!!fieldState.error?.message && (
-                            <FormHelperText>
-                              {fieldState.error?.message as string}
-                            </FormHelperText>
+                          {field.value && (
+                            <IconButton
+                              size="small"
+                              color="error"
+                              onClick={() =>
+                                form.resetField(`cards.${index}.medias.img`)
+                              }
+                            >
+                              <DeleteForever fontSize="small" />
+                            </IconButton>
                           )}
                         </div>
                       )}
@@ -286,9 +269,9 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
                   <FormControl>
                     <Controller
                       control={form.control}
-                      name={`cards.${index}.video`}
-                      render={({ field, fieldState }) => (
-                        <div className="inline-flex">
+                      name={`cards.${index}.medias.video`}
+                      render={({ field }) => (
+                        <div className="inline-flex" style={{ gap: 0 }}>
                           <Button
                             startIcon={<OndemandVideoIcon />}
                             variant="contained"
@@ -298,20 +281,23 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
                           >
                             <HiddenInput
                               type="file"
-                              {...field}
                               onChange={async (
                                 event: ChangeEvent<HTMLInputElement>
                               ) => {
                                 await handleFileUpload(event, "VID", index);
-
-                                field.onChange(event);
                               }}
                             />
                           </Button>
-                          {!!fieldState.error?.message && (
-                            <FormHelperText>
-                              {fieldState.error?.message as string}
-                            </FormHelperText>
+                          {field.value && (
+                            <IconButton
+                              size="small"
+                              color="error"
+                              onClick={() =>
+                                form.resetField(`cards.${index}.medias.video`)
+                              }
+                            >
+                              <DeleteForever fontSize="small" />
+                            </IconButton>
                           )}
                         </div>
                       )}
@@ -322,9 +308,9 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
                   <FormControl>
                     <Controller
                       control={form.control}
-                      name={`cards.${index}.audio`}
-                      render={({ field, fieldState }) => (
-                        <div className="inline-flex">
+                      name={`cards.${index}.medias.audio`}
+                      render={({ field }) => (
+                        <div className="inline-flex" style={{ gap: 0 }}>
                           <Button
                             startIcon={<AudiotrackIcon />}
                             variant="contained"
@@ -334,20 +320,23 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
                           >
                             <HiddenInput
                               type="file"
-                              {...field}
                               onChange={async (
                                 event: ChangeEvent<HTMLInputElement>
                               ) => {
                                 await handleFileUpload(event, "AUD", index);
-
-                                field.onChange(event);
                               }}
                             />
                           </Button>
-                          {!!fieldState.error?.message && (
-                            <FormHelperText>
-                              {fieldState.error?.message as string}
-                            </FormHelperText>
+                          {field.value && (
+                            <IconButton
+                              size="small"
+                              color="error"
+                              onClick={() =>
+                                form.resetField(`cards.${index}.medias.audio`)
+                              }
+                            >
+                              <DeleteForever fontSize="small" />
+                            </IconButton>
                           )}
                         </div>
                       )}
@@ -356,29 +345,68 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
                 </div>
                 <div className="div-media">
                   {/* Image */}
-                  {cardMedias[index]?.img?.preview != undefined && (
+                  {cardsInput[index].medias?.img && (
                     <div className="preview-media">
                       <img
-                        src={cardMedias[index]?.img?.preview}
-                        alt={cardMedias[index]?.img?.fileName}
+                        src={cardsInput[index].medias?.img?.preview}
+                        alt={cardsInput[index].medias?.img?.media?.fileName}
                       />
-                      <small>{cardMedias[index]?.img?.fileName}</small>
+                      <small>
+                        {cardsInput[index].medias?.img?.media.fileName}
+                      </small>
+                      {form.getFieldState(`cards.${index}.medias.img`)
+                        .error && (
+                        <FormHelperText error>
+                          {
+                            form.getFieldState(`cards.${index}.medias.img`)
+                              .error?.message
+                          }
+                        </FormHelperText>
+                      )}
                     </div>
                   )}
 
                   {/* Video */}
-                  {cardMedias[index]?.video?.preview != undefined && (
+                  {cardsInput[index].medias?.video && (
                     <div className="preview-media">
-                      <video src={cardMedias[index]?.video?.preview} controls />
-                      <small>{cardMedias[index]?.video?.fileName}</small>
+                      <video
+                        src={cardsInput[index].medias?.video?.preview}
+                        controls
+                      />
+                      <small>
+                        {cardsInput[index].medias?.video?.media.fileName}
+                      </small>
+                      {form.getFieldState(`cards.${index}.medias.video`)
+                        .error && (
+                        <FormHelperText error>
+                          {
+                            form.getFieldState(`cards.${index}.medias.video`)
+                              .error?.message
+                          }
+                        </FormHelperText>
+                      )}
                     </div>
                   )}
 
                   {/* Audio */}
-                  {cardMedias[index]?.audio?.preview != undefined && (
+                  {cardsInput[index].medias?.audio != undefined && (
                     <div className="preview-media">
-                      <audio src={cardMedias[index]?.audio?.preview} controls />
-                      <small>{cardMedias[index]?.audio?.fileName}</small>
+                      <audio
+                        src={cardsInput[index].medias?.audio?.preview}
+                        controls
+                      />
+                      <small>
+                        {cardsInput[index].medias?.audio?.media.fileName}
+                      </small>
+                      {form.getFieldState(`cards.${index}.medias.audio`)
+                        .error && (
+                        <FormHelperText error>
+                          {
+                            form.getFieldState(`cards.${index}.medias.audio`)
+                              .error?.message
+                          }
+                        </FormHelperText>
+                      )}
                     </div>
                   )}
                 </div>

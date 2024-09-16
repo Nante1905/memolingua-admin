@@ -1,7 +1,12 @@
+import { GridSortDirection } from "@mui/x-data-grid";
+
 export interface PackageListState {
   page: number;
   authorFilter: string;
-  deleteFilter: boolean;
+  isNotDeleted: boolean;
+  sort: string;
+  order: GridSortDirection;
+
   package?: {
     id: string;
     title: string;
@@ -11,5 +16,7 @@ export interface PackageListState {
 export const initialPackageListState: PackageListState = {
   page: 1,
   authorFilter: "all",
-  deleteFilter: false,
+  isNotDeleted: false,
+  sort: "",
+  order: "asc",
 };

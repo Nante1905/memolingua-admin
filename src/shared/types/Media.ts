@@ -5,6 +5,7 @@ export interface Media {
   size?: number;
 }
 
-export interface MediaWithPreview extends Media {
+export interface MediaWithPreview {
+  media: Media;
   preview: string;
 }

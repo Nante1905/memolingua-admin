@@ -18,6 +18,8 @@ interface SelectInputComponentProps extends FormInputProps {
   labelGetter: (item: any) => string;
   paginated?: boolean;
   onLoadMore?: () => void;
+  defaultValue?: any;
+  readonly?: boolean;
 }
 
 const SelectInputComponent: FC<SelectInputComponentProps> = (props) => {
@@ -27,12 +29,16 @@ const SelectInputComponent: FC<SelectInputComponentProps> = (props) => {
         <Controller
           name={props.name}
           control={props.control}
+          defaultValue={props.defaultValue}
           render={({ field, fieldState }) => (
             <FormControl fullWidth error={!!fieldState.error}>
               <InputLabel>{props.label}</InputLabel>
               <Select
                 label={props.label}
-                onChange={(e) => field.onChange(e.target.value)}
+                // onChange={(e) => field.onChange(e.target.value)}
+                // value={field.value}
+                {...field}
+                readOnly={!!props.readonly}
               >
                 {props.items?.flat()?.map((element, index) => (
                   <MenuItem value={props.valueGetter(element)} key={`${index}`}>
@@ -52,7 +58,7 @@ const SelectInputComponent: FC<SelectInputComponentProps> = (props) => {
                 )}
               </Select>
               {!!fieldState.error && (
-                <FormHelperText>
+                <FormHelperText error>
                   {fieldState.error?.message as string}
                 </FormHelperText>
               )}
