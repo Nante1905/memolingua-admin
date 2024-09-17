@@ -24,8 +24,8 @@ const AddCardRoot = () => {
                 Ajout de carte(s) à <u>{pack?.data.payload.title}</u>
               </h1>
               <p className="text-center">
-                <strong>{pack?.data.payload.languageSource.label}</strong> vers{" "}
-                <strong>{pack?.data.payload.languageTarget.label}</strong>
+                <strong>{pack?.data.payload.languageSource?.label}</strong> vers{" "}
+                <strong>{pack?.data.payload.languageTarget?.label}</strong>
               </p>
               <AddCardForm idPackage={pack?.data?.payload?.id as string} />
             </>

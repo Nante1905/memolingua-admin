@@ -24,6 +24,7 @@ import QuizUpdateRoot from "./components/quiz/containers/quiz-update-root/quiz-u
 import ThemeCreateRoot from "./components/themes/containers/theme-create/theme-create.root";
 import ThemeListRoot from "./components/themes/containers/theme-list/theme-list.root";
 import ThemeUpdateRoot from "./components/themes/containers/theme-update/theme-update.root";
+import UserListRoot from "./components/users/container/user-list-root/user-list.root";
 
 export const routes = createBrowserRouter([
   {
@@ -129,6 +130,10 @@ export const routes = createBrowserRouter([
       {
         path: "/themes/:id/update",
         element: <ThemeUpdateRoot />,
+      },
+      {
+        path: "/users",
+        element: <UserListRoot />,
       },
     ],
   },

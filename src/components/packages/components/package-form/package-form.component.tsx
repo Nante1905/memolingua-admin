@@ -99,8 +99,8 @@ const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
             <div className="langs inline-flex">
               <p>Langues:</p>
               <p>
-                {props.pack.languageSource.label} {"->"}{" "}
-                {props.pack.languageTarget.label}{" "}
+                {props.pack.languageSource?.label} {"->"}{" "}
+                {props.pack.languageTarget?.label}{" "}
               </p>
             </div>
           ) : (
