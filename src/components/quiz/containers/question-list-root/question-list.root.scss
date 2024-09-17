@@ -1,5 +1,17 @@
 .question-list-root {
-  padding: 0 30px;
+  padding: 0 10%;
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .actions {
+      display: flex;
+      column-gap: 30px;
+    }
+  }
 
   .filter {
     margin: 30px 0;

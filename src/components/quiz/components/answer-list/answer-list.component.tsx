@@ -43,12 +43,6 @@ const AnswerListComponent: FC<AnswerListComponentProps> = (props) => {
           <Close color="error" />
         ),
     },
-
-    {
-      field: "state",
-      headerName: "État",
-      width: 120,
-    },
     {
       field: "idQuestion",
       headerName: "Question",

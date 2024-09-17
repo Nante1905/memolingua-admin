@@ -1,4 +1,4 @@
-import { MenuItem } from "@mui/material";
+import { Button, MenuItem } from "@mui/material";
 import {
   useInfiniteQuery,
   useMutation,
@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import { useCallback, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import ConfirmationDialogComponent from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import SelectInputControlledComponent from "../../../../shared/components/inputs/select-input/select-input-controlled.component";
@@ -97,9 +97,21 @@ const QuestionListRoot = () => {
 
   return (
     <div className="question-list-root">
-      <header>
-        <h1>Liste des questions</h1>
-      </header>
+      <div className="header">
+        <header>
+          <h1>Liste des questions</h1>
+        </header>
+        <div className="actions">
+          <Link to={"/answers"}>
+            <Button variant="contained" color="secondary">
+              Voir les réponses
+            </Button>
+          </Link>
+          <Link to={"/quizs/add-question"}>
+            <Button variant="contained">Ajouter des questions</Button>
+          </Link>
+        </div>
+      </div>
       <div className="filter">
         <div className="select">
           <SelectInputControlledComponent

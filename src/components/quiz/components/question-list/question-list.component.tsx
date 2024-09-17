@@ -4,6 +4,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales";
 import { FC } from "react";
 import { Link } from "react-router-dom";
+import EntityChipStateComponent from "../../../../shared/components/entity-chip-state/entity-chip-state.component";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
 import { API_BASE_URL } from "../../../../shared/constants/api.constant";
@@ -37,6 +38,9 @@ const QuestionListComponent: FC<QuestionListComponentProps> = (props) => {
       field: "state",
       headerName: "État",
       width: 120,
+      renderCell: (params) => (
+        <EntityChipStateComponent entityState={params.row.state} />
+      ),
     },
     {
       field: "idQuiz",
