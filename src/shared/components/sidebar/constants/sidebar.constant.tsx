@@ -35,4 +35,9 @@ export const sidebarItems: SidebarItem[] = [
     icon: <FontAwesomeIcon icon={"fa-solid fa-layer-group" as IconProp} />,
     link: "/levels",
   },
+  {
+    title: "Utilisateurs",
+    icon: <FontAwesomeIcon icon={"fa-solid fa-users" as IconProp} />,
+    link: "/users",
+  },
 ];
