@@ -1,5 +1,26 @@
 import { GridSortDirection } from "@mui/x-data-grid";
 import { http } from "../../../shared/services/api/interceptor/axios.interceptor";
+import { ApiResponse } from "../../../shared/types/ApiResponse";
+import { ImportValidationResult } from "../../../shared/types/ImportDTO";
+import { Media } from "../../../shared/types/Media";
+import { LangImportDTO } from "../types/LangImportDTO";
+
+export const confirmCSVImportLang = () => {
+  return http.get<ApiResponse<number>>(`/admin/langs/import/confirm`);
+};
+
+export const downloadCSVLang = () => {
+  return http.get(`/admin/langs/import/download`, { responseType: "blob" });
+};
+
+export const importLangCSV = (data: { file: Media }) => {
+  return http.post<ApiResponse<ImportValidationResult<LangImportDTO>>>(
+    `/admin/langs/import`,
+    {
+      ...data,
+    }
+  );
+};
 
 export const getAllLangs = (
   page: number,

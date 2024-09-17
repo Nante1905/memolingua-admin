@@ -9,7 +9,7 @@ export const mediaValidationSchema = z.object(
     size: z.number().min(1, formErrors.fr.required),
     contentType: z.string().min(1, formErrors.fr.required),
   },
-  { required_error: "Média obligatoire" }
+  { required_error: "Fichier obligatoire" }
 );
 
 export const uploadFile = async (file: File) => {

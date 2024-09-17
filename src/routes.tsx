@@ -2,6 +2,7 @@ import { Outlet, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import HomeRoot from "./components/home/home.root";
 import LangCreateRoot from "./components/langs/container/lang-create-root/lang-create.root";
+import LangImportRoot from "./components/langs/container/lang-import-root/lang-import.root";
 import LangListRoot from "./components/langs/container/lang-list-root/lang-list.root";
 import LangUpdateRoot from "./components/langs/container/lang-update-root/lang-update.root";
 import LevelFormComponent from "./components/level/components/level-form/level-form.component";
@@ -129,6 +130,10 @@ export const routes = createBrowserRouter([
       {
         path: "/themes/:id/update",
         element: <ThemeUpdateRoot />,
+      },
+      {
+        path: "/langs/import",
+        element: <LangImportRoot />,
       },
     ],
   },
