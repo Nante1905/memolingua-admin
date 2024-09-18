@@ -1,5 +1,6 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { UploadFile } from "@mui/icons-material";
 import { Button, InputAdornment, TextField } from "@mui/material";
 import { GridSortModel } from "@mui/x-data-grid";
 import { useQuery } from "@tanstack/react-query";
@@ -65,6 +66,12 @@ const LangListRoot = () => {
         <div className="actions">
           <Link to={"/langs/create"}>
             <Button variant="contained">Créer une langue</Button>
+          </Link>
+          <Link to={"/langs/import"}>
+            <Button color="accent" className="inline-flex">
+              <UploadFile />
+              Importer
+            </Button>
           </Link>
         </div>
       </header>

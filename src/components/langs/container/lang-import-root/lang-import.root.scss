@@ -1,0 +1,30 @@
+@import "../../../../shared/styles/variables.scss";
+
+.import-root {
+  .info {
+    width: fit-content;
+    border: 2px dashed $accent;
+    padding: 10px;
+    margin-bottom: 2rem;
+  }
+  .data-table {
+    width: fit-content;
+    min-width: 60%;
+    margin: auto;
+    thead {
+      background-color: rgba($secondary, 40%);
+    }
+    .error {
+      background-color: rgba($danger, 70%);
+    }
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2rem auto;
+    @media (width >= $medium-devices) {
+      width: 60%;
+    }
+  }
+}

@@ -10,8 +10,8 @@ import InputComponent from "../../../../shared/components/inputs/text-input/text
 import { getFlagLink } from "../../../../shared/services/api/flags/flag-api.service";
 import { ApiResponse } from "../../../../shared/types/ApiResponse";
 import { Langage } from "../../../../shared/types/Langage";
+import { langSchema } from "../../helpers/lang.validator";
 import { createLang, updateLang } from "../../services/lang.service";
-import { langSchema } from "../helpers/lang.validator";
 import "./lang-form.component.scss";
 
 interface LangFormComponentProps {
