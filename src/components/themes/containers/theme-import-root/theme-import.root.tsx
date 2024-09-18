@@ -3,8 +3,6 @@ import {
   Button,
   Collapse,
   IconButton,
-  List,
-  ListItem,
   Paper,
   Table,
   TableBody,
@@ -94,38 +92,30 @@ const ThemeImportRoot = () => {
         </IconButton>
         <Collapse in={openInfo} unmountOnExit>
           <div className="info">
-            <List>
-              <ListItem>
-                <strong>En-tête du csv</strong>:
-                <List>
-                  <ListItem>
-                    theme{" "}
-                    <em>
-                      (Le nom du thème en français: <strong>obligatoire</strong>{" "}
-                      )
-                    </em>
-                  </ListItem>
-                  <ListItem>
-                    langage{" "}
-                    <em>
-                      (Le code de la langue déjà enregistrée:{" "}
-                      <strong>obligatoire si une traduction est donnée</strong>.{" "}
-                      )
-                    </em>
-                  </ListItem>
-                  <ListItem>
-                    traduction{" "}
-                    <em>
-                      (La traduction du nom du thème dans la langue soumise:{" "}
-                      <strong>obligatoire si une langue est donnée</strong>. )
-                    </em>
-                  </ListItem>
-                </List>
-              </ListItem>
-              <ListItem>
-                <strong>Séparateur:</strong> Point virgule (;)
-              </ListItem>
-            </List>
+            <strong>En-tête du csv</strong>:
+            <ul>
+              <li>
+                theme{" "}
+                <em>
+                  (Le nom du thème en français: <strong>obligatoire</strong> )
+                </em>
+              </li>
+              <li>
+                langage{" "}
+                <em>
+                  (Le code de la langue déjà enregistrée:{" "}
+                  <strong>obligatoire si une traduction est donnée</strong>. )
+                </em>
+              </li>
+              <li>
+                traduction{" "}
+                <em>
+                  (La traduction du nom du thème dans la langue soumise:{" "}
+                  <strong>obligatoire si une langue est donnée</strong>. )
+                </em>
+              </li>
+            </ul>
+            <strong>Séparateur:</strong> Point virgule (;)
           </div>
         </Collapse>
       </div>
@@ -160,7 +150,13 @@ const ThemeImportRoot = () => {
                     <TableCell>{d.theme}</TableCell>
                     <TableCell>{d.langage}</TableCell>
                     <TableCell>{d.traduction}</TableCell>
-                    <TableCell>{d.error ?? ""}</TableCell>
+                    <TableCell>
+                      <ul>
+                        {d.error?.map((e, i) => (
+                          <li key={`${d.row}_${i}`}>{e}</li>
+                        ))}
+                      </ul>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

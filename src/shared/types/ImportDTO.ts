@@ -1,6 +1,6 @@
 export interface ImportDTO {
   row: number;
-  error?: string;
+  error?: string[];
 }
 
 export interface ImportValidationResult<T extends ImportDTO> {

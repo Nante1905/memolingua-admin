@@ -3,8 +3,6 @@ import {
   Button,
   Collapse,
   IconButton,
-  List,
-  ListItem,
   Paper,
   Table,
   TableBody,
@@ -85,13 +83,13 @@ const LangImportRoot = () => {
         </IconButton>
         <Collapse in={openInfo} unmountOnExit>
           <div className="info">
-            <List>
-              <ListItem>
-                <strong>En-tête du csv</strong>: label{" "}
-                <em>
-                  (Le nom de la langue: <strong>obligatoire</strong> )
-                </em>
-                , code{" "}
+            <strong>En-tête du csv</strong>
+            <ul>
+              <li>
+                label (Le nom de la langue: <strong>obligatoire</strong> )
+              </li>
+              <li>
+                code{" "}
                 <em>
                   (Le code du pays: <strong>obligatoire</strong>.{" "}
                   <a href="https://flagsapi.com/#countries" target="_blank">
@@ -99,11 +97,9 @@ const LangImportRoot = () => {
                   </a>
                   )
                 </em>
-              </ListItem>
-              <ListItem>
-                <strong>Séparateur:</strong> Point virgule (;)
-              </ListItem>
-            </List>
+              </li>
+            </ul>
+            <strong>Séparateur:</strong> Point virgule (;)
           </div>
         </Collapse>
       </div>
@@ -136,7 +132,13 @@ const LangImportRoot = () => {
                     <TableCell align="right">{d.row}</TableCell>
                     <TableCell>{d.label}</TableCell>
                     <TableCell>{d.code}</TableCell>
-                    <TableCell>{d.error ?? ""}</TableCell>
+                    <TableCell>
+                      <ul>
+                        {d.error?.map((e, i) => (
+                          <li key={`${d.row}_${i}`}>{e}</li>
+                        ))}
+                      </ul>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -118,5 +118,9 @@ a {
     width: fit-content;
     row-gap: 1rem;
     align-items: end;
+    width: 100%;
+    @media (width >= $medium-devices) {
+      width: auto !important;
+    }
   }
 }
