@@ -64,3 +64,9 @@ export const updateAnswer = (id: string, answer: object) =>
 
 export const deleteQuestion = (id: string) =>
   http.delete(`/admin/questions/${id}`);
+
+export const importQuiz = (data: object) =>
+  http.post("/admin/quizs/import", data);
+
+export const downloadQuizCsv = () => http.get("/admin/quizs/import/download");
+export const confirmQuizImport = () => http.get("/admin/quizs/import/confirm");
