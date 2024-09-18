@@ -24,3 +24,11 @@ export const uploadFile = async (file: File) => {
     },
   };
 };
+
+export const importCSVSchema = z.object({
+  file: mediaValidationSchema
+    .required()
+    .refine((data) => data.contentType == "text/csv", {
+      message: "Type de fichier invalide",
+    }),
+});

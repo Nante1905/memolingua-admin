@@ -66,7 +66,6 @@ const LangFormComponent: FC<LangFormComponentProps> = (props) => {
   const handleSubmit = (data: object) => {
     if (props.update) {
       langMutationUpdate.mutate(data);
-      //   console.log(data);
     } else {
       langMutationCreate.mutate(data);
     }
