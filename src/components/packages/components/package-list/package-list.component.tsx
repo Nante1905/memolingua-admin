@@ -23,7 +23,7 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
   const navigate = useNavigate();
   const columns: GridColDef[] = useMemo(
     (): GridColDef[] => [
-      { field: "id", headerName: "ID", width: 120 },
+      { field: "id", headerName: "ID", width: 120, cellClassName: "id" },
       { field: "title", headerName: "Titre", width: 200 },
       { field: "themeLabel", headerName: "Thème", width: 150 },
       {

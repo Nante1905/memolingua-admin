@@ -24,6 +24,7 @@ import { uploadFile } from "../../../../shared/helpers/fileupload.helper";
 import { HiddenInput } from "../../../../shared/styles/theme";
 import { ApiResponse } from "../../../../shared/types/ApiResponse";
 import { CardWithMedia } from "../../../../shared/types/Card";
+import { Package } from "../../../../shared/types/Package";
 import { AddCardSchema } from "../../helper/package-form.helper";
 import { addCardsToPackage } from "../../services/package.service";
 import {
@@ -34,6 +35,7 @@ import "./add-card-form.component.scss";
 
 interface AddCardProps {
   idPackage: string;
+  pack: Package;
 }
 
 const AddCardForm: React.FC<AddCardProps> = (props) => {
@@ -185,7 +187,7 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
                   render={({ field, fieldState }) => (
                     <>
                       <RichText
-                        label="Recto"
+                        label={`Recto (${props.pack?.languageTarget?.label})`}
                         {...field}
                         onContentChange={(content: string) =>
                           field.onChange(content)
@@ -208,7 +210,7 @@ const AddCardForm: React.FC<AddCardProps> = (props) => {
                   render={({ field, fieldState }) => (
                     <>
                       <RichText
-                        label="Verso"
+                        label={`Verso (${props.pack?.languageSource?.label})`}
                         {...field}
                         onContentChange={(content: string) =>
                           field.onChange(content)

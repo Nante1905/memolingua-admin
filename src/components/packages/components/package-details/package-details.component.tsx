@@ -1,20 +1,31 @@
-import { DeleteForever } from "@mui/icons-material";
-import { Chip, IconButton } from "@mui/material";
+import { CloseOutlined, DeleteForever, Edit } from "@mui/icons-material";
+import {
+  Chip,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales/frFR";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import parse from "html-react-parser";
 import { enqueueSnackbar } from "notistack";
 import React, { Fragment, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import ConfirmationDialogComponent from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import {
+  ADMIN_ROLE,
   API_BASE_URL,
   ENTITY_DELETED,
 } from "../../../../shared/constants/api.constant";
+import { ApiResponse } from "../../../../shared/types/ApiResponse";
 import { Card } from "../../../../shared/types/Card";
-import { deleteCard } from "../../services/flashcard.service";
-import { PackageContent } from "../../types/PackageLib";
+import { Media } from "../../../../shared/types/Media";
+import { deleteCard, updateCard } from "../../services/flashcard.service";
+import { CardLib, PackageContent } from "../../types/PackageLib";
+import UpdateCardForm from "../update-card-form/update-card-form.component";
 import "./package-details.component.scss";
 
 const readableMediaType = {
@@ -28,7 +39,10 @@ interface PackageDetailsProps {
 }
 
 const PackageDetails: React.FC<PackageDetailsProps> = (props) => {
-  const [card, setCard] = useState<Card | undefined>(undefined);
+  const [cardToDelete, setCardToDelete] = useState<Card | undefined>(undefined);
+  const [cardToModify, setCardToModify] = useState<CardLib | undefined>(
+    undefined
+  );
   const columns: GridColDef[] = useMemo(
     () => [
       { field: "id", headerName: "ID", width: 120 },
@@ -91,22 +105,34 @@ const PackageDetails: React.FC<PackageDetailsProps> = (props) => {
         headerName: "Actions",
         width: 80,
         align: "center",
-        renderCell: (value) =>
-          value.row.state != ENTITY_DELETED && (
-            <div>
+        renderCell: (value) => (
+          <div>
+            {value.row.state != ENTITY_DELETED &&
+              props.pack?.state != ENTITY_DELETED &&
+              props.pack.author.role.code == ADMIN_ROLE && (
+                <IconButton
+                  onClick={() => setCardToModify(value.row)}
+                  size="small"
+                >
+                  {" "}
+                  <Edit />
+                </IconButton>
+              )}
+            {value.row.state != ENTITY_DELETED && (
               <IconButton
                 color="error"
-                onClick={() => setCard(value.row)}
+                onClick={() => setCardToDelete(value.row)}
                 size="small"
               >
                 {" "}
                 <DeleteForever />{" "}
               </IconButton>
-            </div>
-          ),
+            )}
+          </div>
+        ),
       },
     ],
-    []
+    [props]
   );
   const queryClient = useQueryClient();
   const deleteMutation = useMutation({
@@ -120,7 +146,42 @@ const PackageDetails: React.FC<PackageDetailsProps> = (props) => {
         variant: "success",
         autoHideDuration: 3000,
       });
-      setCard(undefined);
+      setCardToDelete(undefined);
+    },
+  });
+
+  const cardMutation = useMutation({
+    mutationKey: ["update-card"],
+    mutationFn: (data: {
+      idCard: string;
+      card: { medias: { img?: Media; video?: Media; audio?: Media } };
+      removeImg?: boolean;
+      removeAud?: boolean;
+      removeVid?: boolean;
+    }) => updateCard(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["package", props.pack?.id],
+      });
+      enqueueSnackbar({
+        message: "Carte modifiée",
+        variant: "success",
+        persist: false,
+        autoHideDuration: 3000,
+        onClose: () => {
+          setCardToModify(undefined);
+        },
+      });
+    },
+    onError: (err) => {
+      const axiosError = err as AxiosError<ApiResponse>;
+      if (Array.isArray(axiosError.response?.data.error)) {
+        axiosError.response?.data.error.map((e) =>
+          e.errors.map((msg: string) =>
+            enqueueSnackbar({ message: msg, variant: "error" })
+          )
+        );
+      }
     },
   });
 
@@ -135,20 +196,50 @@ const PackageDetails: React.FC<PackageDetailsProps> = (props) => {
           className="package-grid"
         />
       </div>
+      {cardToModify && (
+        <Dialog
+          open={true}
+          // onClose={() => {}}
+          fullWidth
+        >
+          <div className="dialog-action">
+            <IconButton
+              className="close-btn"
+              onClick={() => setCardToModify(undefined)}
+              color="error"
+            >
+              <CloseOutlined />
+            </IconButton>
+          </div>
+          <DialogTitle>
+            Modification de <strong>{cardToModify?.id}</strong>
+          </DialogTitle>
 
-      {card && (
+          <DialogContent>
+            <UpdateCardForm
+              card={cardToModify}
+              onSubmit={(data) =>
+                cardMutation.mutate({ idCard: cardToModify.id, ...data })
+              }
+              isSubmitting={cardMutation.isPending}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {cardToDelete && (
         <ConfirmationDialogComponent
           title="Etes vous sûr?"
-          onConfirm={() => deleteMutation.mutate(card.id)}
+          onConfirm={() => deleteMutation.mutate(cardToDelete.id)}
           onClose={() => {
-            setCard(undefined);
+            setCardToDelete(undefined);
           }}
           loading={deleteMutation.isPending}
         >
           <p>
             Voulez-vous vraiment supprimer la carte ?{" "}
-            <div className="no-html">{parse(card.recto)}</div>=
-            <div className="no-html">{parse(card.verso)}</div>{" "}
+            <div className="no-html">{parse(cardToDelete.recto)}</div>=
+            <div className="no-html">{parse(cardToDelete.verso)}</div>{" "}
           </p>
         </ConfirmationDialogComponent>
       )}

@@ -16,18 +16,20 @@ export interface PackageLib {
   authorName: string;
 }
 
-export interface PackageContent extends Package {
-  cards: {
+export interface CardLib {
+  id: string;
+  recto: string;
+  verso: string;
+  state: number;
+  medias: {
     id: string;
-    recto: string;
-    verso: string;
-    state: number;
-    medias: {
-      id: string;
-      mediaType: string;
-      mediaPath: string;
-    }[];
+    mediaType: string;
+    mediaPath: string;
   }[];
+}
+
+export interface PackageContent extends Package {
+  cards: CardLib[];
   author: {
     lastname: string;
     firstname: string;

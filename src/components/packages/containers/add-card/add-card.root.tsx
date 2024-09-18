@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Fragment } from "react";
 import { useParams } from "react-router-dom";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
+import { Package } from "../../../../shared/types/Package";
 import AddCardForm from "../../components/add-card-form/add-card-form.component";
 import { getPackageById } from "../../services/package.service";
 
@@ -27,7 +28,10 @@ const AddCardRoot = () => {
                 <strong>{pack?.data.payload.languageSource?.label}</strong> vers{" "}
                 <strong>{pack?.data.payload.languageTarget?.label}</strong>
               </p>
-              <AddCardForm idPackage={pack?.data?.payload?.id as string} />
+              <AddCardForm
+                idPackage={pack?.data?.payload?.id as string}
+                pack={pack?.data.payload as Package}
+              />
             </>
           )}
           {packageQuery.isError && (
