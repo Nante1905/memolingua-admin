@@ -4,6 +4,7 @@ import { SnackbarProvider, closeSnackbar } from "notistack";
 const AppSnackbarProvider = () => {
   return (
     <SnackbarProvider
+      autoHideDuration={3000}
       maxSnack={5}
       action={(snackbarId) => (
         <Close
