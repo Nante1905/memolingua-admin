@@ -26,6 +26,7 @@ import ThemeCreateRoot from "./components/themes/containers/theme-create/theme-c
 import ThemeImportRoot from "./components/themes/containers/theme-import-root/theme-import.root";
 import ThemeListRoot from "./components/themes/containers/theme-list/theme-list.root";
 import ThemeUpdateRoot from "./components/themes/containers/theme-update/theme-update.root";
+import UserListRoot from "./components/users/container/user-list-root/user-list.root";
 
 export const routes = createBrowserRouter([
   {
@@ -136,10 +137,13 @@ export const routes = createBrowserRouter([
         path: "/langs/import",
         element: <LangImportRoot />,
       },
-
       {
         path: "/themes/import",
         element: <ThemeImportRoot />,
+      },
+      {
+        path: "/users",
+        element: <UserListRoot />,
       },
     ],
   },
