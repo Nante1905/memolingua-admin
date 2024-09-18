@@ -12,14 +12,13 @@ import { importCSVSchema } from "../../../../shared/helpers/fileupload.helper";
 import { toBase64 } from "../../../../shared/services/upload/fileUpload.service";
 import { HiddenInput } from "../../../../shared/styles/theme";
 import { Media } from "../../../../shared/types/Media";
-import "./lang-import.component.scss";
 
-interface LangImportProps {
+interface ThemeImportProps {
   submitForm: (data: any) => void;
   isSubmitting?: boolean;
 }
 
-const LangImportComponent: React.FC<LangImportProps> = (props) => {
+const ThemeImportComponent: React.FC<ThemeImportProps> = (props) => {
   const form = useForm({ resolver: zodResolver(importCSVSchema) });
 
   useEffect(() => {
@@ -40,8 +39,6 @@ const LangImportComponent: React.FC<LangImportProps> = (props) => {
         contentType: file.type as string,
         size: file.size as number,
       };
-      console.log(media);
-
       form.setValue("file", media);
     },
     [form]
@@ -108,4 +105,4 @@ const LangImportComponent: React.FC<LangImportProps> = (props) => {
   );
 };
 
-export default LangImportComponent;
+export default ThemeImportComponent;

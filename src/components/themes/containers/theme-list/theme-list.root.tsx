@@ -1,5 +1,6 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { UploadFile } from "@mui/icons-material";
 import { Button, Checkbox, InputAdornment, TextField } from "@mui/material";
 import { GridSortModel } from "@mui/x-data-grid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -79,6 +80,12 @@ const ThemeListRoot = () => {
         <div className="actions">
           <Link to={`/themes/create`}>
             <Button variant="contained">Créer</Button>
+          </Link>
+          <Link to={"/themes/import"}>
+            <Button color="accent" className="inline-flex">
+              <UploadFile />
+              Importer
+            </Button>
           </Link>
         </div>
       </header>

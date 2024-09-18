@@ -1,13 +1,35 @@
 import { GridSortDirection } from "@mui/x-data-grid";
 import { http } from "../../../shared/services/api/interceptor/axios.interceptor";
 import { ApiResponse } from "../../../shared/types/ApiResponse";
+import { ImportValidationResult } from "../../../shared/types/ImportDTO";
 import { Langage } from "../../../shared/types/Langage";
+import { Media } from "../../../shared/types/Media";
 import { Paginated } from "../../../shared/types/Paginated";
 import {
   MultiLabelTheme,
   Theme,
   ThemeLabel,
 } from "../../../shared/types/Theme";
+import { ThemeImportDTO } from "../types/ThemeImportDTO";
+
+export const confirmCSVImportTheme = () => {
+  return http.get<ApiResponse<{ theme: number; traduction: number }>>(
+    `/admin/themes/import/confirm`
+  );
+};
+
+export const downloadCSVTheme = () => {
+  return http.get(`/admin/themes/import/download`, { responseType: "blob" });
+};
+
+export const importThemeCSV = (data: { file: Media }) => {
+  return http.post<ApiResponse<ImportValidationResult<ThemeImportDTO>>>(
+    `/admin/themes/import`,
+    {
+      ...data,
+    }
+  );
+};
 
 export const deleteTheme = (id: string) => http.delete(`/admin/themes/${id}`);
 
