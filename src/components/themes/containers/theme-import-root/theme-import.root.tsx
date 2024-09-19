@@ -50,9 +50,10 @@ const ThemeImportRoot = () => {
   });
 
   const confirmImportQuery = useQuery({
-    queryKey: ["import-themes"],
+    queryKey: ["confirm-import-themes"],
     queryFn: confirmCSVImportTheme,
     enabled: false,
+    retry: false,
   });
 
   const onDownloadFile = useCallback(() => {

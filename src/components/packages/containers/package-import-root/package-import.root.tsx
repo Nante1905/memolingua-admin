@@ -11,26 +11,28 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import { Fragment, useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { downloadFile } from "../../../../shared/helpers/download.helper";
-import LangImportComponent from "../../components/lang-import/lang-import.component";
+import PackageImportComponent from "../../components/package-import/package-import.component";
 import {
-  confirmCSVImportLang,
-  downloadCSVLang,
-  importLangCSV,
-} from "../../services/lang.service";
-import "./lang-import.root.scss";
+  confirmCSVImportPackage,
+  downloadCSVPackage,
+  importPackageCSV,
+} from "../../services/package.service";
 
-const LangImportRoot = () => {
+const PackageImportRoot = () => {
   const [openInfo, setOpenInfo] = useState<boolean>(false);
   const [confirmed, setConfirmed] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const importMutation = useMutation({
-    mutationKey: ["import-lang"],
-    mutationFn: (data: any) => importLangCSV(data),
+    mutationKey: ["import-package"],
+    mutationFn: (data: any) => importPackageCSV(data),
   });
 
   const handleFormSubmit = useCallback(
@@ -42,69 +44,87 @@ const LangImportRoot = () => {
   );
 
   const downloadQuery = useQuery({
-    queryKey: ["download-langs"],
-    queryFn: downloadCSVLang,
+    queryKey: ["download-packages"],
+    queryFn: downloadCSVPackage,
     enabled: false,
   });
 
   const confirmImportQuery = useQuery({
-    queryKey: ["confirm-import-langs"],
-    queryFn: confirmCSVImportLang,
+    queryKey: ["confirm-import-packages"],
+    queryFn: confirmCSVImportPackage,
     enabled: false,
     retry: false,
   });
 
   const onDownloadFile = useCallback(() => {
     downloadQuery.refetch().then((res) => {
-      console.log(res.data);
       const url = window.URL.createObjectURL(
         new Blob([res.data?.data], { type: "text/csv" })
       );
-      downloadFile(url, `langue-data-${Date.now()}.csv`);
+      downloadFile(url, `paquet-data-${Date.now()}.csv`);
     });
   }, [downloadQuery]);
 
   const onConfirmUpload = useCallback(() => {
     confirmImportQuery.refetch().then((res) => {
       setConfirmed(true);
+      queryClient.invalidateQueries({ queryKey: ["packages"] });
       enqueueSnackbar({
-        message: `${res.data?.data.payload} Langue(s) enregistrée(s)`,
+        message: `${res.data?.data.payload} paquet(s) enregistré(s)`,
         variant: "success",
-        autoHideDuration: 3000,
+        persist: true,
+        onClose: () => navigate("/packages"),
       });
     });
-  }, [confirmImportQuery]);
+  }, [confirmImportQuery, navigate, queryClient]);
 
   return (
     <div className="import-root">
-      <h1>Import de données csv sur les Langues</h1>
+      <h1>Import de données csv des Paquets</h1>
       <div className="import-body">
         <IconButton onClick={() => setOpenInfo(!openInfo)}>
           <Info />
         </IconButton>
         <Collapse in={openInfo} unmountOnExit>
           <div className="info">
-            <strong>En-tête du csv</strong>
+            <strong>En-tête du csv</strong>:
             <ul>
               <li>
-                label (Le nom de la langue: <strong>obligatoire</strong> )
+                title{" "}
+                <em>
+                  (Le titre du paquet dans la langue source:{" "}
+                  <strong>obligatoire</strong> )
+                </em>
               </li>
               <li>
-                code{" "}
+                theme{" "}
                 <em>
-                  (Le code du pays: <strong>obligatoire</strong>.{" "}
-                  <a href="https://flagsapi.com/#countries" target="_blank">
-                    Codes valides
-                  </a>
-                  )
+                  (Le nom du thème en français: <strong>obligatoire</strong> )
+                </em>
+              </li>
+              <li>
+                source{" "}
+                <em>
+                  (Le code de la langue source déjà enregistrée:{" "}
+                  <strong>obligatoire</strong>. )
+                </em>
+              </li>
+              <li>
+                target{" "}
+                <em>
+                  (Le code de la langue ciblée déjà enregistrée:{" "}
+                  <strong>obligatoire</strong>. )
                 </em>
               </li>
             </ul>
+            <strong>NB:</strong> Le cours langue source {`->`} langue cible doit
+            être préalablement créé.
+            <br />
             <strong>Séparateur:</strong> Point virgule (;)
           </div>
         </Collapse>
       </div>
-      <LangImportComponent submitForm={handleFormSubmit} />
+      <PackageImportComponent submitForm={handleFormSubmit} />
 
       {!confirmed && importMutation.isSuccess && importMutation.data?.data && (
         <Fragment>
@@ -122,8 +142,10 @@ const LangImportRoot = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>Ligne</TableCell>
-                  <TableCell>Label</TableCell>
-                  <TableCell>Code</TableCell>
+                  <TableCell>Titre</TableCell>
+                  <TableCell>Thème</TableCell>
+                  <TableCell>Langue source</TableCell>
+                  <TableCell>Langue cible</TableCell>
                   <TableCell>Erreur</TableCell>
                 </TableRow>
               </TableHead>
@@ -131,8 +153,10 @@ const LangImportRoot = () => {
                 {importMutation.data.data.payload.data.map((d) => (
                   <TableRow key={d.row} className={d.error && "error"}>
                     <TableCell align="right">{d.row}</TableCell>
-                    <TableCell>{d.label}</TableCell>
-                    <TableCell>{d.code}</TableCell>
+                    <TableCell>{d.title}</TableCell>
+                    <TableCell>{d.theme}</TableCell>
+                    <TableCell>{d.source}</TableCell>
+                    <TableCell>{d.target}</TableCell>
                     <TableCell>
                       <ul>
                         {d.error?.map((e, i) => (
@@ -179,4 +203,4 @@ const LangImportRoot = () => {
   );
 };
 
-export default LangImportRoot;
+export default PackageImportRoot;

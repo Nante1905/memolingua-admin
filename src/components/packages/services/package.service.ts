@@ -2,12 +2,31 @@ import { http } from "../../../shared/services/api/interceptor/axios.interceptor
 import { ApiResponse } from "../../../shared/types/ApiResponse";
 import { CardWithMedia } from "../../../shared/types/Card";
 import { Course } from "../../../shared/types/Course";
+import { ImportValidationResult } from "../../../shared/types/ImportDTO";
 import { Media } from "../../../shared/types/Media";
 import { Package } from "../../../shared/types/Package";
 import { Paginated } from "../../../shared/types/Paginated";
 import { Theme } from "../../../shared/types/Theme";
 import { CreatePackageData } from "../types/CreatePackageData";
+import { PackageImportDTO } from "../types/PackageImportDTO";
 import { PackageContent, PackageLib } from "../types/PackageLib";
+
+export const confirmCSVImportPackage = () => {
+  return http.get<ApiResponse<number>>(`/admin/packages/import/confirm`);
+};
+
+export const downloadCSVPackage = () => {
+  return http.get(`/admin/packages/import/download`, { responseType: "blob" });
+};
+
+export const importPackageCSV = (data: { file: Media }) => {
+  return http.post<ApiResponse<ImportValidationResult<PackageImportDTO>>>(
+    `/admin/packages/import`,
+    {
+      ...data,
+    }
+  );
+};
 
 export const deletePackage = (id: string) => {
   return http.delete<ApiResponse>(`/admin/packages/${id}`);
