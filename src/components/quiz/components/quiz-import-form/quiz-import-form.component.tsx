@@ -7,6 +7,7 @@ import "./quiz-import-form.component.scss";
 
 interface QuizImportFormComponentProps {
   onSubmit: (data: object) => void;
+  label: string;
   loading: boolean;
 }
 
@@ -22,7 +23,7 @@ const QuizImportFormComponent: FC<QuizImportFormComponentProps> = (props) => {
               control={form.control}
               form={form}
               name="file"
-              label="Import quiz csv"
+              label={props.label}
             />
           </div>
           <div className="form-input">

@@ -1,3 +1,4 @@
+import { UploadFile } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { GridFilterItem, GridSortItem } from "@mui/x-data-grid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -82,6 +83,11 @@ const QuizListRoot = () => {
         <div className="actions">
           <Link to={`/quizs/create`}>
             <Button variant="contained">Créer</Button>
+          </Link>
+          <Link to={`/quizs/import`}>
+            <Button variant="contained" color="accent">
+              Importer <UploadFile />
+            </Button>
           </Link>
         </div>
       </header>

@@ -1,10 +1,12 @@
 import { MenuItem } from "@mui/material";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import parse from "html-react-parser";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import SelectInputControlledComponent from "../../../../shared/components/inputs/select-input/select-input-controlled.component";
 import { QuizQuestion } from "../../../../shared/types/QuizQuestion";
 import AnswerListComponent from "../../components/answer-list/answer-list.component";
+
 import {
   findAllAnswers,
   findAllQuestionsSelect,
@@ -17,6 +19,7 @@ interface AnswerListRootState {
   pageSize?: number;
   search?: string;
   idQuestion?: string;
+  question?: string;
 }
 
 const AnswerListRoot = () => {
@@ -48,6 +51,14 @@ const AnswerListRoot = () => {
     },
   });
 
+  const questions = useMemo(
+    () =>
+      questionQuery.data?.pages
+        .map((e) => e.data.payload.items)
+        .flat() as any[],
+    [questionQuery.data]
+  );
+
   // console.log();
 
   return (
@@ -58,11 +69,7 @@ const AnswerListRoot = () => {
       <div className="filter">
         <div className="select">
           <SelectInputControlledComponent
-            items={
-              questionQuery.data?.pages
-                .map((e) => e.data.payload.items)
-                .flat() as any[]
-            }
+            items={questions}
             extraOptions={<MenuItem value="all">Tous</MenuItem>}
             loading={questionQuery.isFetching}
             valueGetter={(item: QuizQuestion): string => item?.id}
@@ -75,12 +82,18 @@ const AnswerListRoot = () => {
             onValueChange={(value) => {
               console.log(value);
 
-              setState((state) => ({ ...state, idQuestion: value }));
+              setState((state) => ({
+                ...state,
+                idQuestion: value,
+                question: questions.find((e: QuizQuestion) => e.id === value)
+                  .question,
+              }));
             }}
           />
         </div>
       </div>
-      <section className="question-list-root_main">
+      <section className="answer-list-root_main">
+        <div className="question">Question : {parse(state.question ?? "")}</div>
         <AnswerListComponent
           answers={answersQuery.data?.data.payload}
           answersLoading={answersQuery.isFetching}

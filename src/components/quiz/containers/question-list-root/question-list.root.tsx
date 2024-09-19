@@ -1,3 +1,4 @@
+import { UploadFile } from "@mui/icons-material";
 import { Button, MenuItem } from "@mui/material";
 import {
   useInfiniteQuery,
@@ -109,6 +110,11 @@ const QuestionListRoot = () => {
           </Link>
           <Link to={"/quizs/add-question"}>
             <Button variant="contained">Ajouter des questions</Button>
+          </Link>
+          <Link to={`/questions/import`}>
+            <Button variant="contained" color="accent">
+              Importer <UploadFile />
+            </Button>
           </Link>
         </div>
       </div>
