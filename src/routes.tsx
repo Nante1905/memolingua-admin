@@ -10,8 +10,10 @@ import LevelListRoot from "./components/level/container/list-root/list.root";
 import LevelUpdateFormRoot from "./components/level/container/update-form/update-form.root";
 import LoginRoot from "./components/login/container/login.root";
 import AddCardRoot from "./components/packages/containers/add-card/add-card.root";
+import CardImportRoot from "./components/packages/containers/card-import-root/card-import.root";
 import CreatePackageRoot from "./components/packages/containers/create-package/create-package.root";
 import PackageDetailsRoot from "./components/packages/containers/package-details/package-details.root";
+import PackageImportRoot from "./components/packages/containers/package-import-root/package-import.root";
 import PackageListRoot from "./components/packages/containers/package-list/package-list.root";
 import UpdatePackageRoot from "./components/packages/containers/update-package/update-package.root";
 import AnswerListRoot from "./components/quiz/containers/answer-list-root/answer-list.root";
@@ -149,6 +151,14 @@ export const routes = createBrowserRouter([
       {
         path: "/users",
         element: <UserListRoot />,
+      },
+      {
+        path: "/packages/import",
+        element: <PackageImportRoot />,
+      },
+      {
+        path: "/cards/import",
+        element: <CardImportRoot />,
       },
     ],
   },

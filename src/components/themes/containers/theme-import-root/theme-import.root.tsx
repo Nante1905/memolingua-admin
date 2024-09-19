@@ -50,36 +50,41 @@ const ThemeImportRoot = () => {
   });
 
   const confirmImportQuery = useQuery({
-    queryKey: ["import-themes"],
+    queryKey: ["confirm-import-themes"],
     queryFn: confirmCSVImportTheme,
     enabled: false,
+    retry: false,
   });
 
   const onDownloadFile = useCallback(() => {
     downloadQuery.refetch().then((res) => {
-      const url = window.URL.createObjectURL(
-        new Blob([res.data?.data], { type: "text/csv" })
-      );
-      downloadFile(url, `theme-data-${Date.now()}.csv`);
+      if (res.isSuccess) {
+        const url = window.URL.createObjectURL(
+          new Blob([res.data?.data], { type: "text/csv" })
+        );
+        downloadFile(url, `theme-data-${Date.now()}.csv`);
+      }
     });
   }, [downloadQuery]);
 
   const onConfirmUpload = useCallback(() => {
     confirmImportQuery.refetch().then((res) => {
-      setConfirmed(true);
-      queryClient.invalidateQueries({ queryKey: ["themes"] });
-      enqueueSnackbar({
-        message: `${res.data?.data.payload.theme} thème(s) enregistrée(s)`,
-        variant: "success",
-        persist: true,
-        onClose: () => navigate("/themes"),
-      });
-      enqueueSnackbar({
-        message: `${res.data?.data.payload.traduction} traduction(s) enregistrée(s)`,
-        variant: "success",
-        persist: true,
-        onClose: () => navigate("/themes"),
-      });
+      if (res.isSuccess) {
+        setConfirmed(true);
+        queryClient.invalidateQueries({ queryKey: ["themes"] });
+        enqueueSnackbar({
+          message: `${res.data?.data.payload.theme} thème(s) enregistrée(s)`,
+          variant: "success",
+          persist: true,
+          onClose: () => navigate("/themes"),
+        });
+        enqueueSnackbar({
+          message: `${res.data?.data.payload.traduction} traduction(s) enregistrée(s)`,
+          variant: "success",
+          persist: true,
+          onClose: () => navigate("/themes"),
+        });
+      }
     });
   }, [confirmImportQuery, navigate, queryClient]);
 

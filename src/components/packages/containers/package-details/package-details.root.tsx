@@ -1,4 +1,4 @@
-import { Edit } from "@mui/icons-material";
+import { Edit, UploadFile } from "@mui/icons-material";
 import { Badge, Button, Chip, IconButton } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
@@ -91,11 +91,19 @@ const PackageDetailsRoot: React.FC = () => {
                 {getFullName(detailsQuery.data?.data.payload.author as User)}
               </p>
               {detailsQuery.data?.data.payload.state != ENTITY_DELETED && (
-                <Link to={`/packages/${idPackage}/add-cards`}>
-                  <Button color="accent" variant="contained">
-                    Ajouter un carte
-                  </Button>
-                </Link>
+                <div className="actions">
+                  <Link to={`/packages/${idPackage}/add-cards`}>
+                    <Button color="accent" variant="contained">
+                      Ajouter un carte
+                    </Button>
+                  </Link>
+                  <Link to={`/cards/import`}>
+                    <Button color="accent" className="inline-flex">
+                      <UploadFile />
+                      Importer des cartes
+                    </Button>
+                  </Link>
+                </div>
               )}
             </div>
           </div>
@@ -112,6 +120,7 @@ const PackageDetailsRoot: React.FC = () => {
             )}
           </div>
         </div>
+
         <PackageDetails
           pack={detailsQuery.data?.data.payload as PackageContent}
         />
