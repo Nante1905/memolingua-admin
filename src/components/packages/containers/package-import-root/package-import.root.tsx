@@ -58,23 +58,27 @@ const PackageImportRoot = () => {
 
   const onDownloadFile = useCallback(() => {
     downloadQuery.refetch().then((res) => {
-      const url = window.URL.createObjectURL(
-        new Blob([res.data?.data], { type: "text/csv" })
-      );
-      downloadFile(url, `paquet-data-${Date.now()}.csv`);
+      if (res.isSuccess) {
+        const url = window.URL.createObjectURL(
+          new Blob([res.data?.data], { type: "text/csv" })
+        );
+        downloadFile(url, `paquet-data-${Date.now()}.csv`);
+      }
     });
   }, [downloadQuery]);
 
   const onConfirmUpload = useCallback(() => {
     confirmImportQuery.refetch().then((res) => {
-      setConfirmed(true);
-      queryClient.invalidateQueries({ queryKey: ["packages"] });
-      enqueueSnackbar({
-        message: `${res.data?.data.payload} paquet(s) enregistré(s)`,
-        variant: "success",
-        persist: true,
-        onClose: () => navigate("/packages"),
-      });
+      if (res.isSuccess) {
+        setConfirmed(true);
+        queryClient.invalidateQueries({ queryKey: ["packages"] });
+        enqueueSnackbar({
+          message: `${res.data?.data.payload} paquet(s) enregistré(s)`,
+          variant: "success",
+          persist: true,
+          onClose: () => navigate("/packages"),
+        });
+      }
     });
   }, [confirmImportQuery, navigate, queryClient]);
 

@@ -11,26 +11,29 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import parse from "html-react-parser";
 import { enqueueSnackbar } from "notistack";
 import { Fragment, useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { downloadFile } from "../../../../shared/helpers/download.helper";
-import LangImportComponent from "../../components/lang-import/lang-import.component";
+import CardImportComponent from "../../components/card-import/card-import.component";
 import {
-  confirmCSVImportLang,
-  downloadCSVLang,
-  importLangCSV,
-} from "../../services/lang.service";
-import "./lang-import.root.scss";
+  confirmCSVImportCard,
+  downloadCSVCard,
+  importCardCSV,
+} from "../../services/flashcard.service";
 
-const LangImportRoot = () => {
+const CardImportRoot = () => {
   const [openInfo, setOpenInfo] = useState<boolean>(false);
   const [confirmed, setConfirmed] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const importMutation = useMutation({
-    mutationKey: ["import-lang"],
-    mutationFn: (data: any) => importLangCSV(data),
+    mutationKey: ["import-card"],
+    mutationFn: (data: any) => importCardCSV(data),
   });
 
   const handleFormSubmit = useCallback(
@@ -42,14 +45,14 @@ const LangImportRoot = () => {
   );
 
   const downloadQuery = useQuery({
-    queryKey: ["download-langs"],
-    queryFn: downloadCSVLang,
+    queryKey: ["download-cards"],
+    queryFn: downloadCSVCard,
     enabled: false,
   });
 
   const confirmImportQuery = useQuery({
-    queryKey: ["confirm-import-langs"],
-    queryFn: confirmCSVImportLang,
+    queryKey: ["confirm-import-cards"],
+    queryFn: confirmCSVImportCard,
     enabled: false,
     retry: false,
   });
@@ -60,7 +63,7 @@ const LangImportRoot = () => {
         const url = window.URL.createObjectURL(
           new Blob([res.data?.data], { type: "text/csv" })
         );
-        downloadFile(url, `langue-data-${Date.now()}.csv`);
+        downloadFile(url, `cartes-data-${Date.now()}.csv`);
       }
     });
   }, [downloadQuery]);
@@ -69,45 +72,61 @@ const LangImportRoot = () => {
     confirmImportQuery.refetch().then((res) => {
       if (res.isSuccess) {
         setConfirmed(true);
+        queryClient.invalidateQueries({ queryKey: ["packages"] });
         enqueueSnackbar({
-          message: `${res.data?.data.payload} Langue(s) enregistrée(s)`,
+          message: `${res.data?.data.payload} carte(s) enregistrée(s)`,
           variant: "success",
-          autoHideDuration: 3000,
+          persist: true,
+          onClose: () => navigate("/packages"),
         });
       }
     });
-  }, [confirmImportQuery]);
+  }, [confirmImportQuery, navigate, queryClient]);
 
   return (
     <div className="import-root">
-      <h1>Import de données csv sur les Langues</h1>
+      <h1>Import de données csv des cartes</h1>
       <div className="import-body">
         <IconButton onClick={() => setOpenInfo(!openInfo)}>
           <Info />
         </IconButton>
         <Collapse in={openInfo} unmountOnExit>
           <div className="info">
-            <strong>En-tête du csv</strong>
+            <strong>En-tête du csv</strong>:
             <ul>
               <li>
-                label (Le nom de la langue: <strong>obligatoire</strong> )
+                package{" "}
+                <em>
+                  (Le titre du paquet contenant la carte:{" "}
+                  <strong>obligatoire</strong> )
+                </em>
               </li>
               <li>
-                code{" "}
+                recto{" "}
                 <em>
-                  (Le code du pays: <strong>obligatoire</strong>.{" "}
-                  <a href="https://flagsapi.com/#countries" target="_blank">
-                    Codes valides
-                  </a>
-                  )
+                  (Le contenu du recto, étant le nouveau mot à apprendre dans la
+                  langue cible du paquet: <strong>obligatoire</strong> )
+                </em>
+              </li>
+              <li>
+                verso{" "}
+                <em>
+                  (Le contenu du verso étant la signification apprendre dans la
+                  langue source du paquet: <strong>obligatoire</strong> )
                 </em>
               </li>
             </ul>
-            <strong>Séparateur:</strong> Point virgule (;)
+            <p>
+              <strong>NB:</strong> Les contenus du recto et verso peuvent être
+              des éléments HTML5.
+            </p>
+            <p>
+              <strong>Séparateur:</strong> Point virgule (;)
+            </p>
           </div>
         </Collapse>
       </div>
-      <LangImportComponent submitForm={handleFormSubmit} />
+      <CardImportComponent submitForm={handleFormSubmit} />
 
       {!confirmed && importMutation.isSuccess && importMutation.data?.data && (
         <Fragment>
@@ -125,8 +144,9 @@ const LangImportRoot = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>Ligne</TableCell>
-                  <TableCell>Label</TableCell>
-                  <TableCell>Code</TableCell>
+                  <TableCell>Paquet</TableCell>
+                  <TableCell>Recto</TableCell>
+                  <TableCell>Verso</TableCell>
                   <TableCell>Erreur</TableCell>
                 </TableRow>
               </TableHead>
@@ -134,10 +154,11 @@ const LangImportRoot = () => {
                 {importMutation.data.data.payload.data.map((d) => (
                   <TableRow key={d.row} className={d.error && "error"}>
                     <TableCell align="right">{d.row}</TableCell>
-                    <TableCell>{d.label}</TableCell>
-                    <TableCell>{d.code}</TableCell>
+                    <TableCell>{d.package}</TableCell>
+                    <TableCell>{parse(d.recto)}</TableCell>
+                    <TableCell>{parse(d.verso)}</TableCell>
                     <TableCell>
-                      <ul>
+                      <ul key={`err_${d.row}`}>
                         {d.error?.map((e, i) => (
                           <li key={`${d.row}_${i}`}>{e}</li>
                         ))}
@@ -155,7 +176,7 @@ const LangImportRoot = () => {
               onClick={onConfirmUpload}
             >
               {" "}
-              <AppLoaderComponent loading={confirmImportQuery.isRefetching}>
+              <AppLoaderComponent loading={confirmImportQuery.isFetching}>
                 <Save /> Enregistrer les{" "}
                 {importMutation.data.data.payload?.correct} lignes correctes
               </AppLoaderComponent>
@@ -168,7 +189,7 @@ const LangImportRoot = () => {
             >
               {" "}
               <AppLoaderComponent
-                loading={downloadQuery.isRefetching}
+                loading={downloadQuery.isFetching}
                 width="25px"
                 heigth="25px"
               >
@@ -182,4 +203,4 @@ const LangImportRoot = () => {
   );
 };
 
-export default LangImportRoot;
+export default CardImportRoot;

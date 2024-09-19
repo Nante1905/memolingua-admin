@@ -6,3 +6,9 @@ export interface PackageImportDTO extends ImportDTO {
   source: string;
   target: string;
 }
+
+export interface CardImportDTO extends ImportDTO {
+  package: string;
+  recto: string;
+  verso: string;
+}
