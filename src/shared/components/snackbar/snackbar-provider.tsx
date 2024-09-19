@@ -5,7 +5,7 @@ const AppSnackbarProvider = () => {
   return (
     <SnackbarProvider
       autoHideDuration={3000}
-      maxSnack={5}
+      maxSnack={3}
       action={(snackbarId) => (
         <Close
           style={{

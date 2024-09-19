@@ -6,6 +6,6 @@ export const downloadFile = (url: string, fileName: string) => {
   document.body.appendChild(tmpLink);
   tmpLink.click();
 
-  document.removeChild(tmpLink);
+  document.body.removeChild(tmpLink);
   window.URL.revokeObjectURL(url);
 };

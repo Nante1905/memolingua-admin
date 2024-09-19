@@ -69,4 +69,14 @@ export const importQuiz = (data: object) =>
   http.post("/admin/quizs/import", data);
 
 export const downloadQuizCsv = () => http.get("/admin/quizs/import/download");
+
 export const confirmQuizImport = () => http.get("/admin/quizs/import/confirm");
+
+export const importQuestion = (data: object) =>
+  http.post("/admin/questions/import", data);
+
+export const confirmQuestionImport = () =>
+  http.get("/admin/questions/import/confirm");
+
+export const downloadQuestionCsv = () =>
+  http.get("/admin/questions/import/download");

@@ -1,4 +1,4 @@
-import { Download, Save } from "@mui/icons-material";
+import { Check, Close, Download, Save } from "@mui/icons-material";
 import {
   Button,
   Paper,
@@ -17,32 +17,33 @@ import AppLoaderComponent from "../../../../shared/components/loader/app-loader.
 import { downloadFile } from "../../../../shared/helpers/download.helper";
 import QuizImportFormComponent from "../../components/quiz-import-form/quiz-import-form.component";
 import {
-  confirmQuizImport,
-  downloadQuizCsv,
-  importQuiz,
+  confirmQuestionImport,
+  downloadQuestionCsv,
+  importQuestion,
 } from "../../services/quiz.service";
-import { ImportQuiz } from "../../types/ImportQuiz";
-import "./import-quiz.root.scss";
+import { ImportQuestion } from "../../types/ImportQuestion";
+import "./question-import.root.scss";
 
-const ImportQuizRoot = () => {
-  const quizImportMutation = useMutation({
+const QuestionImportRoot = () => {
+  const questionImportMutation = useMutation({
     mutationKey: ["quiz/import"],
-    mutationFn: (data: object) => importQuiz(data),
+    mutationFn: (data: object) => importQuestion(data),
   });
 
   const onSubmit = (data: object) => {
-    quizImportMutation.mutate(data);
+    questionImportMutation.mutate(data);
   };
 
-  const downloadQuery = useQuery({
-    queryKey: ["quiz/import/download"],
-    queryFn: downloadQuizCsv,
+  const confirmQuery = useQuery({
+    queryKey: ["question/import/confirm"],
+    queryFn: confirmQuestionImport,
     enabled: false,
+    retry: false,
   });
 
-  const confirmQuery = useQuery({
-    queryKey: ["quiz/import/confirm"],
-    queryFn: confirmQuizImport,
+  const downloadQuery = useQuery({
+    queryKey: ["question/import/download"],
+    queryFn: downloadQuestionCsv,
     enabled: false,
     retry: false,
   });
@@ -52,60 +53,74 @@ const ImportQuizRoot = () => {
       const url = window.URL.createObjectURL(
         new Blob([res.data?.data], { type: "text/csv" })
       );
-      downloadFile(url, `quiz-data-${Date.now()}.csv`);
+      downloadFile(url, `questions-data-${Date.now()}.csv`);
     });
   }, [downloadQuery]);
 
-  const onConfirmUpload = useCallback(() => {
+  const onConfirm = useCallback(() => {
     confirmQuery.refetch().then((res) => {
-      enqueueSnackbar({
-        message: `${res.data?.data.message}`,
-        variant: "success",
-      });
+      if (res.isSuccess) {
+        enqueueSnackbar({
+          variant: "success",
+          message: res.data?.data.message,
+        });
+      }
     });
   }, [confirmQuery]);
 
   return (
-    <div className="import-quiz-root import-root">
-      <h1 style={{ textAlign: "center" }}>Importer en format csv les quiz</h1>
+    <div className="quesiton-import-root import-root">
+      <h1 style={{ textAlign: "center" }}>
+        Importer en format csv les questions et réponses
+      </h1>
       <div className="form-container">
         <QuizImportFormComponent
-          label="Importer le fichier csv"
           onSubmit={onSubmit}
-          loading={quizImportMutation.isPending}
+          loading={false}
+          label="Importer le fichier csv"
         />
       </div>
       <div className="import-result">
-        {quizImportMutation.isSuccess && (
+        {questionImportMutation.isSuccess && (
           <Fragment>
             <TableContainer component={Paper} className="data-table">
               <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell>Lignes</TableCell>
-                    <TableCell>Titre</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Niveau</TableCell>
-                    <TableCell>Thème</TableCell>
-                    <TableCell>Langue source</TableCell>
-                    <TableCell>Langue cible</TableCell>
+                    <TableCell>Quiz</TableCell>
+                    <TableCell>Question</TableCell>
+                    <TableCell>Est QCM</TableCell>
+                    <TableCell>Réponse</TableCell>
+                    <TableCell>Est correcte</TableCell>
                     <TableCell>Erreurs</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {quizImportMutation.data?.data.payload.data.map(
-                    (e: ImportQuiz) => (
+                  {questionImportMutation.data?.data.payload.data.map(
+                    (e: ImportQuestion) => (
                       <TableRow
                         key={e.row}
                         className={e.errors.length > 0 ? "error" : ""}
                       >
                         <TableCell>{e.row}</TableCell>
-                        <TableCell>{e.title}</TableCell>
-                        <TableCell>{e.description}</TableCell>
-                        <TableCell>{e.level}</TableCell>
-                        <TableCell>{e.theme}</TableCell>
-                        <TableCell>{e.languageSource}</TableCell>
-                        <TableCell>{e.languageTarget}</TableCell>
+                        <TableCell>{e.quiz}</TableCell>
+                        <TableCell>{e.question}</TableCell>
+                        <TableCell>
+                          {e.isqcm == 1 ? (
+                            <Check color="primary" />
+                          ) : (
+                            <Close color="error" />
+                          )}
+                        </TableCell>
+                        <TableCell>{e.reponse}</TableCell>
+                        <TableCell>
+                          {e.iscorrect == 1 ? (
+                            <Check color="primary" />
+                          ) : (
+                            <Close color="error" />
+                          )}
+                        </TableCell>
                         <TableCell>
                           {e.errors.map((e, i) => (
                             <p key={i}>{e}</p>
@@ -120,20 +135,22 @@ const ImportQuizRoot = () => {
             <div className="actions">
               <Button
                 className="inline-flex"
-                disabled={quizImportMutation.data?.data.payload.correct == 0}
-                onClick={onConfirmUpload}
+                disabled={
+                  questionImportMutation.data?.data.payload.correct == 0
+                }
+                onClick={onConfirm}
               >
                 {" "}
                 <AppLoaderComponent loading={false}>
                   <Save /> Enregistrer les{" "}
-                  {quizImportMutation.data?.data.payload?.correct} lignes
+                  {questionImportMutation.data?.data.payload?.correct} lignes
                   correctes
                 </AppLoaderComponent>
               </Button>
               <Button
                 color="secondary"
                 className="inline-flex"
-                disabled={quizImportMutation.data?.data.payload.error == 0}
+                disabled={questionImportMutation.data?.data.payload.error == 0}
                 onClick={onDownloadFile}
               >
                 {" "}
@@ -149,4 +166,4 @@ const ImportQuizRoot = () => {
   );
 };
 
-export default ImportQuizRoot;
+export default QuestionImportRoot;

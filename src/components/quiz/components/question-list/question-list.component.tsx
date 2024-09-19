@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Check, Close, Delete, Edit } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales";
@@ -33,6 +33,18 @@ const QuestionListComponent: FC<QuestionListComponentProps> = (props) => {
       field: "question",
       headerName: "Question",
       width: 300,
+    },
+    {
+      field: "isQcm",
+      headerName: "Est un QCM",
+      width: 100,
+      renderCell: (params) => {
+        return params.row.isQcm ? (
+          <Check color="primary" />
+        ) : (
+          <Close color="error" />
+        );
+      },
     },
     {
       field: "state",
