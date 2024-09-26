@@ -167,7 +167,7 @@ export const routes = createBrowserRouter([
         element: <CardImportRoot />,
       },
       {
-        path: "/stats/lang/:idLang",
+        path: "/stats/lang",
         element: <DetailsDashboardRoot />,
       },
     ],

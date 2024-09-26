@@ -2,6 +2,7 @@ import { GridSortDirection } from "@mui/x-data-grid";
 import { http } from "../../../shared/services/api/interceptor/axios.interceptor";
 import { ApiResponse } from "../../../shared/types/ApiResponse";
 import { ImportValidationResult } from "../../../shared/types/ImportDTO";
+import { Langage } from "../../../shared/types/Langage";
 import { Media } from "../../../shared/types/Media";
 import { LangImportDTO } from "../types/LangImportDTO";
 
@@ -46,3 +47,7 @@ export const updateLang = (values: { data: object; id: string }) =>
   http.put(`/admin/langs/${values.id}`, values.data);
 
 export const findLangById = (id: string) => http.get(`admin/langs/${id}`);
+
+export const getNonPaginatedLangs = () => {
+  return http.get<ApiResponse<Langage[]>>(`/admin/langs?sort=label`);
+};
