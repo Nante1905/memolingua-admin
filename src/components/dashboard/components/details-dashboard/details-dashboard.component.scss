@@ -1,8 +1,13 @@
 @import "../../../../shared/styles/variables.scss";
-
+.details-dashboard-header {
+  margin: 2rem 0;
+  .inline-flex {
+    justify-content: center;
+  }
+}
 .details-dashboard-body {
   padding-inline: 5%;
-  margin: 5rem 0;
+  margin: 2rem 0;
   display: flex;
   flex-direction: column;
   row-gap: 3rem;
@@ -103,5 +108,9 @@
         width: 100%;
       }
     }
+  }
+  .caption {
+    color: gray;
+    font-size: 0.75rem;
   }
 }
