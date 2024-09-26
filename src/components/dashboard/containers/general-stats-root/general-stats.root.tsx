@@ -49,13 +49,13 @@ const GeneralStatsRoot: FC = () => {
   );
   const sessionData = useMemo(
     () => ({
-      labels: dashboardDataQuery.data?.data.payload.hourlySession.map(
+      labels: dashboardDataQuery.data?.data.payload.hourlySession?.map(
         (e) => e.h
       ),
       datasets: [
         {
           label: "Apprentissage",
-          data: dashboardDataQuery.data?.data.payload.hourlySession.map(
+          data: dashboardDataQuery.data?.data.payload.hourlySession?.map(
             (e) => e.totalLearning
           ),
           backgroundColor: "#AFECA8",
@@ -65,7 +65,7 @@ const GeneralStatsRoot: FC = () => {
         },
         {
           label: "Révision",
-          data: dashboardDataQuery.data?.data.payload.hourlySession.map(
+          data: dashboardDataQuery.data?.data.payload.hourlySession?.map(
             (e) => e.totalReview
           ),
           backgroundColor: "#94b5e9",
