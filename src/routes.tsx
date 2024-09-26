@@ -1,5 +1,6 @@
 import { Outlet, createBrowserRouter } from "react-router-dom";
 import App from "./App";
+import DetailsDashboardRoot from "./components/dashboard/containers/details-dashboard/details-dashboard.root";
 import HomeRoot from "./components/home/home.root";
 import LangCreateRoot from "./components/langs/container/lang-create-root/lang-create.root";
 import LangImportRoot from "./components/langs/container/lang-import-root/lang-import.root";
@@ -164,6 +165,10 @@ export const routes = createBrowserRouter([
       {
         path: "/cards/import",
         element: <CardImportRoot />,
+      },
+      {
+        path: "/stats/lang/:idLang",
+        element: <DetailsDashboardRoot />,
       },
     ],
   },
