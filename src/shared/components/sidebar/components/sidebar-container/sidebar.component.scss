@@ -1,7 +1,6 @@
 @import "../../../../styles/variables.scss";
 .sidebar {
   a {
-    color: "#000";
     text-decoration: none;
   }
   &-container {
@@ -26,7 +25,6 @@
 
     &.close {
       border-radius: 66px;
-
       .sidebar-head {
         a {
           width: 0;
@@ -59,15 +57,14 @@
       justify-content: center;
       align-items: center;
       margin-block: 20px;
-      max-width: 350px;
+      // max-width: 350px;
       max-height: 200px;
       transition: max-width 0.3s ease-in-out, max-height 0.5s ease-in-out,
         opacity 0.3s ease-in;
       .img-container {
         width: 100px;
-        height: 100px;
+        height: 70px;
         border-radius: 50%;
-        margin-bottom: 10px;
       }
       .name {
         font-family: $title-font;
@@ -91,7 +88,9 @@
 @media (width <= $small-devices) {
   .sidebar-container {
     max-height: 100vh;
-    min-width: 320px;
+    // min-width: 320px;
+    min-width: calc(100vw - 55px);
+
     top: 20px;
 
     .sidebar-items-container {
@@ -112,6 +111,9 @@
       }
       button {
         margin: 0 !important;
+      }
+      .sidebar-content {
+        width: 0;
       }
     }
   }

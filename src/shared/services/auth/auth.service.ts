@@ -24,3 +24,7 @@ export const requestAccessToken = (refreshToken: string) => {
     token: refreshToken,
   });
 };
+
+export const logOut = () => {
+  sessionStorage.removeItem("accessToken");
+};

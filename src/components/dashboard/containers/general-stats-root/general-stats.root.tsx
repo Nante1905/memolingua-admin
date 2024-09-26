@@ -1,13 +1,14 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { LinearProgress } from "@mui/material";
+import { Button, LinearProgress } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { Dayjs } from "dayjs";
 import { FC, useMemo, useState } from "react";
 import { Bar } from "react-chartjs-2";
+import { Link, useNavigate } from "react-router-dom";
 import DateRangePicker from "../../../../shared/components/date-range-picker/date-range-picker.component";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import NumberDashboardComponent from "../../components/number-dashboard/number-dashboard.component";
-import { findGeneralDashboardData } from "../../services/stats.service";
+import { findGeneralDashboardData } from "../../services/dashboard.service";
 import "./general-stats.root.scss";
 
 interface GeneralStatsRootState {
@@ -17,6 +18,7 @@ interface GeneralStatsRootState {
 
 const GeneralStatsRoot: FC = () => {
   const [state, setState] = useState<GeneralStatsRootState>();
+  const navigate = useNavigate();
 
   const dashboardDataQuery = useQuery({
     queryKey: ["dashboard/general", state?.startDate, state?.endDate],
@@ -42,6 +44,11 @@ const GeneralStatsRoot: FC = () => {
           borderColor: "#94b5e9",
           // borderRadius: 10,
           barPercentage: 1,
+          datalabels: {
+            labels: {
+              title: null,
+            },
+          },
         },
       ],
     }),
@@ -62,6 +69,11 @@ const GeneralStatsRoot: FC = () => {
           borderColor: "#AFECA8",
           borderRadius: 10,
           barPercentage: 1,
+          datalabels: {
+            labels: {
+              title: null,
+            },
+          },
         },
         {
           label: "Révision",
@@ -72,6 +84,11 @@ const GeneralStatsRoot: FC = () => {
           borderColor: "#94b5e9",
           borderRadius: 10,
           barPercentage: 1,
+          datalabels: {
+            labels: {
+              title: null,
+            },
+          },
         },
       ],
     }),
@@ -101,10 +118,6 @@ const GeneralStatsRoot: FC = () => {
                 startDate: data.start.format("YYYY-MM-DD"),
                 endDate: data.end.format("YYYY-MM-DD"),
               }));
-              console.log({
-                start: data.start.format("YYYY-MM-DD"),
-                end: data.end.format("YYYY-MM-DD"),
-              });
             }}
           />
         </div>
@@ -124,8 +137,16 @@ const GeneralStatsRoot: FC = () => {
                 label={"Session/jour"}
               />
             </div>
+            <div className="numbers_item">
+              <div className="number-item">
+                <Link to={`/stats/details`}>
+                  <Button>Voir les détails par langue</Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </AppLoaderComponent>
+
         <div className="charts">
           <div className="middle">
             <div className="left">
@@ -142,8 +163,17 @@ const GeneralStatsRoot: FC = () => {
                           data={langUserData}
                           options={{
                             events: ["click"],
-                            onClick(event, elements, chart) {
+                            onClick(event, elements) {
                               // console.log(elements);
+                              if (elements[0]) {
+                                navigate(
+                                  `/stats/details?lang=${
+                                    dashboardDataQuery.data?.data.payload
+                                      .usersPerLang[elements[0].index]
+                                      .idLanguageTarget
+                                  }`
+                                );
+                              }
                               console.log(
                                 dashboardDataQuery.data?.data.payload
                                   .usersPerLang[elements[0].index]
@@ -278,7 +308,7 @@ const GeneralStatsRoot: FC = () => {
                         },
                         scales: {
                           y: {
-                            max: 10,
+                            max: 20,
                             title: { text: "Nb", display: true },
                           },
                           x: {

@@ -1,9 +1,12 @@
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import { Button } from "@mui/material";
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { logoutEffect } from "../../../../store/shared.effect";
 // import { AppDispatch } from "../../../../store/store";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { logOut } from "../../../../services/auth/auth.service";
 import { SidebarItem } from "../../types/sidebarItem";
 import SidebarItemComponent from "../sidebar-item/sidebar-item.component";
 import "./sidebar.component.scss";
@@ -19,7 +22,7 @@ const SidebarComponent = (props: SidebarComponentProps) => {
   const [collapse, setCollapse] = useState(true);
   const containerRef = useRef<HTMLDivElement | null>(null);
   // const dispatch = useDispatch<AppDispatch>();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const sidebarCollapseStyle = collapse
     ? {
@@ -73,20 +76,15 @@ const SidebarComponent = (props: SidebarComponentProps) => {
             <Link to={"/profile"}>
               <div className="name">{props.userName}</div>
             </Link>
-            <div className="niveau">{props.userLevel}</div>
-            {/* <Button
+            <Button
               variant="contained"
               className="logout-btn"
               color="accent"
               size="small"
-              onClick={() =>
-                dispatch(
-                  logoutEffect({
-                    refreshToken: localStorage.getItem("refreshToken") ?? "",
-                    navigate,
-                  })
-                )
-              }
+              onClick={() => {
+                logOut();
+                navigate("/login");
+              }}
               style={{
                 maxWidth: "none",
                 height: "initial",
@@ -100,7 +98,7 @@ const SidebarComponent = (props: SidebarComponentProps) => {
                   />
                 </span>
               </small>
-            </Button> */}
+            </Button>
           </div>
           <div className="sidebar-items-container">
             {props.sidebarItems.map((e, index) => (

@@ -30,3 +30,19 @@ export interface StatsDetails {
     levels: UserLevelNbr[];
   };
 }
+
+export interface GeneralStatsData {
+  signedUser: number;
+  avgSessionPerDay: number;
+  usersPerLang: UserPerLang[];
+  usersPerThemeOnPackages: UserThemeNbr[];
+  usersPerThemeOnQuiz: UserThemeNbr[];
+  hourlySession: HourlySessionNbr[];
+}
+
+export interface UserPerLang {
+  idLanguageTarget: string;
+  targetLabel: string;
+  targetCode: string;
+  nbUser: number;
+}

@@ -6,8 +6,8 @@ import { SidebarItem } from "../types/sidebarItem";
 library.add(fas);
 export const sidebarItems: SidebarItem[] = [
   {
-    title: "Accueil",
-    icon: <FontAwesomeIcon icon={"fa-solid fa-house" as IconProp} />,
+    title: "Tableau de bord",
+    icon: <FontAwesomeIcon icon={"fa-chart-column" as IconProp} />,
     link: "/home",
   },
   {
