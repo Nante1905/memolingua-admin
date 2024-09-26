@@ -4,6 +4,7 @@ import { Button, FormHelperText } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { frFR } from "@mui/x-date-pickers/locales";
 import dayjs, { Dayjs } from "dayjs";
 import { useCallback } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -47,7 +48,12 @@ const DateRangePicker: React.FC<DateRangeProps> = (props) => {
 
   return (
     <div className="date-range-picker">
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider
+        dateAdapter={AdapterDayjs}
+        localeText={
+          frFR.components.MuiLocalizationProvider.defaultProps.localeText
+        }
+      >
         <form className="form" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="inputs">
             <Controller
@@ -64,6 +70,10 @@ const DateRangePicker: React.FC<DateRangeProps> = (props) => {
                         !!form.formState.errors.start,
                     },
                   }}
+                  localeText={
+                    frFR.components.MuiLocalizationProvider.defaultProps
+                      .localeText
+                  }
                   {...field}
                   label="Début"
                   format="DD-MM-YYYY"
@@ -85,6 +95,10 @@ const DateRangePicker: React.FC<DateRangeProps> = (props) => {
                         !!form.formState.errors.end,
                     },
                   }}
+                  localeText={
+                    frFR.components.MuiLocalizationProvider.defaultProps
+                      .localeText
+                  }
                   {...field}
                   label="Fin"
                   format="DD-MM-YYYY"
