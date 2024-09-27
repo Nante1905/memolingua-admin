@@ -6,7 +6,7 @@ interface HourlySessionNbr {
   totalReview: number;
 }
 
-interface UserThemeNbr {
+export interface UserThemeNbr {
   idTheme: string;
   label: string;
   nbr: number;

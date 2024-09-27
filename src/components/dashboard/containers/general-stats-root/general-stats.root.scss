@@ -1,6 +1,12 @@
 @import "./../../../../shared/styles/variables.scss";
 
 .general-stats-root {
+  .action-btn {
+    color: white;
+    position: fixed;
+    right: 15px;
+    top: 50%;
+  }
   &_main {
     .numbers {
       display: flex;

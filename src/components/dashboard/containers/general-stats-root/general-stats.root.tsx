@@ -1,15 +1,15 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { PictureAsPdf } from "@mui/icons-material";
 import {
   Button,
   Checkbox,
   Dialog,
+  Fab,
   FormControlLabel,
   LinearProgress,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import dayjs, { Dayjs } from "dayjs";
-import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
 import { FC, useMemo, useRef, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { Controller, useForm } from "react-hook-form";
@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import DateRangePicker from "../../../../shared/components/date-range-picker/date-range-picker.component";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import NumberDashboardComponent from "../../components/number-dashboard/number-dashboard.component";
+import { generateGeneralDashboardPDF } from "../../services/dashboard.helper";
 import { findGeneralDashboardData } from "../../services/dashboard.service";
 import "./general-stats.root.scss";
 
@@ -129,190 +130,11 @@ const GeneralStatsRoot: FC = () => {
     () => dashboardDataQuery.data?.data.payload.avgSessionPerDay,
     [dashboardDataQuery.data]
   );
-  const chartRef = useRef<any>(null);
   const form = useForm();
 
   const chartRefs = {
-    packages: useRef<any>(null),
-    quiz: useRef<any>(null),
     users: useRef<any>(null),
     sessions: useRef<any>(null),
-  };
-
-  const generatePDF = (data: Record<string, boolean | undefined>) => {
-    console.log(data);
-    console.log(chartRefs);
-
-    const doc = new jsPDF("portrait", "px", "A4");
-    let top = 40;
-    const padding = 20;
-    const canvaMargin = 30;
-    const width = doc.internal.pageSize.width - padding * 4;
-    const height = data.manyPage
-      ? doc.internal.pageSize.height / 2
-      : 3 * (doc.internal.pageSize.height / 8); // 1/2 of the page or 1/2 of 1/4
-    let count = 0;
-
-    // title
-    doc.setFont("Helvetica", "", "bold");
-    const lineHeight = 15;
-
-    let title = `Statistiques générales Mémolingua`;
-    doc.setFontSize(16);
-    doc.text(
-      title,
-      doc.internal.pageSize.width / 2 - doc.getTextWidth(title) / 2,
-      top
-    );
-    top += lineHeight;
-
-    doc.setFontSize(14);
-    title = `${
-      state.startDate ? dayjs(state.startDate).format("DD MMM YYYY") : ""
-    } - ${state.endDate ? dayjs(state.endDate).format("DD MMM YYYY") : ""}`;
-    doc.text(
-      title,
-      doc.internal.pageSize.width / 2 - doc.getTextWidth(title) / 2,
-      top
-    );
-    top += lineHeight * 2;
-
-    doc.setFont("Helvetica", "", "bold");
-    doc.setFontSize(12);
-
-    // TABS
-    let tableData = [];
-    if (data.packages) {
-      title = `Tendance d'apprentissage des thèmes parmi les paquets:`;
-      doc.text(title, padding, top);
-      doc.line(padding, top + 2, doc.getTextWidth(title) + padding, top + 2);
-      top += lineHeight;
-      doc.setFont("Helvetica", "", "normal");
-      tableData = (
-        dashboardDataQuery.data?.data.payload.usersPerThemeOnPackages ?? []
-      ).map((u) => [
-        u.idTheme,
-        u.label,
-        u.nbr,
-        `${((u.nbr / (users as number)) * 100).toFixed(2)} %`,
-      ]);
-
-      autoTable(doc, {
-        startY: top,
-        theme: "grid",
-        tableWidth: data.manyPage ? width : width / 1.5,
-        head: [["Id", "Label", "Nombre d'utilisateurs", "Pourcentage"]],
-        body: tableData,
-        didDrawPage: (d) => {
-          top = d.cursor?.y as number;
-        },
-        columnStyles: {
-          2: {
-            halign: "right",
-          },
-          3: {
-            halign: "right",
-          },
-        },
-        // headStyles: {
-        //   fillColor
-        // }
-      });
-      count += 1;
-    }
-    top += lineHeight * 2;
-
-    doc.setFont("Helvetica", "", "bold");
-    if (data.quiz) {
-      if (count > 0 && data.manyPage) {
-        doc.addPage();
-        top = 40;
-      }
-      title = `Tendance des thèmes parmi les quiz:`;
-      doc.text(title, padding, top);
-      doc.line(padding, top + 2, doc.getTextWidth(title) + padding, top + 2);
-      top += lineHeight;
-      doc.setFont("Helvetica", "", "normal");
-      tableData = (
-        dashboardDataQuery.data?.data.payload.usersPerThemeOnQuiz ?? []
-      ).map((u) => [
-        u.idTheme,
-        u.label,
-        u.nbr,
-        `${((u.nbr / (users as number)) * 100).toFixed(2)} %`,
-      ]);
-
-      autoTable(doc, {
-        startY: top,
-        theme: "grid",
-        tableWidth: data.manyPage ? width : width / 1.5,
-        head: [["Id", "Label", "Nombre d'utilisateurs", "Pourcentage"]],
-        body: tableData,
-        didDrawPage: (d) => {
-          top = d.cursor?.y as number;
-        },
-        columnStyles: {
-          2: {
-            halign: "right",
-          },
-          3: {
-            halign: "right",
-          },
-        },
-        // headStyles: {
-        //   fillColor
-        // }
-      });
-      count += 1;
-    }
-    top += lineHeight * 2;
-
-    // CHART
-    doc.setFont("Helvetica", "", "bold");
-    let canva = null;
-    if (data.users) {
-      if (
-        count > 0 &&
-        (height + top > doc.internal.pageSize.getHeight() || data.manyPage)
-      ) {
-        doc.addPage();
-        top = 40;
-      }
-
-      title = `Répartition des apprenants par langue:`;
-      doc.text(title, padding, top);
-      doc.line(padding, top + 2, doc.getTextWidth(title) + padding, top + 2);
-      top += lineHeight;
-      canva = chartRefs.users.current!.canvas as HTMLCanvasElement;
-      doc.addImage(canva, "png", padding, top, width, height);
-      top += height + canvaMargin;
-      count += 1;
-    }
-
-    if (data.sessions) {
-      if (
-        count > 0 &&
-        (height + top > doc.internal.pageSize.getHeight() || data.manyPage)
-      ) {
-        doc.addPage();
-        top = 40;
-      }
-      title = `Nombre totale de sessions par heure:`;
-      doc.text(title, padding, top);
-      doc.line(padding, top + 2, doc.getTextWidth(title) + padding, top + 2);
-      top += lineHeight;
-      canva = chartRefs.sessions.current!.canvas as HTMLCanvasElement;
-      doc.addImage(canva, "png", padding, top, width, height);
-      top += height + canvaMargin;
-      count += 1;
-    }
-
-    doc.save(
-      `Statistiques-generale-Mémolingua-${state.startDate?.replace(
-        "-",
-        "/"
-      )}-${state.endDate?.replace("-", "/")}.pdf`
-    );
   };
 
   const pdfFormOptions = form.watch();
@@ -330,17 +152,19 @@ const GeneralStatsRoot: FC = () => {
       <div className="general-stats-root">
         <div className="header">
           <h1>Statistiques générales</h1>
-          <Button
-            onClick={() => {
-              console.log(chartRef.current?.canvas);
-              // pdftest();
-              setState((state) => ({ ...state, openPDFPopup: true }));
-            }}
-          >
-            test
-          </Button>
         </div>
         <section className="general-stats-root_main">
+          {dashboardDataQuery.isSuccess && (
+            <Fab
+              className="action-btn"
+              color="primary"
+              onClick={() => {
+                setState((state) => ({ ...state, openPDFPopup: true }));
+              }}
+            >
+              <PictureAsPdf />
+            </Fab>
+          )}
           <div className="filter">
             <DateRangePicker
               onSubmit={(data: { start: Dayjs; end: Dayjs }) => {
@@ -447,7 +271,7 @@ const GeneralStatsRoot: FC = () => {
                 <AppLoaderComponent loading={dashboardDataQuery.isFetching}>
                   <div className="linear-stat">
                     <h3>Tendance des thèmes </h3>
-                    <div className="linear-stat-body" ref={chartRefs.packages}>
+                    <div className="linear-stat-body">
                       {dashboardDataQuery.data?.data.payload.usersPerThemeOnPackages.map(
                         (e) => (
                           <div className="theme-item" key={`pack-${e.idTheme}`}>
@@ -568,34 +392,24 @@ const GeneralStatsRoot: FC = () => {
       >
         <div className="dialog-content">
           <h2 className="text-center">Configurer le PDF</h2>
-          <form onSubmit={form.handleSubmit(generatePDF)}>
+          <form
+            onSubmit={form.handleSubmit((data) =>
+              generateGeneralDashboardPDF(
+                data,
+                chartRefs,
+                state.startDate ?? "",
+                state.endDate ?? "",
+                dashboardDataQuery.data?.data?.payload
+                  .usersPerThemeOnPackages ?? [],
+                dashboardDataQuery.data?.data?.payload.usersPerThemeOnQuiz ??
+                  [],
+                users as number
+              )
+            )}
+          >
             <div>
               <h3>Choisir les graphes</h3>
-              {/* <div>
-                <FormControlLabel
-                  label="Tous"
-                  control={
-                    <Checkbox
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        console.log("change", Object.keys(pdfFormOptions));
-                        // form.setValue("quiz", true);
-                        const keys =
-                          Object.keys(pdfFormOptions).length > 0
-                            ? Object.keys(pdfFormOptions)
-                            : Object.keys(form.watch());
 
-                        keys.slice(0, -1).forEach((k) => {
-                          console.log(k);
-                          form.setValue(k, event.target.checked);
-                        });
-                      }}
-                      // indeterminate
-                    />
-                  }
-                />
-              </div> */}
               <Controller
                 control={form.control}
                 name="packages"

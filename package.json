@@ -24,6 +24,7 @@
     "@reduxjs/toolkit": "^2.2.7",
     "@tanstack/react-query": "^5.51.16",
     "@tiptap/starter-kit": "^2.6.2",
+    "@types/jspdf": "^2.0.0",
     "axios": "^1.7.2",
     "chartjs": "^0.3.24",
     "chartjs-plugin-autocolors": "^0.3.1",
