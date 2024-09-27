@@ -1,20 +1,33 @@
-import { Star } from "@mui/icons-material";
-import { LinearProgress } from "@mui/material";
+import { PictureAsPdf, Star } from "@mui/icons-material";
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  Fab,
+  FormControlLabel,
+  LinearProgress,
+} from "@mui/material";
 import dayjs from "dayjs";
-import React, { Fragment, useMemo } from "react";
+import React, { Fragment, useMemo, useRef, useState } from "react";
 import { Bar, Pie } from "react-chartjs-2";
+import { Controller, useForm } from "react-hook-form";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { getFlagLink } from "../../../../shared/services/api/flags/flag-api.service";
+import { generateDetailsDashboardPDF } from "../../helper/dashboard.helper";
 import { StatsDetails } from "../../types/dashboard.type";
 import "./details-dashboard.component.scss";
 
 interface DetailsDashboardProps {
   isFetching: boolean;
   stats?: StatsDetails;
+  start: string;
+  end: string;
 }
 
 const DetailsDashboardComponent: React.FC<DetailsDashboardProps> = (props) => {
   const totalUser = props.stats?.stats.totalUser ?? 0;
+  const [openPDFPopup, setOpenPDFPopUp] = useState(false);
+
   const sessionData = useMemo(
     () => ({
       labels: props.stats?.stats.sessions.map((s) => s.h),
@@ -53,24 +66,62 @@ const DetailsDashboardComponent: React.FC<DetailsDashboardProps> = (props) => {
     [props]
   );
 
+  const form = useForm();
+  const chartRefs = {
+    sessions: useRef<any>(null),
+    levels: useRef<any>(null),
+  };
+  const pdfFormOptions = form.watch();
+
+  const plugin = {
+    id: "custom_canvas_background_color",
+    beforeDraw: (chart: any) => {
+      const { ctx } = chart;
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-over";
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, chart.width + 1, chart.height);
+      ctx.restore();
+    },
+  };
+
+  const invalidPdfOptions = useMemo(
+    () =>
+      Object.keys(pdfFormOptions)
+        .slice(0, -1)
+        .every((k) => !pdfFormOptions[k]),
+    [pdfFormOptions]
+  );
+
   return (
     <>
       {!props.isFetching && (
-        <div className="details-dashboard-header text-center">
-          <div className="inline-flex">
-            <h2>
-              {props.stats?.stats.lang.label}({props.stats?.stats.lang.code})
-            </h2>
-            <img
-              src={getFlagLink(props.stats?.stats.lang.code as string, 48)}
-              alt={props.stats?.stats.lang.code}
-            />
+        <Fragment>
+          <div className="details-dashboard-header text-center">
+            <div className="inline-flex">
+              <h2>
+                {props.stats?.stats.lang.label}({props.stats?.stats.lang.code})
+              </h2>
+              <img
+                src={getFlagLink(props.stats?.stats.lang.code as string, 48)}
+                alt={props.stats?.stats.lang.code}
+              />
+            </div>
+            <p className="no-margin">
+              {dayjs(props.stats?.start as string).format("DD MMM YYYY")} au{" "}
+              {dayjs(props.stats?.end as string).format("DD MMM YYYY")}{" "}
+            </p>
           </div>
-          <p className="no-margin">
-            {dayjs(props.stats?.start as string).format("DD MMM YYYY")} au{" "}
-            {dayjs(props.stats?.end as string).format("DD MMM YYYY")}{" "}
-          </p>
-        </div>
+          <Fab
+            className="floating-action-btn"
+            color="primary"
+            onClick={() => {
+              setOpenPDFPopUp(true);
+            }}
+          >
+            <PictureAsPdf />
+          </Fab>
+        </Fragment>
       )}
       <div className="details-dashboard-body">
         <div className="up">
@@ -84,6 +135,8 @@ const DetailsDashboardComponent: React.FC<DetailsDashboardProps> = (props) => {
                   <Bar
                     id="hourly-session-chart"
                     data={sessionData}
+                    plugins={[plugin]}
+                    ref={chartRefs.sessions}
                     options={{
                       maintainAspectRatio: false,
                       plugins: {
@@ -210,6 +263,8 @@ const DetailsDashboardComponent: React.FC<DetailsDashboardProps> = (props) => {
                     <Pie
                       data={levelData}
                       id="level-chart"
+                      plugins={[plugin]}
+                      ref={chartRefs.levels}
                       options={{
                         plugins: {
                           autocolors: {
@@ -246,6 +301,103 @@ const DetailsDashboardComponent: React.FC<DetailsDashboardProps> = (props) => {
           </div>
         </div>
       </div>
+
+      <Dialog
+        open={openPDFPopup}
+        onClose={() => {
+          setOpenPDFPopUp(false);
+          form.reset();
+        }}
+      >
+        <div className="pdf-dialog-content">
+          <h2 className="text-center">Configurer le PDF</h2>
+          <form
+            onSubmit={form.handleSubmit((data) => {
+              if (props.stats?.stats.lang) {
+                generateDetailsDashboardPDF(
+                  data,
+                  props.stats?.stats.lang,
+                  chartRefs,
+                  props.start,
+                  props.end,
+                  props.stats?.stats.packages,
+                  props.stats?.stats.quiz,
+                  totalUser
+                );
+              }
+            })}
+          >
+            <div>
+              <h3>Choisir les graphes</h3>
+
+              <Controller
+                control={form.control}
+                name="sessions"
+                render={({ field }) => (
+                  <FormControlLabel
+                    label="Nombre total de session par heure"
+                    control={<Checkbox {...field} />}
+                  />
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="packages"
+                render={({ field }) => (
+                  <FormControlLabel
+                    label="Tendance des thèmes sur les paquets"
+                    {...field}
+                    control={<Checkbox />}
+                  />
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="quiz"
+                render={({ field }) => (
+                  <FormControlLabel
+                    label="Tendance des thèmes sur les quiz"
+                    control={<Checkbox {...field} />}
+                  />
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="levels"
+                render={({ field }) => (
+                  <FormControlLabel
+                    label="Répartition des utilisateurs par niveau"
+                    control={<Checkbox {...field} />}
+                  />
+                )}
+              />
+            </div>
+            <div>
+              <h3>Mise en page</h3>
+
+              <Controller
+                control={form.control}
+                name="manyPage"
+                render={({ field }) => (
+                  <FormControlLabel
+                    label="Un graphe par page"
+                    control={<Checkbox {...field} />}
+                  />
+                )}
+              />
+            </div>
+            <div className="text-center">
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={invalidPdfOptions}
+              >
+                Générer
+              </Button>
+            </div>
+          </form>
+        </div>
+      </Dialog>
     </>
   );
 };
