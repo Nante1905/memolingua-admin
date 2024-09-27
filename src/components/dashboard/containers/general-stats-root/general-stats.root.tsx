@@ -2,7 +2,8 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Button, LinearProgress } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { Dayjs } from "dayjs";
-import { FC, useMemo, useState } from "react";
+import { jsPDF } from "jspdf";
+import { FC, useMemo, useRef, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { Link, useNavigate } from "react-router-dom";
 import DateRangePicker from "../../../../shared/components/date-range-picker/date-range-picker.component";
@@ -95,6 +96,18 @@ const GeneralStatsRoot: FC = () => {
     [dashboardDataQuery.data]
   );
 
+  const plugin = {
+    id: "custom_canvas_background_color",
+    beforeDraw: (chart: any) => {
+      const { ctx } = chart;
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-over";
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, chart.width + 1, chart.height);
+      ctx.restore();
+    },
+  };
+
   const users = useMemo(
     () => dashboardDataQuery.data?.data.payload.signedUser,
     [dashboardDataQuery.data]
@@ -103,11 +116,29 @@ const GeneralStatsRoot: FC = () => {
     () => dashboardDataQuery.data?.data.payload.avgSessionPerDay,
     [dashboardDataQuery.data]
   );
+  const chartRef = useRef(null);
+
+  const pdftest = () => {
+    const doc = new jsPDF();
+    const canvas = chartRef.current!.canvas as HTMLCanvasElement;
+    const width = doc.internal.pageSize.getWidth() - 40;
+    doc.addImage(canvas, "png", 20, 0, width, 0);
+
+    doc.save("download.pdf");
+  };
 
   return (
     <div className="general-stats-root">
       <div className="header">
         <h1>Statistiques générales</h1>
+        <Button
+          onClick={() => {
+            console.log(chartRef.current?.canvas);
+            pdftest();
+          }}
+        >
+          test
+        </Button>
       </div>
       <section className="general-stats-root_main">
         <div className="filter">
@@ -161,6 +192,8 @@ const GeneralStatsRoot: FC = () => {
                         <Bar
                           id="user-lang-chart"
                           data={langUserData}
+                          // plugins={[plugin]}
+                          // ref={chartRef}
                           options={{
                             events: ["click"],
                             onClick(event, elements) {
@@ -294,6 +327,8 @@ const GeneralStatsRoot: FC = () => {
                     <Bar
                       id="hourly-session-chart"
                       data={sessionData}
+                      plugins={[plugin]}
+                      ref={chartRef}
                       options={{
                         maintainAspectRatio: false,
                         plugins: {
