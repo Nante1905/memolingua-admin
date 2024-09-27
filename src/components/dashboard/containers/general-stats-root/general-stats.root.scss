@@ -1,12 +1,6 @@
 @import "./../../../../shared/styles/variables.scss";
 
 .general-stats-root {
-  .action-btn {
-    color: white;
-    position: fixed;
-    right: 15px;
-    top: 50%;
-  }
   &_main {
     .numbers {
       display: flex;
@@ -133,6 +127,12 @@
     }
   }
 }
-.dialog-content {
+.pdf-dialog-content {
   padding: 2rem;
+}
+.floating-action-btn {
+  color: white !important;
+  position: fixed !important;
+  right: 15px;
+  bottom: 40px;
 }

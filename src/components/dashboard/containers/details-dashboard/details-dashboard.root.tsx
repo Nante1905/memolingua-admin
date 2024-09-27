@@ -11,8 +11,8 @@ import {
 } from "chart.js";
 import autocolors from "chartjs-plugin-autocolors";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { Dayjs } from "dayjs";
-import { useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
+import { Fragment, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import DateRangePicker from "../../../../shared/components/date-range-picker/date-range-picker.component";
@@ -41,9 +41,12 @@ const DetailsDashboardRoot = () => {
   const idLang = searchParams.get("lang");
 
   const [dateRange, setDateRange] = useState<{
-    start?: string;
-    end?: string;
-  }>();
+    start: string;
+    end: string;
+  }>({
+    start: dayjs().startOf("month").format("YYYY-MM-DD"),
+    end: dayjs().endOf("month").format("YYYY-MM-DD"),
+  });
   const [lang, selectLang] = useDebounceValue(idLang, 500);
 
   const statQuery = useQuery({
@@ -60,36 +63,40 @@ const DetailsDashboardRoot = () => {
   });
 
   return (
-    <div id="details-dashboard-root">
-      <div className="details-dashboard-root-header">
-        <h1>Détails des statistiques</h1>
+    <Fragment>
+      <div id="details-dashboard-root">
+        <div className="details-dashboard-root-header">
+          <h1>Détails des statistiques</h1>
 
-        <SelectInputControlledComponent
-          items={langsQuery.data?.data?.payload as Langage[]}
-          loading={langsQuery.isFetching}
-          valueGetter={(item: Langage) => item?.id}
-          labelGetter={(item: Langage) => item?.label}
-          label={"Langue"}
-          onValueChange={(value: string) => selectLang(value)}
-          size="small"
-          defaultValue={idLang ?? undefined}
+          <SelectInputControlledComponent
+            items={langsQuery.data?.data?.payload as Langage[]}
+            loading={langsQuery.isFetching}
+            valueGetter={(item: Langage) => item?.id}
+            labelGetter={(item: Langage) => item?.label}
+            label={"Langue"}
+            onValueChange={(value: string) => selectLang(value)}
+            size="small"
+            defaultValue={idLang ?? undefined}
+          />
+        </div>
+        <DateRangePicker
+          onSubmit={(data: { start: Dayjs; end: Dayjs }) => {
+            setDateRange({
+              start: data.start.format("YYYY-MM-DD"),
+              end: data.end.format("YYYY-MM-DD"),
+            });
+          }}
         />
+        {statQuery.isSuccess && (
+          <DetailsDashboardComponent
+            isFetching={statQuery.isFetching}
+            stats={statQuery.data?.data.payload as StatsDetails}
+            start={dateRange?.start}
+            end={dateRange?.end}
+          />
+        )}
       </div>
-      <DateRangePicker
-        onSubmit={(data: { start: Dayjs; end: Dayjs }) => {
-          setDateRange({
-            start: data.start.format("YYYY-MM-DD"),
-            end: data.end.format("YYYY-MM-DD"),
-          });
-        }}
-      />
-      {statQuery.isSuccess && (
-        <DetailsDashboardComponent
-          isFetching={statQuery.isFetching}
-          stats={statQuery.data?.data.payload as StatsDetails}
-        />
-      )}
-    </div>
+    </Fragment>
   );
 };
 

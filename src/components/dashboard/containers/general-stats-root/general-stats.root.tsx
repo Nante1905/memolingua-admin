@@ -17,7 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import DateRangePicker from "../../../../shared/components/date-range-picker/date-range-picker.component";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import NumberDashboardComponent from "../../components/number-dashboard/number-dashboard.component";
-import { generateGeneralDashboardPDF } from "../../services/dashboard.helper";
+import { generateGeneralDashboardPDF } from "../../helper/dashboard.helper";
 import { findGeneralDashboardData } from "../../services/dashboard.service";
 import "./general-stats.root.scss";
 
@@ -156,7 +156,7 @@ const GeneralStatsRoot: FC = () => {
         <section className="general-stats-root_main">
           {dashboardDataQuery.isSuccess && (
             <Fab
-              className="action-btn"
+              className="floating-action-btn"
               color="primary"
               onClick={() => {
                 setState((state) => ({ ...state, openPDFPopup: true }));
@@ -388,9 +388,12 @@ const GeneralStatsRoot: FC = () => {
       </div>
       <Dialog
         open={state.openPDFPopup}
-        onClose={() => setState((state) => ({ ...state, openPDFPopup: false }))}
+        onClose={() => {
+          setState((state) => ({ ...state, openPDFPopup: false }));
+          form.reset();
+        }}
       >
-        <div className="dialog-content">
+        <div className="pdf-dialog-content">
           <h2 className="text-center">Configurer le PDF</h2>
           <form
             onSubmit={form.handleSubmit((data) =>
