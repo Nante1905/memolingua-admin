@@ -35,7 +35,7 @@ const Login: React.FC<{ from?: string | null }> = (props) => {
       const res: ApiResponse<any> = data.data;
       sessionStorage.setItem("accessToken", res.payload);
       dispatch(setIsLoggedIn(true));
-      if (props.from == null) {
+      if (props.from == null || props.from == "") {
         navigate("/home");
       } else {
         navigate(`/${props.from}`);
