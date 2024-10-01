@@ -66,7 +66,14 @@ const DetailsDashboardRoot = () => {
     <Fragment>
       <div id="details-dashboard-root">
         <div className="details-dashboard-root-header">
-          <h1>Détails des statistiques</h1>
+          <div>
+            <h1>Détails des statistiques</h1>
+            <p>
+              <small className="text-danger">
+                Ce dashboard se met à jour à <strong>minuit</strong>.
+              </small>
+            </p>
+          </div>
 
           <SelectInputControlledComponent
             items={langsQuery.data?.data?.payload as Langage[]}

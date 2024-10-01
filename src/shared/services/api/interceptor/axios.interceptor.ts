@@ -1,18 +1,34 @@
-import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosError } from "axios";
+import {
+  buildWebStorage,
+  InternalCacheRequestConfig,
+  setupCache,
+} from "axios-cache-interceptor";
 import { enqueueSnackbar } from "notistack";
 import { API_BASE_URL } from "../../../constants/api.constant";
+import { CACHED_URLS_PREFIX } from "../../../constants/caching.constant";
 import { ApiResponse } from "../../../types/ApiResponse";
 
-export const http = axios.create({
+export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 5000,
+});
+
+export const http = setupCache(axiosInstance, {
+  storage: buildWebStorage(localStorage, "memolingua-admin-"),
 });
 
 // REQUEST INTERCEPTOR
 http.interceptors.request.use(
   (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    config: InternalAxiosRequestConfig<any>
+    config: InternalCacheRequestConfig<any>
   ) => {
+    if (
+      CACHED_URLS_PREFIX.filter((u) => !config.url?.startsWith(u)).length > 0
+    ) {
+      config.cache = false;
+    }
     if (config.url?.includes("login")) return config;
     else {
       const token = sessionStorage.getItem("accessToken");
