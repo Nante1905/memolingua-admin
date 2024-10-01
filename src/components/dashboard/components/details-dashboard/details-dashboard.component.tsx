@@ -256,7 +256,7 @@ const DetailsDashboardComponent: React.FC<DetailsDashboardProps> = (props) => {
             <div className="levels-stat">
               <h3>Répartition par niveau</h3>
               <AppLoaderComponent loading={props.isFetching}>
-                {props.stats?.stats.levels.length == 0 ? (
+                {props.stats?.stats.levels.length == 0 || totalUser == 0 ? (
                   <p className="caption text-center">Aucune donnée.</p>
                 ) : (
                   <Fragment>
