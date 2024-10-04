@@ -12,5 +12,5 @@ export const getFlagLink = (code: string, size: FLAG_SIZE) => {
 export const getFlagLinkFromCompleteCode = (code: string, size: FLAG_SIZE) => {
   return `https://flagsapi.com/${extractLanguageAndCountryCode(
     code
-  ).country.toUpperCase()}/flat/${size}.png`;
+  ).country?.toUpperCase()}/flat/${size}.png`;
 };

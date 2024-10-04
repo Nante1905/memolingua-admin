@@ -1,13 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@mui/material";
+import { Button, FormControl, TextField } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { enqueueSnackbar } from "notistack";
-import { FC } from "react";
-import { useForm } from "react-hook-form";
+import { FC, useMemo } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useDebounceValue } from "usehooks-ts";
 import InputComponent from "../../../../shared/components/inputs/text-input/text-input.component";
-import { getFlagLinkFromCompleteCode } from "../../../../shared/services/api/flags/flag-api.service";
+import { extractLanguageAndCountryCode } from "../../../../shared/helpers/lang.helper";
+import { getFlagLink } from "../../../../shared/services/api/flags/flag-api.service";
 import { ApiResponse } from "../../../../shared/types/ApiResponse";
 import { Langage } from "../../../../shared/types/Langage";
 import { langSchema } from "../../helpers/lang.validator";
@@ -23,7 +25,12 @@ const LangFormComponent: FC<LangFormComponentProps> = (props) => {
     resolver: zodResolver(langSchema),
     defaultValues: { ...props?.update },
   });
-  const code = form.watch("code");
+  // const code = form.watch("code");
+  const [code, setCode] = useDebounceValue(form.watch("code"), 500);
+  const countryCode = useMemo(
+    () => extractLanguageAndCountryCode(code ?? "").country,
+    [code]
+  );
 
   const navigate = useNavigate();
 
@@ -85,20 +92,43 @@ const LangFormComponent: FC<LangFormComponentProps> = (props) => {
               control={form.control}
               label={"Label"}
             />
-            <InputComponent
+            {/* <InputComponent
               type={"text"}
               name={"code"}
               control={form.control}
               label={"Code (code langue - code pays)"}
-            />
+            /> */}
+            <div className={`form-input`}>
+              <FormControl fullWidth>
+                <Controller
+                  control={form.control}
+                  name={"code"}
+                  render={({ field, fieldState, formState }) => (
+                    <TextField
+                      onChange={(e) => {
+                        field.onChange(e.target.value);
+                        setCode(e.target.value);
+                      }}
+                      defaultValue={formState.defaultValues?.code}
+                      error={!!fieldState.error}
+                      helperText={fieldState.error?.message}
+                      type="string"
+                      label={"Code (code langue - code pays)"}
+                    />
+                  )}
+                />
+              </FormControl>
+            </div>
             <div className="flag">
               <div className=" inline-flex">
                 <span>Drapeau selon le code pays</span>
-                <img
-                  src={getFlagLinkFromCompleteCode(code ?? "", 48)}
-                  alt=""
-                  width={"48px"}
-                />
+                {countryCode && (
+                  <img
+                    src={getFlagLink(countryCode, 48)}
+                    alt=""
+                    width={"48px"}
+                  />
+                )}
               </div>
               <p>
                 <small>

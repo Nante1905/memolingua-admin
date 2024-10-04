@@ -86,7 +86,8 @@ const QuizListRoot = () => {
           </Link>
           <Link to={`/quizs/import`}>
             <Button variant="contained" color="accent">
-              Importer <UploadFile />
+              <UploadFile />
+              Importer
             </Button>
           </Link>
         </div>

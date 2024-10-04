@@ -82,7 +82,7 @@ const ThemeListRoot = () => {
             <Button variant="contained">Créer</Button>
           </Link>
           <Link to={"/themes/import"}>
-            <Button color="accent" className="inline-flex">
+            <Button color="accent" className="inline-flex" variant="contained">
               <UploadFile />
               Importer
             </Button>

@@ -107,7 +107,10 @@ const LangImportRoot = () => {
           </div>
         </Collapse>
       </div>
-      <LangImportComponent submitForm={handleFormSubmit} />
+      <LangImportComponent
+        submitForm={handleFormSubmit}
+        isSubmitting={importMutation.isPending}
+      />
 
       {!confirmed && importMutation.isSuccess && importMutation.data?.data && (
         <Fragment>
