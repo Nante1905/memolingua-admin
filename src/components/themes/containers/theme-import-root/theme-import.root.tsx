@@ -124,7 +124,10 @@ const ThemeImportRoot = () => {
           </div>
         </Collapse>
       </div>
-      <ThemeImportComponent submitForm={handleFormSubmit} />
+      <ThemeImportComponent
+        submitForm={handleFormSubmit}
+        isSubmitting={importMutation.isPending}
+      />
 
       {!confirmed && importMutation.isSuccess && importMutation.data?.data && (
         <Fragment>

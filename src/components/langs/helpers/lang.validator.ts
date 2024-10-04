@@ -1,7 +1,12 @@
 import { z } from "zod";
-import { strRequired } from "../../../shared/constants/validator.constant";
+import {
+  codeLangageRegex,
+  strRequired,
+} from "../../../shared/constants/validator.constant";
 
 export const langSchema = z.object({
   label: strRequired,
-  code: strRequired,
+  code: strRequired.refine((d) => codeLangageRegex.test(d), {
+    message: "Format invalide",
+  }),
 });

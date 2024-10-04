@@ -1,12 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@mui/material";
+import { Button, FormControl, TextField } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { enqueueSnackbar } from "notistack";
-import { FC } from "react";
-import { useForm } from "react-hook-form";
+import { FC, useMemo } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useDebounceValue } from "usehooks-ts";
 import InputComponent from "../../../../shared/components/inputs/text-input/text-input.component";
+import { extractLanguageAndCountryCode } from "../../../../shared/helpers/lang.helper";
 import { getFlagLink } from "../../../../shared/services/api/flags/flag-api.service";
 import { ApiResponse } from "../../../../shared/types/ApiResponse";
 import { Langage } from "../../../../shared/types/Langage";
@@ -23,7 +25,12 @@ const LangFormComponent: FC<LangFormComponentProps> = (props) => {
     resolver: zodResolver(langSchema),
     defaultValues: { ...props?.update },
   });
-  const code = form.watch("code");
+  // const code = form.watch("code");
+  const [code, setCode] = useDebounceValue(form.watch("code"), 500);
+  const countryCode = useMemo(
+    () => extractLanguageAndCountryCode(code ?? "").country,
+    [code]
+  );
 
   const navigate = useNavigate();
 
@@ -85,22 +92,61 @@ const LangFormComponent: FC<LangFormComponentProps> = (props) => {
               control={form.control}
               label={"Label"}
             />
-            <InputComponent
+            {/* <InputComponent
               type={"text"}
               name={"code"}
               control={form.control}
-              label={"Code"}
-            />
+              label={"Code (code langue - code pays)"}
+            /> */}
+            <div className={`form-input`}>
+              <FormControl fullWidth>
+                <Controller
+                  control={form.control}
+                  name={"code"}
+                  render={({ field, fieldState, formState }) => (
+                    <TextField
+                      onChange={(e) => {
+                        field.onChange(e.target.value);
+                        setCode(e.target.value);
+                      }}
+                      defaultValue={formState.defaultValues?.code}
+                      error={!!fieldState.error}
+                      helperText={fieldState.error?.message}
+                      type="string"
+                      label={"Code (code langue - code pays)"}
+                    />
+                  )}
+                />
+              </FormControl>
+            </div>
             <div className="flag">
               <div className=" inline-flex">
-                <span>Drapeau selon le code</span>
-                <img src={getFlagLink(code ?? "", 48)} alt="" width={"48px"} />
+                <span>Drapeau selon le code pays</span>
+                {countryCode && (
+                  <img
+                    src={getFlagLink(countryCode, 48)}
+                    alt=""
+                    width={"48px"}
+                  />
+                )}
               </div>
-              <small>
-                <a href="https://flagsapi.com/#countries" target="_blank">
-                  Liste des codes
-                </a>
-              </small>
+              <p>
+                <small>
+                  <a
+                    href="https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1"
+                    target="_blank"
+                  >
+                    Liste des codes langues
+                  </a>
+                </small>
+              </p>
+              <p>
+                <small>
+                  <a href="https://flagsapi.com/#countries" target="_blank">
+                    Liste des codes pays
+                  </a>
+                </small>
+              </p>
             </div>
             <div className="form-input">
               <Button type="submit" color="primary" variant="contained">

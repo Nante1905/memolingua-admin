@@ -126,7 +126,10 @@ const CardImportRoot = () => {
           </div>
         </Collapse>
       </div>
-      <CardImportComponent submitForm={handleFormSubmit} />
+      <CardImportComponent
+        submitForm={handleFormSubmit}
+        isSubmitting={importMutation.isPending}
+      />
 
       {!confirmed && importMutation.isSuccess && importMutation.data?.data && (
         <Fragment>
