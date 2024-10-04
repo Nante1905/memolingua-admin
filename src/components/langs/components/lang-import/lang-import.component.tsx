@@ -50,7 +50,7 @@ const LangImportComponent: React.FC<LangImportProps> = (props) => {
   return (
     <div className="import-component">
       <form
-        className={`form ${props.isSubmitting && "loading"}`}
+        className={`form ${props.isSubmitting ? "loading" : ""}`}
         onSubmit={form.handleSubmit(props.submitForm)}
       >
         <div className="form-input">

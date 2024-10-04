@@ -12,7 +12,7 @@ import React, { Fragment, useMemo, useRef, useState } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import { Controller, useForm } from "react-hook-form";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
-import { getFlagLink } from "../../../../shared/services/api/flags/flag-api.service";
+import { getFlagLinkFromCompleteCode } from "../../../../shared/services/api/flags/flag-api.service";
 import { generateDetailsDashboardPDF } from "../../helper/dashboard.helper";
 import { StatsDetails } from "../../types/dashboard.type";
 import "./details-dashboard.component.scss";
@@ -103,7 +103,10 @@ const DetailsDashboardComponent: React.FC<DetailsDashboardProps> = (props) => {
                 {props.stats?.stats.lang.label}({props.stats?.stats.lang.code})
               </h2>
               <img
-                src={getFlagLink(props.stats?.stats.lang.code as string, 48)}
+                src={getFlagLinkFromCompleteCode(
+                  props.stats?.stats.lang.code as string,
+                  48
+                )}
                 alt={props.stats?.stats.lang.code}
               />
             </div>

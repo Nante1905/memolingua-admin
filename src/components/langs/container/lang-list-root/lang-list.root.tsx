@@ -68,7 +68,7 @@ const LangListRoot = () => {
             <Button variant="contained">Créer une langue</Button>
           </Link>
           <Link to={"/langs/import"}>
-            <Button color="accent" className="inline-flex">
+            <Button color="accent" variant="contained" className="inline-flex">
               <UploadFile />
               Importer
             </Button>

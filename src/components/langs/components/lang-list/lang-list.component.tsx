@@ -6,7 +6,7 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
-import { getFlagLink } from "../../../../shared/services/api/flags/flag-api.service";
+import { getFlagLinkFromCompleteCode } from "../../../../shared/services/api/flags/flag-api.service";
 import { Langage } from "../../../../shared/types/Langage";
 import { Paginated } from "../../../../shared/types/Paginated";
 import "./lang-list.component.scss";
@@ -28,11 +28,14 @@ const LangListComponent: FC<LangListComponentProps> = (props) => {
       field: "code",
       headerName: "Code",
       headerAlign: "center",
-      width: 100,
+      width: 120,
       renderCell: (value) => (
         <div className="inline-flex flag-code">
           {value.row.code}{" "}
-          <img src={getFlagLink(value.row.code, 24)} alt={value.row.code} />{" "}
+          <img
+            src={getFlagLinkFromCompleteCode(value.row.code, 24)}
+            alt={value.row.code}
+          />{" "}
         </div>
       ),
     },

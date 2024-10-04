@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import FaIconPicker from "../../../../shared/components/icon-picker/components/FaIconPicker";
 import { useFontAwesomePack } from "../../../../shared/components/icon-picker/hooks/useFontAwesomePack";
-import { getFlagLink } from "../../../../shared/services/api/flags/flag-api.service";
+import { getFlagLinkFromCompleteCode } from "../../../../shared/services/api/flags/flag-api.service";
 import { Theme, ThemeLabel } from "../../../../shared/types/Theme";
 import { ThemeSchema } from "../../helper/theme.helper";
 import "./theme-form.component.scss";
@@ -87,7 +87,10 @@ const ThemeFormComponent: React.FC<ThemeFormProps> = (props) => {
             {props.langs.map((l, i) => (
               <div className="inline-flex lang-label" key={l.id}>
                 <div className="inline-flex">
-                  <img src={getFlagLink(l.code, 24)} alt={l.code} />
+                  <img
+                    src={getFlagLinkFromCompleteCode(l.code, 24)}
+                    alt={l.code}
+                  />
                   <span>({l.code})</span>
                 </div>
                 <div className="lang-input">

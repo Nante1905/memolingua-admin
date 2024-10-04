@@ -113,7 +113,8 @@ const QuestionListRoot = () => {
           </Link>
           <Link to={`/questions/import`}>
             <Button variant="contained" color="accent">
-              Importer <UploadFile />
+              <UploadFile />
+              Importer
             </Button>
           </Link>
         </div>

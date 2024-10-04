@@ -128,7 +128,10 @@ const PackageImportRoot = () => {
           </div>
         </Collapse>
       </div>
-      <PackageImportComponent submitForm={handleFormSubmit} />
+      <PackageImportComponent
+        submitForm={handleFormSubmit}
+        isSubmitting={importMutation.isPending}
+      />
 
       {!confirmed && importMutation.isSuccess && importMutation.data?.data && (
         <Fragment>
