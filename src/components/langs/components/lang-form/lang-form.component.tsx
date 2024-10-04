@@ -7,7 +7,7 @@ import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import InputComponent from "../../../../shared/components/inputs/text-input/text-input.component";
-import { getFlagLink } from "../../../../shared/services/api/flags/flag-api.service";
+import { getFlagLinkFromCompleteCode } from "../../../../shared/services/api/flags/flag-api.service";
 import { ApiResponse } from "../../../../shared/types/ApiResponse";
 import { Langage } from "../../../../shared/types/Langage";
 import { langSchema } from "../../helpers/lang.validator";
@@ -89,18 +89,34 @@ const LangFormComponent: FC<LangFormComponentProps> = (props) => {
               type={"text"}
               name={"code"}
               control={form.control}
-              label={"Code"}
+              label={"Code (code langue - code pays)"}
             />
             <div className="flag">
               <div className=" inline-flex">
-                <span>Drapeau selon le code</span>
-                <img src={getFlagLink(code ?? "", 48)} alt="" width={"48px"} />
+                <span>Drapeau selon le code pays</span>
+                <img
+                  src={getFlagLinkFromCompleteCode(code ?? "", 48)}
+                  alt=""
+                  width={"48px"}
+                />
               </div>
-              <small>
-                <a href="https://flagsapi.com/#countries" target="_blank">
-                  Liste des codes
-                </a>
-              </small>
+              <p>
+                <small>
+                  <a
+                    href="https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1"
+                    target="_blank"
+                  >
+                    Liste des codes langues
+                  </a>
+                </small>
+              </p>
+              <p>
+                <small>
+                  <a href="https://flagsapi.com/#countries" target="_blank">
+                    Liste des codes pays
+                  </a>
+                </small>
+              </p>
             </div>
             <div className="form-input">
               <Button type="submit" color="primary" variant="contained">
