@@ -20,6 +20,7 @@ const FaIconPicker: React.FC<FaIconPickerProps> = (props) => {
   const [popUpAnchor, setPopUpAnchor] = useState<HTMLButtonElement | null>(
     null
   );
+  // TODO: load all icon
 
   const iconsFiltered = useMemo(
     () =>

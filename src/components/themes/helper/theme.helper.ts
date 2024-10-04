@@ -6,10 +6,13 @@ export const ThemeSchema = z.object({
   label: z.string().min(1, formErrors["fr"].required),
   icon: z.string().optional(),
   langs: z.array(
-    z.object({
-      id: z.string().min(1, formErrors["fr"].required),
-      label: z.string().min(1, formErrors["fr"].required),
-    })
+    z
+      .object({
+        id: z.string().min(1, formErrors["fr"].required),
+        label: z.string(),
+        // label: z.string().min(1, formErrors["fr"].required),
+      })
+      .optional()
   ),
 });
 
