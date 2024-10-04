@@ -24,6 +24,7 @@ http.interceptors.request.use(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     config: InternalCacheRequestConfig<any>
   ) => {
+    config.headers.set("accept-language", "us-FR");
     if (
       CACHED_URLS_PREFIX.filter((u) => !config.url?.startsWith(u)).length > 0
     ) {

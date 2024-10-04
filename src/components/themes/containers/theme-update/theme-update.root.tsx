@@ -50,7 +50,6 @@ const ThemeUpdateRoot = () => {
           onSubmit={onFormSubmit}
           isSubmitting={themeMutation.isPending}
         />
-        <p>{themeQuery.data?.data.payload.id}</p>
       </AppLoaderComponent>
     </div>
   );
