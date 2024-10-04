@@ -28,11 +28,11 @@ export const questionSchema = z
     question: richTextRequired,
     isQcm: z.any(),
     correctAns: z.string({
-      message: "Please provide at leat 1 correct answers",
+      message: "Veuillez fournir au moins une réponse correcte",
     }),
     answers: z
       .array(answerSchema)
-      .nonempty({ message: "Provide at least 1 element" }),
+      .nonempty({ message: "Veuillez fournir au moins 1 élément" }),
     img: mediaValidationSchema
       .refine(
         (img) => {
@@ -75,11 +75,11 @@ export const questionSchema = z
   .refine((arg) => {
     if (arg.isQcm == "1" && arg.answers.length <= 1) return false;
     else return true;
-  }, "QCM must have at least 2 answers")
+  }, "Le QCM doit avoir au moins 2 réponses")
   .refine((arg) => {
     if (arg.isQcm == "0" && arg.answers.length > 1) return false;
     else return true;
-  }, "No QCM question must have only one answer");
+  }, "La question qui n'est pas un QCM ne doit comporter qu'une seule réponse");
 
 export const addQuestionSchema = z.object({
   idQuiz: z.string(),
