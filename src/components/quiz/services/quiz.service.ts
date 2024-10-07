@@ -5,11 +5,11 @@ import { Paginated } from "../../../shared/types/Paginated";
 export const findAllQuizWithNoQuestion = () => http.get("/quizs/no-question");
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const addQuestionToQuiz = (data: any) =>
-  http.post("/admin/quizs/add-question", data);
+  http.post("/admin/quiz/add-question", data);
 
-export const createQuiz = (data: unknown) => http.post("/admin/quizs", data);
+export const createQuiz = (data: unknown) => http.post("/admin/quiz", data);
 export const updateQuiz = (id: string, data: unknown) =>
-  http.put(`/admin/quizs/${id}`, data);
+  http.put(`/admin/quiz/${id}`, data);
 export const findAllQuizs = (
   page: number,
   pageSize: number,
@@ -18,13 +18,13 @@ export const findAllQuizs = (
   sortMode: string = ""
 ) =>
   http.get(
-    `/admin/quizs?page=${page}&limit=${pageSize}&search=${search}&sortField=${sortField}&sortMode=${sortMode}`
+    `/admin/quiz?page=${page}&limit=${pageSize}&search=${search}&sortField=${sortField}&sortMode=${sortMode}`
   );
 
-export const findQuizById = (id: string) => http.get(`/admin/quizs/${id}`);
+export const findQuizById = (id: string) => http.get(`/admin/quiz/${id}`);
 
 export const findAllQuizsSelect = ({ pageParam = 1 }) =>
-  http.get<ApiResponse<Paginated<any>>>(`/admin/quizs?page=${pageParam}`);
+  http.get<ApiResponse<Paginated<any>>>(`/admin/quiz?page=${pageParam}`);
 
 export const findAllQuestionsSelect = ({ pageParam = 1 }) =>
   http.get<ApiResponse<Paginated<any>>>(
@@ -41,7 +41,7 @@ export const findAllQuestions = (
   );
 
 export const findAllAnswers = (page: number, idQuestion?: string) =>
-  http.get(`/admin/quizs/answers?page=${page}&id=${idQuestion ?? ""}`);
+  http.get(`/admin/quiz/answers?page=${page}&id=${idQuestion ?? ""}`);
 
 export const findAllLangs = () => http.get("/langs");
 export const findPaginatedLangs = (page: number, limit: number) =>
@@ -50,7 +50,7 @@ export const findAllThemes = () => http.get("/themes");
 
 export const findAllLevels = () => http.get("/levels");
 
-export const deleteQuiz = (id: string) => http.delete(`/admin/quizs/${id}`);
+export const deleteQuiz = (id: string) => http.delete(`/admin/quiz/${id}`);
 
 export const findQuestionById = (id: string) =>
   http.get(`/admin/questions/${id}`);
@@ -66,11 +66,11 @@ export const deleteQuestion = (id: string) =>
   http.delete(`/admin/questions/${id}`);
 
 export const importQuiz = (data: object) =>
-  http.post("/admin/quizs/import", data);
+  http.post("/admin/quiz/import", data);
 
-export const downloadQuizCsv = () => http.get("/admin/quizs/import/download");
+export const downloadQuizCsv = () => http.get("/admin/quiz/import/download");
 
-export const confirmQuizImport = () => http.get("/admin/quizs/import/confirm");
+export const confirmQuizImport = () => http.get("/admin/quiz/import/confirm");
 
 export const importQuestion = (data: object) =>
   http.post("/admin/questions/import", data);
