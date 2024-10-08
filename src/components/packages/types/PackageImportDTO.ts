@@ -11,4 +11,5 @@ export interface CardImportDTO extends ImportDTO {
   package: string;
   recto: string;
   verso: string;
+  target: string;
 }
