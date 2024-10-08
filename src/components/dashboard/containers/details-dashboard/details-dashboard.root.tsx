@@ -68,11 +68,6 @@ const DetailsDashboardRoot = () => {
         <div className="details-dashboard-root-header">
           <div>
             <h1>Détails des statistiques</h1>
-            <p>
-              <small className="text-danger">
-                Ce dashboard se met à jour à <strong>minuit</strong>.
-              </small>
-            </p>
           </div>
 
           <SelectInputControlledComponent

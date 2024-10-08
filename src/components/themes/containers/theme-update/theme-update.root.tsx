@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import { useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { MultiLabelTheme } from "../../../../shared/types/Theme";
 import ThemeFormComponent from "../../components/theme-form/theme-form.component";
@@ -10,6 +10,7 @@ import { getThemeById, updateTheme } from "../../services/theme.service";
 
 const ThemeUpdateRoot = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const idTheme = useParams().id;
   const themeQuery = useQuery({
     queryKey: ["theme", idTheme],
@@ -26,6 +27,7 @@ const ThemeUpdateRoot = () => {
         message: `Thème ${themeQuery.data?.data.payload?.label ?? ""} modifié`,
         variant: "success",
         autoHideDuration: 3000,
+        onClose: () => navigate("/themes"),
       });
     },
   });

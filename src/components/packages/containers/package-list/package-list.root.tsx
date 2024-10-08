@@ -89,7 +89,13 @@ const PackageListRoot = () => {
           <Link to={`/packages/import`}>
             <Button color="accent" className="inline-flex" variant="contained">
               <UploadFile />
-              Importer
+              Importer des paquets
+            </Button>
+          </Link>
+          <Link to={`/cards/import`}>
+            <Button color="accent" className="inline-flex" variant="contained">
+              <UploadFile />
+              Importer des cartes
             </Button>
           </Link>
         </div>

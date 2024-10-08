@@ -1,8 +1,6 @@
-import { UploadFile } from "@mui/icons-material";
-import { Button } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { Fragment } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { Package } from "../../../../shared/types/Package";
 import AddCardForm from "../../components/add-card-form/add-card-form.component";
@@ -30,12 +28,12 @@ const AddCardRoot = () => {
                 <strong>{pack?.data.payload.languageSource?.label}</strong> vers{" "}
                 <strong>{pack?.data.payload.languageTarget?.label}</strong>
               </p>
-              <Link to={`/cards/import`}>
+              {/* <Link to={`/cards/import`}>
                 <Button color="accent" className="inline-flex">
                   <UploadFile />
                   Importer des cartes
                 </Button>
-              </Link>
+              </Link> */}
               <AddCardForm
                 idPackage={pack?.data?.payload?.id as string}
                 pack={pack?.data.payload as Package}

@@ -152,9 +152,6 @@ const GeneralStatsRoot: FC = () => {
       <div className="general-stats-root">
         <div className="header">
           <h1>Statistiques générales</h1>
-          <small className="text-danger">
-            Ce dashboard se met à jour à <strong>minuit</strong>.
-          </small>
         </div>
         <section className="general-stats-root_main">
           {dashboardDataQuery.isSuccess && (

@@ -115,6 +115,13 @@ const CardImportRoot = () => {
                   langue source du paquet: <strong>obligatoire</strong> )
                 </em>
               </li>
+              <li>
+                target{" "}
+                <em>
+                  (Le code de la langue ciblée par le paquet:{" "}
+                  <strong>obligatoire</strong> )
+                </em>
+              </li>
             </ul>
             <p>
               <strong>NB:</strong> Les contenus du recto et verso peuvent être
@@ -150,6 +157,7 @@ const CardImportRoot = () => {
                   <TableCell>Paquet</TableCell>
                   <TableCell>Recto</TableCell>
                   <TableCell>Verso</TableCell>
+                  <TableCell>Langue cible</TableCell>
                   <TableCell>Erreur</TableCell>
                 </TableRow>
               </TableHead>
@@ -160,6 +168,7 @@ const CardImportRoot = () => {
                     <TableCell>{d.package}</TableCell>
                     <TableCell>{parse(d.recto)}</TableCell>
                     <TableCell>{parse(d.verso)}</TableCell>
+                    <TableCell>{parse(d.target)}</TableCell>
                     <TableCell>
                       <ul key={`err_${d.row}`}>
                         {d.error?.map((e, i) => (
@@ -175,7 +184,10 @@ const CardImportRoot = () => {
           <div className="actions">
             <Button
               className="inline-flex"
-              disabled={importMutation.data.data.payload.correct == 0}
+              disabled={
+                importMutation.data.data.payload.correct == 0 ||
+                confirmImportQuery.isFetching
+              }
               onClick={onConfirmUpload}
             >
               {" "}
