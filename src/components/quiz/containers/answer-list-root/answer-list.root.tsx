@@ -7,6 +7,7 @@ import SelectInputControlledComponent from "../../../../shared/components/inputs
 import { QuizQuestion } from "../../../../shared/types/QuizQuestion";
 import AnswerListComponent from "../../components/answer-list/answer-list.component";
 
+import { useDebounceValue } from "usehooks-ts";
 import {
   findAllAnswers,
   findAllQuestionsSelect,
@@ -16,8 +17,6 @@ import "./answer-list.root.scss";
 interface AnswerListRootState {
   page: number;
   quizPage: number;
-  pageSize?: number;
-  search?: string;
   idQuestion?: string;
   question?: string;
 }
@@ -36,9 +35,12 @@ const AnswerListRoot = () => {
   //     idQuestion: searchParams.get("id") ?? "",
   //   }));
   // }, [searchParams]);
+  const [search, setSearch] = useDebounceValue("", 800);
+  const [pageSize, setPageSize] = useDebounceValue(8, 800);
   const answersQuery = useQuery({
-    queryKey: ["answer", state.page, state.idQuestion],
-    queryFn: () => findAllAnswers(state.page, state.idQuestion),
+    queryKey: ["answer", state.page, state.idQuestion, search, pageSize],
+    queryFn: () =>
+      findAllAnswers(state.page, state.idQuestion, search, pageSize),
   });
   const questionQuery = useInfiniteQuery({
     queryKey: ["question/all"],
@@ -73,7 +75,9 @@ const AnswerListRoot = () => {
             extraOptions={<MenuItem value="all">Tous</MenuItem>}
             loading={questionQuery.isFetching}
             valueGetter={(item: QuizQuestion): string => item?.id}
-            labelGetter={(item: QuizQuestion): string => item?.id}
+            labelGetter={(item: QuizQuestion): string =>
+              item?.id + " - " + item?.question
+            }
             label={"Question"}
             paginated
             onLoadMore={() => {
@@ -110,16 +114,10 @@ const AnswerListRoot = () => {
             }));
           }}
           onPageSizeChange={function (pageSize: number): void {
-            setState((state) => ({
-              ...state,
-              pageSize,
-            }));
+            setPageSize(pageSize);
           }}
           onSearchChange={function (search: string): void {
-            setState((state) => ({
-              ...state,
-              search,
-            }));
+            setSearch(search);
           }}
         />
       </section>

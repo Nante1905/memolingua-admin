@@ -34,14 +34,26 @@ export const findAllQuestionsSelect = ({ pageParam = 1 }) =>
 export const findAllQuestions = (
   page: number,
   pageSize: number,
-  idQuiz?: string
+  idQuiz?: string,
+  search?: string
 ) =>
   http.get(
-    `/admin/questions?page=${page}&idQuiz=${idQuiz ?? ""}&limit=${pageSize}`
+    `/admin/questions?page=${page}&idQuiz=${
+      idQuiz ?? ""
+    }&limit=${pageSize}&search=${search ?? ""}`
   );
 
-export const findAllAnswers = (page: number, idQuestion?: string) =>
-  http.get(`/admin/quiz/answers?page=${page}&id=${idQuestion ?? ""}`);
+export const findAllAnswers = (
+  page: number,
+  idQuestion?: string,
+  search?: string,
+  limit?: number
+) =>
+  http.get(
+    `/admin/quiz/answers?page=${page}&limit=${limit}&id=${
+      idQuestion ?? ""
+    }&search=${search ?? ""}`
+  );
 
 export const findAllLangs = () => http.get("/langs");
 export const findPaginatedLangs = (page: number, limit: number) =>
