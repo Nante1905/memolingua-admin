@@ -85,15 +85,20 @@ const AnswerListRoot = () => {
               setState((state) => ({
                 ...state,
                 idQuestion: value,
-                question: questions.find((e: QuizQuestion) => e.id === value)
-                  .question,
+                question:
+                  value != "all"
+                    ? questions.find((e: QuizQuestion) => e.id === value)
+                        .question
+                    : "",
               }));
             }}
           />
         </div>
       </div>
       <section className="answer-list-root_main">
-        <div className="question">Question : {parse(state.question ?? "")}</div>
+        <div className="question">
+          Question : {parse(state?.question ?? "")}
+        </div>
         <AnswerListComponent
           answers={answersQuery.data?.data.payload}
           answersLoading={answersQuery.isFetching}

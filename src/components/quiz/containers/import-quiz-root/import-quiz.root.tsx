@@ -58,10 +58,11 @@ const ImportQuizRoot = () => {
 
   const onConfirmUpload = useCallback(() => {
     confirmQuery.refetch().then((res) => {
-      enqueueSnackbar({
-        message: `${res.data?.data.message}`,
-        variant: "success",
-      });
+      if (!res.error)
+        enqueueSnackbar({
+          message: `${res.data?.data.message}`,
+          variant: "success",
+        });
     });
   }, [confirmQuery]);
 
