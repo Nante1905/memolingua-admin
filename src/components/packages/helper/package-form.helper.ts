@@ -11,10 +11,13 @@ import {
 } from "../../../shared/constants/media.constant";
 import { mediaValidationSchema } from "../../../shared/helpers/fileupload.helper";
 
-export const cardMediaValidator = z.object({
-  preview: z.string().optional(),
-  media: mediaValidationSchema,
-});
+export const cardMediaValidator = z.object(
+  {
+    preview: z.string().optional(),
+    media: mediaValidationSchema,
+  },
+  { required_error: "Champ obligatoire" }
+);
 
 export const cardMediaSchema = z.object({
   img: cardMediaValidator

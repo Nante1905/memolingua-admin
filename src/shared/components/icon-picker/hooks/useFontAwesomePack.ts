@@ -28,6 +28,7 @@ export const useFontAwesomePack = () => {
             });
           }
         });
+        console.log("icon is ready");
 
         setFaPack(icons);
       });

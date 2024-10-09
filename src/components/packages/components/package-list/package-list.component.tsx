@@ -4,6 +4,7 @@ import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales";
 import React, { Fragment, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import EntityChipStateComponent from "../../../../shared/components/entity-chip-state/entity-chip-state.component";
 import {
   ADMIN_ROLE,
   ENTITY_DELETED,
@@ -58,12 +59,9 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
         width: 100,
         align: "center",
         sortable: false,
-        renderCell: (value) =>
-          value.row.state == ENTITY_DELETED ? (
-            <Chip label={`Suppr.`} color="error" size="small" />
-          ) : (
-            <></>
-          ),
+        renderCell: (value) => (
+          <EntityChipStateComponent entityState={value.row.state} />
+        ),
       },
       {
         field: "authorRole",

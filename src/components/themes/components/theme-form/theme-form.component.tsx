@@ -1,15 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DeleteForever } from "@mui/icons-material";
 import { Button, IconButton, LinearProgress, TextField } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import FaIconPicker from "../../../../shared/components/icon-picker/components/FaIconPicker";
+// import FaIconPicker from "../../../../shared/components/icon-picker/components/FaIconPicker";
 import { useFontAwesomePack } from "../../../../shared/components/icon-picker/hooks/useFontAwesomePack";
 import { getFlagLinkFromCompleteCode } from "../../../../shared/services/api/flags/flag-api.service";
 import { Theme, ThemeLabel } from "../../../../shared/types/Theme";
 import { ThemeSchema } from "../../helper/theme.helper";
 import "./theme-form.component.scss";
-
+const FaIconPicker = lazy(
+  () =>
+    import("../../../../shared/components/icon-picker/components/FaIconPicker")
+);
 interface ThemeFormProps {
   langs: ThemeLabel[];
   theme?: Theme;
@@ -62,15 +65,17 @@ const ThemeFormComponent: React.FC<ThemeFormProps> = (props) => {
         </div>
         <div className="form-input">
           <div className="input-flex">
-            <FaIconPicker
-              onChange={(value: string) => form.setValue("icon", value)}
-              icons={iconPack ?? []}
-              className="icon-input"
-              control={form.control}
-              name="icon"
-              label="Icône"
-              defaultValue={props.theme?.icon}
-            />
+            <Suspense fallback={<>Loading</>}>
+              <FaIconPicker
+                onChange={(value: string) => form.setValue("icon", value)}
+                icons={iconPack ?? []}
+                className="icon-input"
+                control={form.control}
+                name="icon"
+                label="Icône"
+                defaultValue={props.theme?.icon}
+              />
+            </Suspense>
             <IconButton
               color="error"
               onClick={() => {
@@ -116,9 +121,12 @@ const ThemeFormComponent: React.FC<ThemeFormProps> = (props) => {
           <Button
             variant="contained"
             type="submit"
-            onClick={() => console.log(form.formState.errors)}
+            onClick={() => {
+              console.log(form.formState.errors);
+              console.log(form.getValues());
+            }}
           >
-            Créer
+            {props.theme ? "Modifier" : "Créer"}
           </Button>
         </div>
         {props.isSubmitting && (

@@ -33,6 +33,7 @@ import ThemeImportRoot from "./components/themes/containers/theme-import-root/th
 import ThemeListRoot from "./components/themes/containers/theme-list/theme-list.root";
 import ThemeUpdateRoot from "./components/themes/containers/theme-update/theme-update.root";
 import UserListRoot from "./components/users/container/user-list-root/user-list.root";
+import NotFoundPage from "./shared/components/error/404/not-found-page.root";
 
 export const routes = createBrowserRouter([
   {
@@ -176,5 +177,9 @@ export const routes = createBrowserRouter([
         element: <GeneralStatsRoot />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
