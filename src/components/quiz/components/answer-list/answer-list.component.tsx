@@ -1,5 +1,7 @@
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Check, Close, Edit } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales";
 import { FC } from "react";
@@ -67,7 +69,23 @@ const AnswerListComponent: FC<AnswerListComponentProps> = (props) => {
   ];
 
   return (
-    <div className="question-list_container">
+    <div className="answer-list_container">
+      <div className="search-bar">
+        <TextField
+          label="Mots clés"
+          size="small"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <FontAwesomeIcon
+                  icon={"fa-solid fa-magnifying-glass" as IconProp}
+                />
+              </InputAdornment>
+            ),
+          }}
+          onChange={(e) => props.onSearchChange(e.target.value as string)}
+        />
+      </div>
       <div className="data-table">
         <AppLoaderComponent loading={false}>
           <DataGrid

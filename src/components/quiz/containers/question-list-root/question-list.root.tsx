@@ -27,7 +27,6 @@ interface QuestionListRootState {
   page: number;
   quizPage: number;
   pageSize?: number;
-  search?: string;
   idQuiz?: string;
   openDialog: boolean;
   idDelete: string;
@@ -46,10 +45,11 @@ const QuestionListRoot = () => {
   const queryClient = useQueryClient();
 
   const [pageSize, setPageSize] = useDebounceValue(8, 800);
+  const [search, setSearch] = useDebounceValue("", 800);
 
   const questionQuery = useQuery({
-    queryKey: ["quiz/question", state.page, pageSize, state.idQuiz],
-    queryFn: () => findAllQuestions(state.page, pageSize, state.idQuiz),
+    queryKey: ["quiz/question", state.page, pageSize, state.idQuiz, search],
+    queryFn: () => findAllQuestions(state.page, pageSize, state.idQuiz, search),
   });
   const quizQuery = useInfiniteQuery({
     queryKey: ["quiz/all"],
@@ -159,10 +159,7 @@ const QuestionListRoot = () => {
             setPageSize(pageSize);
           }}
           onSearchChange={function (search: string): void {
-            setState((state) => ({
-              ...state,
-              search,
-            }));
+            setSearch(search);
           }}
           onDeleteClick={onDeleteClick}
         />
