@@ -1,8 +1,14 @@
 import { IconLookup, IconName } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Edit } from "@mui/icons-material";
-import { IconButton, InputAdornment, Popover, TextField } from "@mui/material";
-import React, { Fragment, useMemo, useState } from "react";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  Popover,
+  TextField,
+} from "@mui/material";
+import React, { Fragment, useCallback, useMemo, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useDebounceValue } from "usehooks-ts";
 import { FormInputProps } from "../../../types/FormInputProps";
@@ -20,18 +26,24 @@ const FaIconPicker: React.FC<FaIconPickerProps> = (props) => {
   const [popUpAnchor, setPopUpAnchor] = useState<HTMLButtonElement | null>(
     null
   );
+  const [iconCount, setIconCount] = useState(50);
   // TODO: load all icon
 
   const iconsFiltered = useMemo(
     () =>
       props.icons
-        ?.slice(0, 20)
+        // ?.slice(0, 200)
         .filter((icon) => icon.iconName.includes(searchText.toLowerCase())),
     [searchText, props.icons]
   );
 
+  const loadMoreIcon = useCallback(
+    () => setIconCount(iconCount + 50),
+    [iconCount]
+  );
+
   return (
-    <div className={props.className ?? undefined}>
+    <div className={props.className ?? ""}>
       <Controller
         control={props.control}
         name={props.name}
@@ -41,7 +53,9 @@ const FaIconPicker: React.FC<FaIconPickerProps> = (props) => {
               fullWidth
               placeholder="Choisir une icône"
               variant="outlined"
+              defaultValue={undefined}
               {...field}
+              value={field.value ?? ""}
               InputProps={{
                 readOnly: true,
                 endAdornment: (
@@ -71,6 +85,7 @@ const FaIconPicker: React.FC<FaIconPickerProps> = (props) => {
                 vertical: "bottom",
                 horizontal: "center",
               }}
+              keepMounted
               transformOrigin={{
                 vertical: "top",
                 horizontal: "center",
@@ -83,11 +98,13 @@ const FaIconPicker: React.FC<FaIconPickerProps> = (props) => {
                     fullWidth
                     placeholder="Rechercher"
                     variant="standard"
+                    defaultValue={""}
+                    // value={searchText}
                     onChange={(event) => setSearchText(event.target.value)}
                   />
                 </div>
                 <div className="icons-container">
-                  {iconsFiltered?.map((icon) => (
+                  {iconsFiltered?.slice(0, iconCount).map((icon) => (
                     <IconButton
                       key={icon.iconName}
                       className={`icon-btn ${
@@ -98,6 +115,15 @@ const FaIconPicker: React.FC<FaIconPickerProps> = (props) => {
                       <FontAwesomeIcon icon={icon} />
                     </IconButton>
                   ))}
+                </div>
+                <div className="footer">
+                  <Button
+                    fullWidth
+                    onClick={loadMoreIcon}
+                    disabled={iconCount > iconsFiltered?.length}
+                  >
+                    Voir plus
+                  </Button>
                 </div>
               </div>
             </Popover>

@@ -1,11 +1,5 @@
 import { CloseOutlined, DeleteForever, Edit } from "@mui/icons-material";
-import {
-  Chip,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-} from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales/frFR";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,6 +9,7 @@ import { enqueueSnackbar } from "notistack";
 import React, { Fragment, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import ConfirmationDialogComponent from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
+import EntityChipStateComponent from "../../../../shared/components/entity-chip-state/entity-chip-state.component";
 import {
   ADMIN_ROLE,
   API_BASE_URL,
@@ -66,12 +61,9 @@ const PackageDetails: React.FC<PackageDetailsProps> = (props) => {
         field: "state",
         headerName: "État",
         width: 100,
-        renderCell: (value) =>
-          value.row.state == ENTITY_DELETED ? (
-            <Chip label={`Suppr.`} color="error" size="small" />
-          ) : (
-            <></>
-          ),
+        renderCell: (value) => (
+          <EntityChipStateComponent entityState={value.row.state} />
+        ),
       },
       {
         field: "medias",

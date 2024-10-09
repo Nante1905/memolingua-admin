@@ -15,11 +15,14 @@ import {
 import { GridSortModel } from "@mui/x-data-grid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import ConfirmationDialogComponent from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
+import SelectInputControlledComponent from "../../../../shared/components/inputs/select-input/select-input-controlled.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
+import { Langage } from "../../../../shared/types/Langage";
+import { getNonPaginatedLangs } from "../../../langs/services/lang.service";
 import PackageListComponent from "../../components/package-list/package-list.component";
 import { deletePackage, getAllPackages } from "../../services/package.service";
 import {
@@ -32,7 +35,7 @@ import "./package-list.root.scss";
 const PackageListRoot = () => {
   const [state, setState] = useState<PackageListState>(initialPackageListState);
   const [pageSize, setPageSize] = useDebounceValue(10, 800);
-  const [keyword, setKeyword] = useDebounceValue("", 800);
+  const [keyword, setKeyword] = useDebounceValue("", 500);
   const queryClient = useQueryClient();
 
   const packageQuery = useQuery({
@@ -46,9 +49,21 @@ const PackageListRoot = () => {
           notDeleted: state.isNotDeleted,
           sort: state.sort,
           order: state.order ?? "asc",
+          source: state.source,
+          target: state.target,
         }
       ),
   });
+
+  const langQuery = useQuery({
+    queryKey: ["all-langs"],
+    queryFn: getNonPaginatedLangs,
+  });
+
+  const langages = useMemo(
+    () => [{ id: "", label: "Tous" }, ...(langQuery.data?.data.payload ?? [])],
+    [langQuery.data]
+  );
 
   const onSortChange = useCallback((model: GridSortModel) => {
     if (model[0]) {
@@ -154,6 +169,32 @@ const PackageListRoot = () => {
               />
             </RadioGroup>
           </FormControl>
+          <SelectInputControlledComponent
+            items={langages}
+            defaultValue={""}
+            loading={langQuery.isFetching}
+            size="small"
+            valueGetter={(item: Langage) => item.id}
+            labelGetter={(item: Langage) => item.label}
+            label={"Source"}
+            onValueChange={(value: string) =>
+              setState((state) => ({ ...state, source: value }))
+            }
+            className="lang-select"
+          />
+          <SelectInputControlledComponent
+            items={langages}
+            defaultValue={""}
+            loading={langQuery.isFetching}
+            size="small"
+            valueGetter={(item: Langage) => item.id}
+            labelGetter={(item: Langage) => item.label}
+            label={"Cible"}
+            onValueChange={(value: string) =>
+              setState((state) => ({ ...state, target: value }))
+            }
+            className="lang-select"
+          />
         </div>
         <div className="right">
           Non supprimé

@@ -6,6 +6,8 @@ export interface PackageListState {
   isNotDeleted: boolean;
   sort: string;
   order: GridSortDirection;
+  source: string;
+  target: string;
 
   package?: {
     id: string;
@@ -19,4 +21,6 @@ export const initialPackageListState: PackageListState = {
   isNotDeleted: false,
   sort: "",
   order: "asc",
+  source: "",
+  target: "",
 };

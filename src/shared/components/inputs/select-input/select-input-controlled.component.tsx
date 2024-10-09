@@ -21,15 +21,14 @@ interface SelectInputControlledComponentProps {
   extraOptions?: React.ReactNode;
   defaultValue?: string | object;
   size?: "small" | "medium";
+  className?: string;
 }
 
 const SelectInputControlledComponent: FC<
   SelectInputControlledComponentProps
 > = (props) => {
-  console.log(props.items);
-
   return (
-    <div className="form-input">
+    <div className={`form-input ${props.className ?? ""}`}>
       <FormControl fullWidth>
         <InputLabel>{props.label}</InputLabel>
         <AppLoaderComponent loading={props.loading}>

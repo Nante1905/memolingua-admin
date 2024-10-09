@@ -320,11 +320,6 @@ const UpdateCardForm: React.FC<UpdateCardFormProps> = (props) => {
               Modifier{" "}
             </AppLoaderComponent>
           </Button>
-          <Button onClick={() => console.log(form.formState.errors)}>
-            <AppLoaderComponent loading={!!props.isSubmitting}>
-              Erreur{" "}
-            </AppLoaderComponent>
-          </Button>
         </div>
       </form>
     </div>
