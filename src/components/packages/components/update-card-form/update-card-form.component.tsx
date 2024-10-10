@@ -299,7 +299,7 @@ const UpdateCardForm: React.FC<UpdateCardFormProps> = (props) => {
                   <audio
                     src={`${API_BASE_URL}/${cardMedias["AUD"]}`}
                     controls
-                    className={removeImg && "removed-media"}
+                    className={removeAud && "removed-media"}
                   />
                   <Button
                     size="small"
