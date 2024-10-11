@@ -65,6 +65,8 @@ export const getAllPackages = (
     notDeleted?: boolean;
     sort?: string;
     order?: string;
+    source?: string;
+    target?: string;
   }
 ) => {
   let url = `/admin/packages?page=${page.page}&pageSize=${page.pageSize}`;
@@ -79,6 +81,12 @@ export const getAllPackages = (
     }
     if (filter.notDeleted) {
       url += `&state=exist`;
+    }
+    if (filter.source) {
+      url += `&source=${filter.source}`;
+    }
+    if (filter.target) {
+      url += `&target=${filter.target}`;
     }
     if (filter.sort) {
       url += `&sort=${filter.sort.trim()}&order=${filter.order

@@ -90,15 +90,17 @@ const PackageDetailsRoot: React.FC = () => {
                 <strong>Auteur: </strong>{" "}
                 {getFullName(detailsQuery.data?.data.payload.author as User)}
               </p>
-              {detailsQuery.data?.data.payload.state != ENTITY_DELETED && (
-                <div className="actions">
-                  <Link to={`/packages/${idPackage}/add-cards`}>
-                    <Button color="accent" variant="contained">
-                      Ajouter un carte
-                    </Button>
-                  </Link>
-                </div>
-              )}
+              {detailsQuery.data?.data.payload.state != ENTITY_DELETED &&
+                detailsQuery.data?.data.payload.author.role.code ==
+                  ADMIN_ROLE && (
+                  <div className="actions">
+                    <Link to={`/packages/${idPackage}/add-cards`}>
+                      <Button color="accent" variant="contained">
+                        Ajouter une carte
+                      </Button>
+                    </Link>
+                  </div>
+                )}
             </div>
           </div>
 

@@ -4,7 +4,7 @@ import { MultiLabelTheme, Theme } from "../../../shared/types/Theme";
 
 export const ThemeSchema = z.object({
   label: z.string().min(1, formErrors["fr"].required),
-  icon: z.string().nullable(),
+  icon: z.string().nullable().optional(),
   langs: z.array(
     z
       .object({

@@ -89,6 +89,11 @@ const DetailsDashboardRoot = () => {
             });
           }}
         />
+        {!lang && (
+          <p className="text-center">
+            <strong>Choisir une langue</strong>
+          </p>
+        )}
         {statQuery.isSuccess && (
           <DetailsDashboardComponent
             isFetching={statQuery.isFetching}

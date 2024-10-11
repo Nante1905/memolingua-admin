@@ -77,7 +77,7 @@ const LangListRoot = () => {
       </header>
       <div className="filter">
         <TextField
-          label="Mot clé, Titre, Thème, ..."
+          label="Label"
           size="small"
           className="input"
           InputProps={{

@@ -193,7 +193,7 @@ const CardImportRoot = () => {
               {" "}
               <AppLoaderComponent loading={confirmImportQuery.isFetching}>
                 <Save /> Enregistrer les{" "}
-                {importMutation.data.data.payload?.correct} lignes correctes
+                {importMutation.data.data.payload?.correct} ligne(s) correcte(s)
               </AppLoaderComponent>
             </Button>
             <Button

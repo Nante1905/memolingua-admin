@@ -299,7 +299,7 @@ const UpdateCardForm: React.FC<UpdateCardFormProps> = (props) => {
                   <audio
                     src={`${API_BASE_URL}/${cardMedias["AUD"]}`}
                     controls
-                    className={removeImg && "removed-media"}
+                    className={removeAud && "removed-media"}
                   />
                   <Button
                     size="small"
@@ -318,11 +318,6 @@ const UpdateCardForm: React.FC<UpdateCardFormProps> = (props) => {
           <Button variant="contained" type="submit">
             <AppLoaderComponent loading={!!props.isSubmitting}>
               Modifier{" "}
-            </AppLoaderComponent>
-          </Button>
-          <Button onClick={() => console.log(form.formState.errors)}>
-            <AppLoaderComponent loading={!!props.isSubmitting}>
-              Erreur{" "}
             </AppLoaderComponent>
           </Button>
         </div>
