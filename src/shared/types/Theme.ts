@@ -7,6 +7,7 @@ export interface Theme {
   icon: string;
   langExist?: number;
   totalLang?: number;
+  nbr: number;
 }
 
 export interface ThemeLib extends Theme {
