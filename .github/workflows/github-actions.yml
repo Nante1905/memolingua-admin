@@ -8,22 +8,20 @@ on:
     branches:
       - stage
 jobs:
-  installation:
+  delivery:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [20.x]
     steps:
-      - uses: actions/checkout@v4
+      - name: Installation
+        uses: actions/checkout@v4
       - run: npm i
       - run: npm run build
-  copy:
-    runs-on: ubuntu-latest
-    steps:
       - name: SSH Agent initiation
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.KEY }}
-      - name: copy build file
+      - name: Copy build file
         run: |
           scp -o StrictHostKeyChecking=no -r ./dist/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/mem-admin/html
