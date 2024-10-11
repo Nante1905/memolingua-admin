@@ -12,11 +12,15 @@ interface EntityChipStateComponentProps {
 
 const EntityChipStateComponent: FC<EntityChipStateComponentProps> = (props) => {
   if (props.entityState === ENTITY_CREATED) {
-    return <Chip color="info" label="Créé" />;
+    return <Chip color="info" label="Créé" size="small" variant="outlined" />;
   } else if (props.entityState === ENTITY_UPDATED)
-    return <Chip color="warning" label="Modifié" />;
+    return (
+      <Chip color="warning" label="Modifié" size="small" variant="outlined" />
+    );
   else if (props.entityState === ENTITY_DELETED)
-    return <Chip color="error" label="Supprimé" />;
+    return (
+      <Chip color="error" label="Supprimé" size="small" variant="outlined" />
+    );
 };
 
 export default EntityChipStateComponent;
