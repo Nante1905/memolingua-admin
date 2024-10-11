@@ -2,7 +2,7 @@ import { http } from "../../../shared/services/api/interceptor/axios.interceptor
 import { ApiResponse } from "../../../shared/types/ApiResponse";
 import { Paginated } from "../../../shared/types/Paginated";
 
-export const findAllQuizWithNoQuestion = () => http.get("/quizs/no-question");
+export const findAllQuizWithNoQuestion = () => http.get("/quiz/no-question");
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const addQuestionToQuiz = (data: any) =>
   http.post("/admin/quiz/add-question", data);
@@ -58,7 +58,7 @@ export const findAllAnswers = (
 export const findAllLangs = () => http.get("/langs");
 export const findPaginatedLangs = (page: number, limit: number) =>
   http.get(`/langs?page=${page}&limit=${limit}`);
-export const findAllThemes = () => http.get("/themes");
+export const findAllThemes = () => http.get("/admin/themes/exist");
 
 export const findAllLevels = () => http.get("/levels");
 

@@ -5,9 +5,15 @@ export interface Theme {
   label: string;
   state: number;
   icon: string;
-  nbr: number;
   langExist?: number;
   totalLang?: number;
+}
+
+export interface ThemeLib extends Theme {
+  totalPackage: number;
+  existPackage: number;
+  totalQuiz: number;
+  existQuiz: number;
 }
 
 export interface ThemeLabel extends Langage {

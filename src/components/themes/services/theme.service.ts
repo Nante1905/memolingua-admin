@@ -7,8 +7,8 @@ import { Media } from "../../../shared/types/Media";
 import { Paginated } from "../../../shared/types/Paginated";
 import {
   MultiLabelTheme,
-  Theme,
   ThemeLabel,
+  ThemeLib,
 } from "../../../shared/types/Theme";
 import { ThemeImportDTO } from "../types/ThemeImportDTO";
 
@@ -91,5 +91,5 @@ export const getAllThemes = (
       ?.trim()
       .toUpperCase()}`;
   }
-  return http.get<ApiResponse<Paginated<Theme>>>(req);
+  return http.get<ApiResponse<Paginated<ThemeLib>>>(req);
 };

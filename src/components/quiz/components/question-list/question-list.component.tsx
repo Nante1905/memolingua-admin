@@ -40,6 +40,7 @@ const QuestionListComponent: FC<QuestionListComponentProps> = (props) => {
       field: "isQcm",
       headerName: "Est un QCM",
       width: 100,
+      cellClassName: "qcm-cell",
       renderCell: (params) => {
         return params.row.isQcm ? (
           <Check color="primary" />

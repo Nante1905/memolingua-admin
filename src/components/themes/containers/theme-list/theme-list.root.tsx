@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { useDebounceValue } from "usehooks-ts";
 import ConfirmationDialogComponent from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
-import { Theme } from "../../../../shared/types/Theme";
+import { ThemeLib } from "../../../../shared/types/Theme";
 import ThemeListComponent from "../../components/theme-list/theme-list.component";
 import { deleteTheme, getAllThemes } from "../../services/theme.service";
 import { initialThemeListState, ThemeListState } from "../../state/theme.state";
@@ -20,7 +20,7 @@ const ThemeListRoot = () => {
   const [state, setState] = useState<ThemeListState>(initialThemeListState);
   const [pageSize, setPageSize] = useDebounceValue(10, 800);
   const [keyword, setKeyword] = useDebounceValue("", 800);
-  const [themeToDelete, setThemeToDelete] = useState<Theme | undefined>(
+  const [themeToDelete, setThemeToDelete] = useState<ThemeLib | undefined>(
     undefined
   );
   const queryClient = useQueryClient();
@@ -49,13 +49,21 @@ const ThemeListRoot = () => {
     mutationFn: (id: string) => deleteTheme(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["themes", state.page, pageSize],
+        queryKey: [
+          "themes",
+          state.page,
+          state.isNotDeleted,
+          state.order,
+          state.sort,
+          state.page,
+          pageSize,
+        ],
       });
 
       enqueueSnackbar({
-        message: `Thème ${themeToDelete?.label ?? ""} et ses ${
-          themeToDelete?.nbr ?? ""
-        } paquets supprimés`,
+        message: `Thème ${themeToDelete?.label ?? ""} supprimé ainsi que ses ${
+          themeToDelete?.existPackage
+        } paquets et ${themeToDelete?.existQuiz}`,
         variant: "success",
         autoHideDuration: 3000,
       });
@@ -65,6 +73,7 @@ const ThemeListRoot = () => {
 
   const onSortChange = useCallback((model: GridSortModel) => {
     if (model[0]) {
+      console.log(model[0]);
       setState((state) => ({
         ...state,
         sort: model[0].field,
@@ -133,7 +142,7 @@ const ThemeListRoot = () => {
       <ThemeListComponent
         themes={themeQuery.data?.data.payload.items ?? []}
         loading={themeQuery.isFetching}
-        onDelete={(theme: Theme) => setThemeToDelete(theme)}
+        onDelete={(theme: ThemeLib) => setThemeToDelete(theme)}
         onSortModelChange={onSortChange}
       />
       <AppPagination
@@ -160,9 +169,10 @@ const ThemeListRoot = () => {
         >
           <p>
             Voulez-vous vraiment supprimer le thème{" "}
-            <strong>"{themeToDelete.label}"</strong> et les{" "}
-            <strong> {themeToDelete.nbr ?? ""} paquet(s)</strong> rattaché à lui
-            ?{" "}
+            <strong>"{themeToDelete.label}"</strong> ainsi que les{" "}
+            <strong> {themeToDelete.existPackage ?? ""} paquet(s)</strong> et
+            les <strong> {themeToDelete.existQuiz ?? ""} quiz</strong> rattachés
+            à lui ?{" "}
           </p>
         </ConfirmationDialogComponent>
       )}
