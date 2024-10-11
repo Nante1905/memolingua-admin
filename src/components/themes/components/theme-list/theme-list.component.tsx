@@ -7,13 +7,13 @@ import { frFR } from "@mui/x-data-grid/locales";
 import React, { Fragment, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ENTITY_DELETED } from "../../../../shared/constants/api.constant";
-import { Theme } from "../../../../shared/types/Theme";
+import { ThemeLib } from "../../../../shared/types/Theme";
 import "./theme-list.component.scss";
 
 interface ThemeListProps {
-  themes: Theme[];
+  themes: ThemeLib[];
   loading: boolean;
-  onDelete: (theme: Theme) => void;
+  onDelete: (theme: ThemeLib) => void;
   onSortModelChange: (model: GridSortModel) => void;
 }
 
@@ -37,10 +37,20 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
         ),
       },
       {
-        field: "nbr",
-        headerName: "Contenu",
+        field: "existPackage",
+        headerName: "Paquets*",
+        headerAlign: "right",
         align: "right",
-        renderCell: (value) => `${value.row.nbr} paquets`,
+        renderCell: (value) =>
+          `${value.row.existPackage} / ${value.row.totalPackage}`,
+      },
+      {
+        field: "existQuiz",
+        headerName: "Quiz*",
+        headerAlign: "right",
+        align: "right",
+        renderCell: (value) =>
+          `${value.row.existQuiz} / ${value.row.totalQuiz}`,
       },
       {
         field: "intl",
@@ -99,7 +109,7 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
                   color="error"
                   onClick={(event) => {
                     event.stopPropagation();
-                    props.onDelete(value.row as Theme);
+                    props.onDelete(value.row as ThemeLib);
                   }}
                   size="small"
                 >
@@ -132,6 +142,14 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
         onSortModelChange={props.onSortModelChange}
         autoHeight
       />
+      <div>
+        <p className="caption">
+          *Paquets: Nombre de paquets existants / Nombre de paquets total
+        </p>
+        <p className="caption">
+          *Quiz: Nombre de quiz existants / Nombre de quiz total
+        </p>
+      </div>
     </div>
   );
 };

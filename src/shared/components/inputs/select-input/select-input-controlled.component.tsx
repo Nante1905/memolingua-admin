@@ -29,7 +29,7 @@ const SelectInputControlledComponent: FC<
 > = (props) => {
   return (
     <div className={`form-input ${props.className ?? ""}`}>
-      <FormControl fullWidth>
+      <FormControl size={props.size ?? "medium"} fullWidth>
         <InputLabel>{props.label}</InputLabel>
         <AppLoaderComponent loading={props.loading}>
           <Select
