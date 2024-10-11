@@ -189,9 +189,9 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
             control={form.control}
             render={({ field: { onChange, value }, fieldState }) => (
               <FormControl className="form-control">
-                <InputLabel>Level</InputLabel>
+                <InputLabel>Niveau</InputLabel>
                 <Select
-                  label="Level"
+                  label="Niveau"
                   style={{
                     width: "100%",
                   }}

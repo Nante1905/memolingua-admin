@@ -80,6 +80,13 @@ const QuestionImportRoot = () => {
           label="Importer le fichier csv"
         />
       </div>
+      {questionImportMutation.data?.data.payload.error &&
+        questionImportMutation.data?.data.payload.error > 0 && (
+          <p style={{ marginLeft: "20px", color: "red" }}>
+            Lignes en erreurs :{" "}
+            {questionImportMutation.data?.data.payload.error}
+          </p>
+        )}
       <div className="import-result">
         {questionImportMutation.isSuccess && (
           <Fragment>

@@ -76,6 +76,12 @@ const ImportQuizRoot = () => {
           loading={quizImportMutation.isPending}
         />
       </div>
+      {quizImportMutation.data?.data.payload.error &&
+        quizImportMutation.data?.data.payload.error > 0 && (
+          <p style={{ marginLeft: "20px", color: "red" }}>
+            Lignes en erreurs : {quizImportMutation.data?.data.payload.error}
+          </p>
+        )}
       <div className="import-result">
         {quizImportMutation.isSuccess && (
           <Fragment>
