@@ -1,0 +1,11 @@
+@import "../../../../shared/styles/variables.scss";
+
+.level-list {
+  @media (width >= $large-devices) {
+    width: 70%;
+    margin: auto;
+  }
+  .search-bar {
+    margin: 30px 0;
+  }
+}

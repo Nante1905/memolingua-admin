@@ -1,0 +1,123 @@
+@import "../../../../styles/variables.scss";
+.sidebar {
+  a {
+    text-decoration: none;
+  }
+  &-container {
+    position: fixed;
+    top: 100px;
+    left: 30px;
+    box-shadow: $container-box-shadow;
+    border-radius: 15px;
+    min-width: 350px;
+    max-height: calc(100vh - 40px);
+    transition: min-width 0.8s ease-in-out;
+    z-index: 100;
+    background-color: #fff;
+    button {
+      // margin: 0 !important;
+      max-width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      min-width: unset;
+      z-index: 2000;
+    }
+
+    &.close {
+      border-radius: 66px;
+      .sidebar-head {
+        a {
+          width: 0;
+          height: 0;
+          display: none;
+        }
+      }
+      .sidebar-items-container {
+        max-height: 400px;
+      }
+      button {
+        min-width: unset;
+      }
+      .logout-btn {
+        width: 0;
+        height: 0;
+        margin: 0 !important;
+        display: none;
+        small {
+          width: 0;
+          height: 0;
+        }
+      }
+    }
+
+    .sidebar-head {
+      display: flex;
+      flex-direction: column;
+      // row-gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-block: 20px;
+      // max-width: 350px;
+      max-height: 200px;
+      transition: max-width 0.3s ease-in-out, max-height 0.5s ease-in-out,
+        opacity 0.3s ease-in;
+      .img-container {
+        width: 100px;
+        height: 70px;
+        border-radius: 50%;
+      }
+      .name {
+        font-family: $title-font;
+      }
+    }
+
+    .sidebar-items-container {
+      display: flex;
+      border-radius: 15px;
+      flex-direction: column;
+      align-items: center;
+      row-gap: 15px;
+      max-height: 250px;
+      scrollbar-width: none;
+      overflow-y: scroll;
+      padding-inline: 15px;
+      padding-block: 10px;
+    }
+  }
+}
+@media (width <= $small-devices) {
+  .sidebar-container {
+    max-height: 100vh;
+    // min-width: 320px;
+    min-width: calc(100vw - 55px);
+
+    top: 20px;
+
+    .sidebar-items-container {
+      max-height: 350px;
+    }
+    &.close {
+      max-height: 0;
+      min-height: 0;
+      top: 50px;
+      box-shadow: none;
+      // transition: max-width 0.8s ease-in-out;
+
+      // .sidebar-content {
+      //   display: none;
+      // }
+      .sidebar-items-container {
+        visibility: hidden;
+      }
+      button {
+        margin: 0 !important;
+      }
+      .sidebar-content {
+        width: 0;
+      }
+    }
+  }
+  .content {
+    margin-inline: 10px;
+  }
+}

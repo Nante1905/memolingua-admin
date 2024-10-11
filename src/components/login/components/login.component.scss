@@ -1,0 +1,56 @@
+@import "../../../shared/styles/text.scss";
+@import "../../../shared/styles/variables.scss";
+@import "../../../shared/styles/form.scss";
+
+#login {
+  min-height: calc(
+    100vh - ($footer-height + $footer-border-size + 1px) - 4rem -
+      $footer-margin-top
+  );
+  .main-title {
+    @extend %big-title;
+    margin: 0rem;
+    color: rgba($color: $primary, $alpha: 0.75);
+    margin: auto;
+  }
+  .paragraph {
+    margin: 0;
+    text-align: right;
+  }
+
+  .form {
+    @extend %form-body;
+    padding-bottom: 5rem;
+    position: relative;
+
+    .blur {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      bottom: 4px;
+      background: gray;
+      opacity: 0.5;
+    }
+
+    .form-submit {
+      text-align: center;
+    }
+
+    .linear-progress {
+      position: absolute;
+      bottom: 0;
+    }
+  }
+  @media (width >= $medium-devices) {
+    .right-side {
+      margin: 4rem 0rem 2rem;
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      .form-container {
+        min-width: 50vw;
+      }
+    }
+  }
+}

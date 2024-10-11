@@ -1,0 +1,27 @@
+@import "../../../../shared/styles/form.scss";
+@import "../../../../shared/styles/variables.scss";
+
+.quiz-add-question {
+  .header {
+    h1 {
+      text-align: center;
+    }
+  }
+  .form {
+    @extend %form-body;
+    align-items: center;
+    padding: 3rem;
+    form {
+      display: block;
+      margin: auto;
+      width: 100%;
+      .form-input {
+        width: 100%;
+      }
+      .btn-sub {
+        width: 100%;
+        margin: 1rem 0;
+      }
+    }
+  }
+}

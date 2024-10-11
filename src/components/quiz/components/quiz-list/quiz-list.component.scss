@@ -1,0 +1,15 @@
+.quiz-list {
+  .search-bar {
+    margin: 30px 0;
+  }
+
+  .actions {
+    display: flex;
+    button {
+      max-height: 40px;
+    }
+    & > * {
+      margin: 0 10px;
+    }
+  }
+}

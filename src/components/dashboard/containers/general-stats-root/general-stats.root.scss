@@ -1,0 +1,138 @@
+@import "./../../../../shared/styles/variables.scss";
+
+.general-stats-root {
+  &_main {
+    .numbers {
+      display: flex;
+      width: 100%;
+      column-gap: 2rem;
+      margin: 2rem 0;
+      align-items: flex-end;
+      &_item {
+        min-width: 9rem;
+      }
+
+      @media (width <= $small-devices) {
+        justify-content: center;
+      }
+    }
+
+    .progress-bar {
+      height: 6px;
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+
+    .charts {
+      margin: 5% 5% 10% 5%;
+      .chart-div {
+        overflow-x: scroll;
+      }
+      .chart-body {
+        min-width: 400px;
+      }
+
+      .bottom {
+        margin: 90px 0;
+      }
+
+      .middle {
+        display: flex;
+        align-items: start;
+        column-gap: 5%;
+        row-gap: 50%;
+        margin: 50px 0;
+
+        @media (width <= $medium-devices) {
+          justify-content: center;
+          align-items: center;
+          flex-direction: column-reverse;
+          .right {
+            margin-bottom: 50px;
+            width: 100% !important;
+          }
+          .left {
+            width: 100% !important;
+          }
+        }
+
+        .left {
+          width: 45%;
+          min-width: 350px;
+          .user-lang {
+            min-width: 350px;
+            &_chart {
+              min-height: 500px;
+            }
+          }
+        }
+        .right {
+          width: 45%;
+          .linear-stat {
+            padding: 1rem;
+            box-sizing: border-box;
+            box-shadow: $container-box-shadow;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            margin: 20px 0;
+            .linear-stat-body {
+              display: flex;
+              flex-direction: column;
+              row-gap: 1rem;
+              overflow-y: scroll;
+              max-height: 250px;
+              padding-right: 5px;
+
+              &::-webkit-scrollbar {
+                width: 3px;
+                height: 5px;
+              }
+
+              &::-webkit-scrollbar-thumb {
+                background: rgba($secondary, 0.5);
+                border-radius: 6px;
+              }
+            }
+            .progress-div {
+              display: flex;
+              align-items: baseline;
+              justify-content: space-between;
+              .progress-bar {
+                width: 90%;
+              }
+            }
+          }
+        }
+      }
+
+      .bottom {
+        .hourly-session {
+          &_chart {
+            min-height: 500px;
+          }
+        }
+      }
+
+      .chart-body {
+        height: inherit;
+        min-height: inherit;
+        @media (width < $small-devices) {
+          width: 140vw;
+        }
+
+        @media ($small-devices <= width < $medium-devices) {
+          width: 150vw;
+        }
+      }
+    }
+  }
+}
+.pdf-dialog-content {
+  padding: 2rem;
+}
+.floating-action-btn {
+  color: white !important;
+  position: fixed !important;
+  right: 15px;
+  bottom: 40px;
+}

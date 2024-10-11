@@ -1,0 +1,46 @@
+@import "../../../../shared/styles/variables.scss";
+
+.update-card-form {
+  .media-inputs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .group-medias {
+    width: 90%;
+    margin: auto;
+    .media-previews {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 200px);
+      gap: 10px;
+      justify-content: space-between;
+      margin: 01rem 0;
+      .media-item {
+        margin: 1rem 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .media-info {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+      }
+      img,
+      video,
+      audio {
+        width: 200px;
+      }
+      p {
+        margin: 0;
+        word-break: break-word;
+        max-width: 160px; //200px - 40px ilay icone
+      }
+    }
+  }
+  .form-action {
+    margin: 1rem 0;
+  }
+}

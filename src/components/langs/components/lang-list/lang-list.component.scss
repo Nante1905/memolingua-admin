@@ -1,0 +1,12 @@
+@import "../../../../shared/styles/variables.scss";
+
+.lang-list {
+  .data-table {
+    width: fit-content;
+    max-width: 100%;
+    margin: auto;
+  }
+  .flag-code {
+    justify-content: space-between;
+  }
+}

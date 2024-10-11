@@ -1,0 +1,16 @@
+.theme-tab {
+  max-width: 80%;
+  margin: auto;
+  .actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  .theme-langs {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .content-cell {
+    height: fit-content;
+  }
+}

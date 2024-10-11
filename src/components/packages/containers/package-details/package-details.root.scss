@@ -1,0 +1,22 @@
+@import "../../../../shared/styles/variables.scss";
+
+#package-details-root {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 5%;
+    margin-bottom: 5%;
+    flex-wrap: wrap;
+    .div-img {
+      width: 300px;
+      aspect-ratio: 2/1;
+      border: 3px dashed $primary;
+      display: grid;
+      place-content: center;
+      img {
+        width: 300px;
+        height: 100%;
+      }
+    }
+  }
+}

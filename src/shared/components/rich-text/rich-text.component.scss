@@ -1,0 +1,10 @@
+.MuiTiptap-MenuBar-root {
+  background-color: transparent;
+}
+.richTextContainer {
+  &.error {
+    .MuiTiptap-RichTextField-root {
+      border: 2px solid red;
+    }
+  }
+}

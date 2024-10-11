@@ -1,0 +1,73 @@
+@import "../../../../shared/styles/variables.scss";
+@import "../../../../shared/styles/form.scss";
+@import "../../../../shared/styles/text.scss";
+
+#add-card-form {
+  padding-inline: 1rem;
+  .form {
+    @extend %form-body;
+
+    .form-input {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      .card-input {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .card-input-actions {
+        max-width: fit-content;
+      }
+
+      & {
+        border-bottom: 2px solid rgba(128, 128, 128, 0.426);
+        padding-bottom: 1rem;
+      }
+
+      .media-tools {
+        .action-btns {
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+        }
+      }
+      .div-media {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 50%);
+        .preview-media {
+          padding: 1rem;
+          img,
+          video,
+          audio {
+            width: 100%;
+          }
+        }
+      }
+    }
+    .form-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      row-gap: 2rem;
+    }
+
+    @media (width >= $large-devices) {
+      max-width: 60% !important;
+    }
+  }
+  .error-wrapper {
+    @extend %error-container;
+    margin: 1rem auto;
+    @media (width >= $large-devices) {
+      max-width: 60% !important;
+    }
+  }
+  .add-card-info {
+    margin: 1rem 0;
+    p {
+      margin: 0;
+    }
+  }
+}

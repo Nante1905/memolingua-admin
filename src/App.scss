@@ -1,0 +1,140 @@
+@import url("https://fonts.googleapis.com/css2?family=Gilda+Display&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@import "./shared/styles/variables.scss";
+@import "./shared/styles/container.scss";
+
+body {
+  font-family: "Roboto";
+  font-weight: 400;
+}
+
+.cell-number {
+  text-align: right !important;
+}
+
+// color
+body {
+  background-color: #fff;
+}
+
+/* 16px */
+html {
+  font-size: 100%;
+}
+
+small {
+  font-size: 0.75rem;
+  /* 12px */
+}
+
+button {
+  text-transform: none !important;
+}
+.text-center {
+  text-align: center !important;
+}
+.text-danger {
+  color: $danger !important;
+}
+.text-success {
+  color: $primary !important;
+}
+
+.content {
+  margin-top: 40px;
+  margin-left: 130px;
+  min-height: 70vh;
+}
+
+.inline-flex {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+// startIcon
+.css-1d6wzja-MuiButton-startIcon {
+  margin: 0 !important;
+}
+a {
+  color: #000;
+}
+
+// SCROLLBAR
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $secondary;
+  border-radius: 6px;
+}
+
+// card
+.recto,
+.verso {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin: 0;
+  }
+  &.no-html {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-size: medium !important;
+      font-weight: normal;
+    }
+  }
+  p {
+    margin: 0;
+  }
+}
+.list-header {
+  display: flex;
+  flex-direction: column;
+  margin: 30px 0;
+  h1 {
+    margin: 0;
+  }
+
+  @media (width >= $medium-devices) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+  }
+  .actions {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    row-gap: 1rem;
+    align-items: end;
+    width: 100%;
+    @media (width >= $medium-devices) {
+      width: auto !important;
+    }
+  }
+}
+.folder {
+  @extend %folder-div;
+}
+.no-margin {
+  margin: 0 !important;
+}
+.removed-media {
+  opacity: 0.25;
+}
+.caption {
+  color: gray;
+  font-size: 0.75rem;
+}

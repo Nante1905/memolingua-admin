@@ -1,0 +1,14 @@
+@import "../../../../shared/styles/form.scss";
+
+.level-form {
+  .form {
+    @extend %form-body;
+
+    form {
+      width: 100%;
+    }
+    .form-input {
+      margin: 20px 0;
+    }
+  }
+}

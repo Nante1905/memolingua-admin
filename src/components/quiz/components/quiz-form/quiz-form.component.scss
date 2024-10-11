@@ -1,0 +1,11 @@
+@import "../../../../shared/styles/form.scss";
+@import "../../../../shared/styles/variables.scss";
+
+.quiz-form {
+  .form {
+    @extend %form-body;
+    .form-input {
+      margin: 30px 0;
+    }
+  }
+}
