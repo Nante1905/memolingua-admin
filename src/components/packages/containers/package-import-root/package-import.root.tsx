@@ -183,7 +183,7 @@ const PackageImportRoot = () => {
               onClick={onConfirmUpload}
             >
               {" "}
-              <AppLoaderComponent loading={confirmImportQuery.isRefetching}>
+              <AppLoaderComponent loading={confirmImportQuery.isFetching}>
                 <Save /> Enregistrer les{" "}
                 {importMutation.data.data.payload?.correct} ligne(s) correcte(s)
               </AppLoaderComponent>
@@ -196,7 +196,7 @@ const PackageImportRoot = () => {
             >
               {" "}
               <AppLoaderComponent
-                loading={downloadQuery.isRefetching}
+                loading={downloadQuery.isFetching}
                 width="25px"
                 heigth="25px"
               >
