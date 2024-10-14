@@ -53,7 +53,7 @@ const UserListComponent: FC<UserListComponentProps> = (props) => {
       field: "gender",
       width: 170,
       renderCell: (params) =>
-        params.row.gender && (
+        params.row.gender != undefined && (
           <Chip
             label={APP_GENDER[params.row.gender]}
             sx={{
