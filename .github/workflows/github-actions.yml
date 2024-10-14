@@ -1,0 +1,26 @@
+name: Memolingua-Admin-Workflow
+run-name: ${{ github.actor }} is running GitHub Actions for Memolingua Admin
+on:
+  push:
+    branches:
+      - stage
+
+jobs:
+  delivery:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - name: Installation
+        uses: actions/checkout@v4
+      - run: npm i
+      - run: npm run build
+      - name: SSH Agent initiation
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.KEY }}
+      - name: Copy build file
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} "rm -r /var/www/mem-admin/html/*"
+          scp -o StrictHostKeyChecking=no -r ./dist/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/mem-admin/html
