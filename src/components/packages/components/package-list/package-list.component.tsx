@@ -77,6 +77,7 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
                 value.row.authorRole == ADMIN_ROLE ? "secondary" : "accent"
               }
               size="small"
+              variant="outlined"
             />
           </Tooltip>
         ),
