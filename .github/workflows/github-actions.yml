@@ -22,5 +22,5 @@ jobs:
           ssh-private-key: ${{ secrets.KEY }}
       - name: Copy build file
         run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} "rm -r /var/www/mem-admin/html/*"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} "rm -r /var/www/mem-admin/html/*"
           scp -o StrictHostKeyChecking=no -r ./dist/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/mem-admin/html
