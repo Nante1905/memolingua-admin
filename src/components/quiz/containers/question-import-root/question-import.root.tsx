@@ -63,6 +63,7 @@ const QuestionImportRoot = () => {
         enqueueSnackbar({
           variant: "success",
           message: res.data?.data.message,
+          autoHideDuration: 3000,
         });
       }
     });
