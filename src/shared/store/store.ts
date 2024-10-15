@@ -5,6 +5,7 @@ export const store = configureStore({
   reducer: {
     shared: SharedSlice.reducer,
   },
+  devTools: !import.meta.env.PROD,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

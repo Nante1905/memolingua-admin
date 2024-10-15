@@ -1,39 +1,139 @@
+/* eslint-disable react-refresh/only-export-components */
+import { lazy } from "react";
 import { Outlet, createBrowserRouter } from "react-router-dom";
 import App from "./App";
-import DetailsDashboardRoot from "./components/dashboard/containers/details-dashboard/details-dashboard.root";
-import GeneralStatsRoot from "./components/dashboard/containers/general-stats-root/general-stats.root";
-import HomeRoot from "./components/home/home.root";
-import LangCreateRoot from "./components/langs/container/lang-create-root/lang-create.root";
-import LangImportRoot from "./components/langs/container/lang-import-root/lang-import.root";
-import LangListRoot from "./components/langs/container/lang-list-root/lang-list.root";
-import LangUpdateRoot from "./components/langs/container/lang-update-root/lang-update.root";
-import LevelFormComponent from "./components/level/components/level-form/level-form.component";
-import LevelListRoot from "./components/level/container/list-root/list.root";
-import LevelUpdateFormRoot from "./components/level/container/update-form/update-form.root";
-import LoginRoot from "./components/login/container/login.root";
-import AddCardRoot from "./components/packages/containers/add-card/add-card.root";
-import CardImportRoot from "./components/packages/containers/card-import-root/card-import.root";
-import CreatePackageRoot from "./components/packages/containers/create-package/create-package.root";
-import PackageDetailsRoot from "./components/packages/containers/package-details/package-details.root";
-import PackageImportRoot from "./components/packages/containers/package-import-root/package-import.root";
-import PackageListRoot from "./components/packages/containers/package-list/package-list.root";
-import UpdatePackageRoot from "./components/packages/containers/update-package/update-package.root";
-import AnswerListRoot from "./components/quiz/containers/answer-list-root/answer-list.root";
-import AnswerUpdateRoot from "./components/quiz/containers/answer-update-root/answer-update.root";
-import ImportQuizRoot from "./components/quiz/containers/import-quiz-root/import-quiz.root";
-import QuestionImportRoot from "./components/quiz/containers/question-import-root/question-import.root";
-import QuestionListRoot from "./components/quiz/containers/question-list-root/question-list.root";
-import QuestionUpdateRoot from "./components/quiz/containers/question-update-root/question-update.root";
-import QuizAddQuestionRoot from "./components/quiz/containers/quiz-add-question-root/quiz-add-question.root";
-import QuizCreationRoot from "./components/quiz/containers/quiz-creation-root/quiz-creation.root";
-import QuizListRoot from "./components/quiz/containers/quiz-list-root/quiz-list.root";
-import QuizUpdateRoot from "./components/quiz/containers/quiz-update-root/quiz-update.root";
-import ThemeCreateRoot from "./components/themes/containers/theme-create/theme-create.root";
-import ThemeImportRoot from "./components/themes/containers/theme-import-root/theme-import.root";
-import ThemeListRoot from "./components/themes/containers/theme-list/theme-list.root";
-import ThemeUpdateRoot from "./components/themes/containers/theme-update/theme-update.root";
-import UserListRoot from "./components/users/container/user-list-root/user-list.root";
-import NotFoundPage from "./shared/components/error/404/not-found-page.root";
+
+const DetailsDashboardRoot = lazy(
+  () =>
+    import(
+      "./components/dashboard/containers/details-dashboard/details-dashboard.root"
+    )
+);
+const GeneralStatsRoot = lazy(
+  () =>
+    import(
+      "./components/dashboard/containers/general-stats-root/general-stats.root"
+    )
+);
+const HomeRoot = lazy(() => import("./components/home/home.root"));
+const LangCreateRoot = lazy(
+  () => import("./components/langs/container/lang-create-root/lang-create.root")
+);
+const LangImportRoot = lazy(
+  () => import("./components/langs/container/lang-import-root/lang-import.root")
+);
+const LangListRoot = lazy(
+  () => import("./components/langs/container/lang-list-root/lang-list.root")
+);
+const LangUpdateRoot = lazy(
+  () => import("./components/langs/container/lang-update-root/lang-update.root")
+);
+const LevelFormComponent = lazy(
+  () => import("./components/level/components/level-form/level-form.component")
+);
+const LevelListRoot = lazy(
+  () => import("./components/level/container/list-root/list.root")
+);
+const LevelUpdateFormRoot = lazy(
+  () => import("./components/level/container/update-form/update-form.root")
+);
+const LoginRoot = lazy(() => import("./components/login/container/login.root"));
+const AddCardRoot = lazy(
+  () => import("./components/packages/containers/add-card/add-card.root")
+);
+const CardImportRoot = lazy(
+  () =>
+    import("./components/packages/containers/card-import-root/card-import.root")
+);
+const CreatePackageRoot = lazy(
+  () =>
+    import(
+      "./components/packages/containers/create-package/create-package.root"
+    )
+);
+const PackageDetailsRoot = lazy(
+  () =>
+    import(
+      "./components/packages/containers/package-details/package-details.root"
+    )
+);
+const PackageImportRoot = lazy(
+  () =>
+    import(
+      "./components/packages/containers/package-import-root/package-import.root"
+    )
+);
+const PackageListRoot = lazy(
+  () =>
+    import("./components/packages/containers/package-list/package-list.root")
+);
+const UpdatePackageRoot = lazy(
+  () =>
+    import(
+      "./components/packages/containers/update-package/update-package.root"
+    )
+);
+const AnswerListRoot = lazy(
+  () => import("./components/quiz/containers/answer-list-root/answer-list.root")
+);
+const AnswerUpdateRoot = lazy(
+  () =>
+    import("./components/quiz/containers/answer-update-root/answer-update.root")
+);
+const ImportQuizRoot = lazy(
+  () => import("./components/quiz/containers/import-quiz-root/import-quiz.root")
+);
+const QuestionImportRoot = lazy(
+  () =>
+    import(
+      "./components/quiz/containers/question-import-root/question-import.root"
+    )
+);
+const QuestionListRoot = lazy(
+  () =>
+    import("./components/quiz/containers/question-list-root/question-list.root")
+);
+const QuestionUpdateRoot = lazy(
+  () =>
+    import(
+      "./components/quiz/containers/question-update-root/question-update.root"
+    )
+);
+const QuizAddQuestionRoot = lazy(
+  () =>
+    import(
+      "./components/quiz/containers/quiz-add-question-root/quiz-add-question.root"
+    )
+);
+const QuizCreationRoot = lazy(
+  () =>
+    import("./components/quiz/containers/quiz-creation-root/quiz-creation.root")
+);
+const QuizListRoot = lazy(
+  () => import("./components/quiz/containers/quiz-list-root/quiz-list.root")
+);
+const QuizUpdateRoot = lazy(
+  () => import("./components/quiz/containers/quiz-update-root/quiz-update.root")
+);
+const ThemeCreateRoot = lazy(
+  () => import("./components/themes/containers/theme-create/theme-create.root")
+);
+const ThemeImportRoot = lazy(
+  () =>
+    import("./components/themes/containers/theme-import-root/theme-import.root")
+);
+const ThemeListRoot = lazy(
+  () => import("./components/themes/containers/theme-list/theme-list.root")
+);
+const ThemeUpdateRoot = lazy(
+  () => import("./components/themes/containers/theme-update/theme-update.root")
+);
+const UserListRoot = lazy(
+  () => import("./components/users/container/user-list-root/user-list.root")
+);
+const NotFoundPage = lazy(
+  () => import("./shared/components/error/404/not-found-page.root")
+);
 
 export const routes = createBrowserRouter([
   {
