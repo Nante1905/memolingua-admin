@@ -9,6 +9,18 @@ import {
   LinearProgress,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import {
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Title,
+  Tooltip,
+} from "chart.js";
+import autocolors from "chartjs-plugin-autocolors";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import dayjs, { Dayjs } from "dayjs";
 import { FC, useMemo, useRef, useState } from "react";
 import { Bar } from "react-chartjs-2";
@@ -26,6 +38,18 @@ interface GeneralStatsRootState {
   endDate?: string;
   openPDFPopup: boolean;
 }
+
+ChartJS.register(
+  ArcElement,
+  BarElement,
+  Legend,
+  Title,
+  Tooltip,
+  CategoryScale,
+  LinearScale,
+  autocolors,
+  ChartDataLabels
+);
 
 const GeneralStatsRoot: FC = () => {
   const [state, setState] = useState<GeneralStatsRootState>({
