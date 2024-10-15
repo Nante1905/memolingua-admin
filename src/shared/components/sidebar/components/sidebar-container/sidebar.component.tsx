@@ -12,16 +12,13 @@ import SidebarItemComponent from "../sidebar-item/sidebar-item.component";
 import "./sidebar.component.scss";
 
 interface SidebarComponentProps {
-  userImg?: string;
   userName: string;
-  userLevel: string;
   sidebarItems: SidebarItem[];
 }
 
 const SidebarComponent = (props: SidebarComponentProps) => {
   const [collapse, setCollapse] = useState(true);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  // const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const sidebarCollapseStyle = collapse
@@ -36,8 +33,6 @@ const SidebarComponent = (props: SidebarComponentProps) => {
         style={{
           ...sidebarCollapseStyle,
         }}
-        // onMouseLeave={() => setCollapse(true)}
-        // onBlur={() => setCollapse(true)}
         ref={containerRef}
       >
         <div className="action">
@@ -61,18 +56,6 @@ const SidebarComponent = (props: SidebarComponentProps) => {
               maxHeight: collapse ? "20px" : "",
             }}
           >
-            {/* <Link to={"/profile"}> */}
-            {/* <div
-              className="img-container"
-              style={{
-                backgroundColor: props.userImg == undefined ? "black" : "unset",
-                backgroundImage: `url('${props?.userImg}')`,
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-              }}
-            ></div> */}
-            {/* </Link> */}
             <Link to={"/profile"}>
               <div className="name">{props.userName}</div>
             </Link>

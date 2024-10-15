@@ -1,13 +1,14 @@
+import { useSelector } from "react-redux";
+import { getLoggedInUser } from "../../../store/shared.selector";
 import SidebarComponent from "../components/sidebar-container/sidebar.component";
 import { sidebarItems } from "../constants/sidebar.constant";
 
 const SidebarRoot = () => {
+  const user = useSelector(getLoggedInUser);
   return (
     <>
       <SidebarComponent
-        userImg="/vite.svg"
-        userName="Minohary Nantenaina"
-        userLevel="Débutant"
+        userName={[user?.firstname, user?.lastname].join(" ")}
         sidebarItems={sidebarItems}
       />
     </>
