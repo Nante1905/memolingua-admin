@@ -131,7 +131,7 @@ const ImportQuizRoot = () => {
                 onClick={onConfirmUpload}
               >
                 {" "}
-                <AppLoaderComponent loading={false}>
+                <AppLoaderComponent loading={confirmQuery.isFetching}>
                   <Save /> Enregistrer les{" "}
                   {quizImportMutation.data?.data.payload?.correct} lignes
                   correctes
@@ -144,7 +144,11 @@ const ImportQuizRoot = () => {
                 onClick={onDownloadFile}
               >
                 {" "}
-                <AppLoaderComponent loading={false} width="25px" heigth="25px">
+                <AppLoaderComponent
+                  loading={downloadQuery.isFetching}
+                  width="25px"
+                  heigth="25px"
+                >
                   <Download /> Télécharger et modifier
                 </AppLoaderComponent>
               </Button>

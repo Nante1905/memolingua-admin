@@ -20,7 +20,6 @@ import parse from "html-react-parser";
 import { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import EntityChipStateComponent from "../../../../shared/components/entity-chip-state/entity-chip-state.component";
-import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import AppPagination from "../../../../shared/components/pagination/pagination.component";
 import { formatDate } from "../../../../shared/helpers/formatter";
 import { Paginated } from "../../../../shared/types/Paginated";
@@ -147,35 +146,35 @@ const QuizListComponent: FC<QuizListComponentProps> = (props) => {
         />
       </div>
       <div className="data-table">
-        <AppLoaderComponent loading={props.quizsLoading}>
-          <DataGrid
-            columns={columns}
-            rows={props.quizs?.items}
-            loading={props.quizsLoading}
-            hideFooterPagination={true}
-            sortingMode="server"
-            localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
-            sortModel={sortModel}
-            onSortModelChange={(model) => {
-              setSortModel(model);
-              props.onSortChange(model[0]);
-            }}
-            sx={{
-              "&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell": {
-                py: "8px",
-              },
-              "&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell": {
-                py: "15px",
-              },
-              "&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell": {
-                py: "22px",
-              },
-            }}
-            getRowHeight={() => "auto"}
-            filterDebounceMs={500}
-            autoHeight
-          />
-        </AppLoaderComponent>
+        {/* <AppLoaderComponent loading={props.quizsLoading}> */}
+        <DataGrid
+          columns={columns}
+          rows={props.quizs?.items}
+          loading={props.quizsLoading}
+          hideFooterPagination={true}
+          sortingMode="server"
+          localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
+          sortModel={sortModel}
+          onSortModelChange={(model) => {
+            setSortModel(model);
+            props.onSortChange(model[0]);
+          }}
+          sx={{
+            "&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell": {
+              py: "8px",
+            },
+            "&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell": {
+              py: "15px",
+            },
+            "&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell": {
+              py: "22px",
+            },
+          }}
+          getRowHeight={() => "auto"}
+          filterDebounceMs={500}
+          autoHeight
+        />
+        {/* </AppLoaderComponent> */}
         <AppPagination
           currentPage={props.page}
           pageSize={props.quizs?.itemPerPage}

@@ -1,10 +1,10 @@
 import { Edit } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { frFR } from "@mui/x-data-grid/locales";
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import EntityChipStateComponent from "../../../../shared/components/entity-chip-state/entity-chip-state.component";
-import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { Level } from "../../../../shared/types/Level";
 import "./level-list.component.scss";
 
@@ -59,15 +59,20 @@ const LevelListComponent: FC<LevelListComponentProps> = (props) => {
   return (
     <div className="level-list">
       <div className="data-table">
-        <AppLoaderComponent loading={props.levelsLoading}>
-          <DataGrid
-            columns={columns}
-            rows={props.levels}
-            loading={props.levelsLoading}
-            hideFooterPagination={true}
-            onRowClick={(r) => console.log(r)}
-          />
-        </AppLoaderComponent>
+        {/* <AppLoaderComponent loading={props.levelsLoading}> */}
+        <DataGrid
+          columns={columns}
+          rows={props.levels}
+          loading={props.levelsLoading}
+          hideFooterPagination={true}
+          onRowClick={(r) => console.log(r)}
+          localeText={{
+            noRowsLabel: "Aucune donnée",
+            ...frFR.components.MuiDataGrid.defaultProps.localeText,
+          }}
+          autoHeight
+        />
+        {/* </AppLoaderComponent> */}
       </div>
     </div>
   );

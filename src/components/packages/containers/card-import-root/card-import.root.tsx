@@ -15,7 +15,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import parse from "html-react-parser";
 import { enqueueSnackbar } from "notistack";
 import { Fragment, useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { downloadFile } from "../../../../shared/helpers/download.helper";
 import CardImportComponent from "../../components/card-import/card-import.component";
@@ -28,7 +27,6 @@ import {
 const CardImportRoot = () => {
   const [openInfo, setOpenInfo] = useState<boolean>(false);
   const [confirmed, setConfirmed] = useState<boolean>(false);
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const importMutation = useMutation({
@@ -77,11 +75,11 @@ const CardImportRoot = () => {
           message: `${res.data?.data.payload} carte(s) enregistrée(s)`,
           variant: "success",
           persist: true,
-          onClose: () => navigate("/packages"),
+          autoHideDuration: 3000,
         });
       }
     });
-  }, [confirmImportQuery, navigate, queryClient]);
+  }, [confirmImportQuery, queryClient]);
 
   return (
     <div className="import-root">

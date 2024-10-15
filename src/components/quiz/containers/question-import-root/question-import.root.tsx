@@ -63,6 +63,7 @@ const QuestionImportRoot = () => {
         enqueueSnackbar({
           variant: "success",
           message: res.data?.data.message,
+          autoHideDuration: 3000,
         });
       }
     });
@@ -148,7 +149,7 @@ const QuestionImportRoot = () => {
                 onClick={onConfirm}
               >
                 {" "}
-                <AppLoaderComponent loading={false}>
+                <AppLoaderComponent loading={confirmQuery.isFetching}>
                   <Save /> Enregistrer les{" "}
                   {questionImportMutation.data?.data.payload?.correct} lignes
                   correctes
@@ -161,7 +162,11 @@ const QuestionImportRoot = () => {
                 onClick={onDownloadFile}
               >
                 {" "}
-                <AppLoaderComponent loading={false} width="25px" heigth="25px">
+                <AppLoaderComponent
+                  loading={downloadQuery.isFetching}
+                  width="25px"
+                  heigth="25px"
+                >
                   <Download /> Télécharger et modifier
                 </AppLoaderComponent>
               </Button>
