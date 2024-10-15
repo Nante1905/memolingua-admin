@@ -14,7 +14,6 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import { Fragment, useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { downloadFile } from "../../../../shared/helpers/download.helper";
 import PackageImportComponent from "../../components/package-import/package-import.component";
@@ -27,7 +26,6 @@ import {
 const PackageImportRoot = () => {
   const [openInfo, setOpenInfo] = useState<boolean>(false);
   const [confirmed, setConfirmed] = useState<boolean>(false);
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const importMutation = useMutation({
@@ -76,11 +74,11 @@ const PackageImportRoot = () => {
           message: `${res.data?.data.payload} paquet(s) enregistré(s)`,
           variant: "success",
           persist: true,
-          onClose: () => navigate("/packages"),
+          autoHideDuration: 3000,
         });
       }
     });
-  }, [confirmImportQuery, navigate, queryClient]);
+  }, [confirmImportQuery, queryClient]);
 
   return (
     <div className="import-root">
