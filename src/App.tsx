@@ -1,15 +1,26 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Fragment, useEffect } from "react";
+import { Fragment, lazy, Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./App.scss";
-import FooterRoot from "./shared/components/footer/container/footer-root/footer.root";
-import AuthProtector from "./shared/components/guards/container/auth-protection.root";
-import NavbarRoot from "./shared/components/navbar/container/navbar-root/navbar.root";
-import ScrollTopRoute from "./shared/components/scroll-top/scroll-top.component";
-import SidebarRoot from "./shared/components/sidebar/container/sidebar.root";
+import PageLoadingRoot from "./shared/components/page-loading/page-loading.root";
 import { decodeJWT } from "./shared/services/auth/auth.service";
 import { getIsLoggedIn } from "./shared/store/shared.selector";
 import { setUser } from "./shared/store/shared.slice";
+const FooterRoot = lazy(
+  () => import("./shared/components/footer/container/footer-root/footer.root")
+);
+const AuthProtector = lazy(
+  () => import("./shared/components/guards/container/auth-protection.root")
+);
+const NavbarRoot = lazy(
+  () => import("./shared/components/navbar/container/navbar-root/navbar.root")
+);
+const ScrollTopRoute = lazy(
+  () => import("./shared/components/scroll-top/scroll-top.component")
+);
+const SidebarRoot = lazy(
+  () => import("./shared/components/sidebar/container/sidebar.root")
+);
 
 function App(props: { children: React.ReactNode }) {
   const isLoggedIn = useSelector(getIsLoggedIn);
@@ -44,16 +55,17 @@ function App(props: { children: React.ReactNode }) {
 
   return (
     <Fragment>
-      {/* TODO: uncoomment */}
-      <ScrollTopRoute />
-      <AuthProtector>
-        <SidebarRoot />
-        <NavbarRoot />
-        <QueryClientProvider client={queryClient}>
-          <div className="content">{props.children}</div>
-        </QueryClientProvider>
-        <FooterRoot />
-      </AuthProtector>
+      <Suspense fallback={<PageLoadingRoot />}>
+        <ScrollTopRoute />
+        <AuthProtector>
+          <SidebarRoot />
+          <NavbarRoot />
+          <QueryClientProvider client={queryClient}>
+            <div className="content">{props.children}</div>
+          </QueryClientProvider>
+          <FooterRoot />
+        </AuthProtector>
+      </Suspense>
     </Fragment>
   );
 }
