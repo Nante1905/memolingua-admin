@@ -82,7 +82,7 @@ const QuestionFormUpdate: FC<QuestionFormUpdateProps> = (props) => {
               name={"img"}
               label={"Modifier ou ajouter une image"}
             />
-            {!img && (
+            {img && (
               <Link to={`${API_BASE_URL}${img as string}`} target="_blank">
                 <Button>Voir l'ancienne</Button>
               </Link>
@@ -104,7 +104,7 @@ const QuestionFormUpdate: FC<QuestionFormUpdateProps> = (props) => {
               name={"video"}
               label={"Modifier ou ajouter une Video"}
             />
-            {!vid && (
+            {vid && (
               <Link
                 to={`${API_BASE_URL}${vid as string}`}
                 target="_blank"
