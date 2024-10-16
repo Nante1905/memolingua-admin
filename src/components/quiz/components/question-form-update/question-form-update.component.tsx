@@ -82,9 +82,11 @@ const QuestionFormUpdate: FC<QuestionFormUpdateProps> = (props) => {
               name={"img"}
               label={"Modifier ou ajouter une image"}
             />
-            <Link to={`${API_BASE_URL}${img as string}`} target="_blank">
-              <Button disabled={!img}>Voir l'ancienne</Button>
-            </Link>
+            {!img && (
+              <Link to={`${API_BASE_URL}${img as string}`} target="_blank">
+                <Button>Voir l'ancienne</Button>
+              </Link>
+            )}
             <FormControlLabel
               {...form.register("deleteImg")}
               control={<Checkbox />}
@@ -102,13 +104,15 @@ const QuestionFormUpdate: FC<QuestionFormUpdateProps> = (props) => {
               name={"video"}
               label={"Modifier ou ajouter une Video"}
             />
-            <Link
-              to={`${API_BASE_URL}${vid as string}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button disabled={!vid}>Voir l'ancienne</Button>
-            </Link>
+            {!vid && (
+              <Link
+                to={`${API_BASE_URL}${vid as string}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button>Voir l'ancienne</Button>
+              </Link>
+            )}
             <FormControlLabel
               {...form.register("deleteVid")}
               control={<Checkbox />}
