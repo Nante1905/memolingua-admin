@@ -16,7 +16,9 @@ import parse from "html-react-parser";
 import { enqueueSnackbar } from "notistack";
 import { Fragment, useCallback, useState } from "react";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
+import ScrollToBtn from "../../../../shared/components/scroll-to-btn/scroll-to-btn.component";
 import { downloadFile } from "../../../../shared/helpers/download.helper";
+import "../../../../shared/styles/import-data.scss";
 import CardImportComponent from "../../components/card-import/card-import.component";
 import {
   confirmCSVImportCard,
@@ -138,6 +140,8 @@ const CardImportRoot = () => {
 
       {!confirmed && importMutation.isSuccess && importMutation.data?.data && (
         <Fragment>
+          <ScrollToBtn direction="top" />
+          <ScrollToBtn direction="bottom" />
           {importMutation.data.data.payload.error > 0 && (
             <p className="text-danger">
               Erreur sur{" "}

@@ -15,14 +15,15 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import { Fragment, useCallback, useState } from "react";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
+import ScrollToBtn from "../../../../shared/components/scroll-to-btn/scroll-to-btn.component";
 import { downloadFile } from "../../../../shared/helpers/download.helper";
+import "../../../../shared/styles/import-data.scss";
 import LangImportComponent from "../../components/lang-import/lang-import.component";
 import {
   confirmCSVImportLang,
   downloadCSVLang,
   importLangCSV,
 } from "../../services/lang.service";
-import "./lang-import.root.scss";
 
 const LangImportRoot = () => {
   const [openInfo, setOpenInfo] = useState<boolean>(false);
@@ -114,6 +115,8 @@ const LangImportRoot = () => {
 
       {!confirmed && importMutation.isSuccess && importMutation.data?.data && (
         <Fragment>
+          <ScrollToBtn direction="top" />
+          <ScrollToBtn direction="bottom" />
           {importMutation.data.data.payload.error > 0 && (
             <p className="text-danger">
               Erreur sur{" "}

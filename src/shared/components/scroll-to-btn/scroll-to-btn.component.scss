@@ -1,0 +1,21 @@
+@import "../../styles/variables.scss";
+
+.to-top-btn {
+  position: fixed !important;
+  bottom: 80px;
+  right: 20px;
+  background-color: rgba($color: $accent, $alpha: 0.75) !important;
+  color: $background !important;
+  transition: all ease-in-out 300ms;
+  z-index: 20;
+}
+
+.to-bottom-btn {
+  position: fixed !important;
+  bottom: 30px;
+  right: 20px;
+  background-color: rgba($color: $accent, $alpha: 0.75) !important;
+  color: $background !important;
+  transition: all ease-in-out 300ms;
+  z-index: 20;
+}
