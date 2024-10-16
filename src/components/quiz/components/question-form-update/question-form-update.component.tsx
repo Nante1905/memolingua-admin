@@ -83,7 +83,7 @@ const QuestionFormUpdate: FC<QuestionFormUpdateProps> = (props) => {
               label={"Modifier ou ajouter une image"}
             />
             <Link to={`${API_BASE_URL}${img as string}`} target="_blank">
-              <Button>Voir l'ancienne</Button>
+              <Button disabled={!img}>Voir l'ancienne</Button>
             </Link>
             <FormControlLabel
               {...form.register("deleteImg")}
@@ -107,7 +107,7 @@ const QuestionFormUpdate: FC<QuestionFormUpdateProps> = (props) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button>Voir l'ancienne</Button>
+              <Button disabled={!vid}>Voir l'ancienne</Button>
             </Link>
             <FormControlLabel
               {...form.register("deleteVid")}
