@@ -12,7 +12,6 @@ import { theme } from "./shared/styles/theme";
 const AppSnackbarProvider = lazy(
   () => import("./shared/components/snackbar/snackbar-provider")
 );
-console.log(import.meta.env);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

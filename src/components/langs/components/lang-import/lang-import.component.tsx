@@ -39,7 +39,6 @@ const LangImportComponent: React.FC<LangImportProps> = (props) => {
         contentType: file.type as string,
         size: file.size as number,
       };
-      console.log(media);
 
       form.setValue("file", media);
     },

@@ -33,7 +33,6 @@ const AnswerUpdateRoot = () => {
   });
 
   const handleSubmit = (data: object) => {
-    console.log(data);
     answerUpdateMutation.mutate(data);
   };
 

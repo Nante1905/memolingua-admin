@@ -44,7 +44,6 @@ const LevelFormComponent: FC<LevelFormComponentProps> = (props) => {
   });
 
   const onSubmit = (data: object) => {
-    console.log(data);
     if (!props.update) {
       createLevelMutation.mutate(data);
     } else {

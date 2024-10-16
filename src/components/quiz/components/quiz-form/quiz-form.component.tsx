@@ -35,24 +35,8 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
     defaultValues: { ...props.defaultValues },
   });
 
-  // const quizCreateMutation = useMutation({
-  //   mutationKey: ["quiz-create"],
-  //   mutationFn: (data: unknown) => createQuiz(data),
-  //   onSuccess(res: AxiosResponse<ApiResponse>) {
-  //     enqueueSnackbar({ message: res.data.message, variant: "success" });
-  //   },
-  //   onError(err: AxiosError<ApiResponse>) {
-  //     enqueueSnackbar({ message: err.response?.data.error, variant: "error" });
-  //   },
-  // });
-
   const selectedSource = form.watch("idLanguageSource");
   const selectedTarget = form.watch("idLanguageTarget");
-
-  // const onSubmit = (data: unknown) => {
-  //   console.log(data);
-  //   quizCreateMutation.mutate(data);
-  // };
 
   return (
     <div className="quiz-form">

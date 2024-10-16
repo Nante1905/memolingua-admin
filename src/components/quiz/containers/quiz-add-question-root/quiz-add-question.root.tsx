@@ -47,7 +47,6 @@ const QuizAddQuestionRoot = () => {
   });
 
   const onSubmit = (data: any) => {
-    console.log(data);
     quizMutation.mutate(data);
   };
 

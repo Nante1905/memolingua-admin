@@ -44,7 +44,6 @@ const QuestionFormUpdate: FC<QuestionFormUpdateProps> = (props) => {
     <div className="question-form-update">
       <form
         onSubmit={form.handleSubmit((data) => {
-          console.log(data);
           props.onSubmit(data);
         })}
       >

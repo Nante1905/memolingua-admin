@@ -17,8 +17,6 @@ export const ThemeSchema = z.object({
 });
 
 export const themeFactory = (data: MultiLabelTheme) => {
-  console.log(data);
-
   const t: Theme = {
     id: data?.id,
     label: data?.label,
