@@ -16,6 +16,7 @@ import { enqueueSnackbar } from "notistack";
 import { Fragment, useCallback, useState } from "react";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { downloadFile } from "../../../../shared/helpers/download.helper";
+import "../../../../shared/styles/import-data.scss";
 import ThemeImportComponent from "../../components/theme-import/theme-import.component";
 import {
   confirmCSVImportTheme,

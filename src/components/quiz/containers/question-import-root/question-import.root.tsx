@@ -15,6 +15,7 @@ import { useCallback } from "react";
 import { Fragment } from "react/jsx-runtime";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { downloadFile } from "../../../../shared/helpers/download.helper";
+import "../../../../shared/styles/import-data.scss";
 import QuizImportFormComponent from "../../components/quiz-import-form/quiz-import-form.component";
 import {
   confirmQuestionImport,

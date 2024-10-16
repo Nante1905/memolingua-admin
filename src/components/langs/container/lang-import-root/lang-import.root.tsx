@@ -16,13 +16,13 @@ import { enqueueSnackbar } from "notistack";
 import { Fragment, useCallback, useState } from "react";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import { downloadFile } from "../../../../shared/helpers/download.helper";
+import "../../../../shared/styles/import-data.scss";
 import LangImportComponent from "../../components/lang-import/lang-import.component";
 import {
   confirmCSVImportLang,
   downloadCSVLang,
   importLangCSV,
 } from "../../services/lang.service";
-import "./lang-import.root.scss";
 
 const LangImportRoot = () => {
   const [openInfo, setOpenInfo] = useState<boolean>(false);
