@@ -12,7 +12,6 @@ import { importCSVSchema } from "../../../../shared/helpers/fileupload.helper";
 import { toBase64 } from "../../../../shared/services/upload/fileUpload.service";
 import { HiddenInput } from "../../../../shared/styles/theme";
 import { Media } from "../../../../shared/types/Media";
-import "./lang-import.component.scss";
 
 interface LangImportProps {
   submitForm: (data: any) => void;
