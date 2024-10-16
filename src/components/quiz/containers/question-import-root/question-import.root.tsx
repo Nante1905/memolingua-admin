@@ -14,6 +14,7 @@ import { enqueueSnackbar } from "notistack";
 import { useCallback } from "react";
 import { Fragment } from "react/jsx-runtime";
 import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
+import ScrollToBtn from "../../../../shared/components/scroll-to-btn/scroll-to-btn.component";
 import { downloadFile } from "../../../../shared/helpers/download.helper";
 import "../../../../shared/styles/import-data.scss";
 import QuizImportFormComponent from "../../components/quiz-import-form/quiz-import-form.component";
@@ -92,6 +93,8 @@ const QuestionImportRoot = () => {
       <div className="import-result">
         {questionImportMutation.isSuccess && (
           <Fragment>
+            <ScrollToBtn direction="top" />
+            <ScrollToBtn direction="bottom" />
             <TableContainer component={Paper} className="data-table">
               <Table>
                 <TableHead>
