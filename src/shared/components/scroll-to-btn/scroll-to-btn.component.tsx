@@ -25,8 +25,6 @@ const ScrollToBtn: React.FC<{ direction: "top" | "bottom" }> = (props) => {
     show && (
       <IconButton
         onClick={() => {
-          console.log("click");
-
           window.scrollTo({
             top:
               props.direction == "top"

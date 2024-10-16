@@ -28,8 +28,6 @@ export const uploadFile = async (file: File) => {
 export const importCSVSchema = z.object({
   file: mediaValidationSchema.required().refine(
     (data) => {
-      console.log(data);
-
       return (
         data.contentType == "text/csv" ||
         data.contentType == "application/vnd.ms-excel"

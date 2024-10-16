@@ -35,7 +35,6 @@ const SelectInputControlledComponent: FC<
           <Select
             label={props.label}
             onChange={(e) => props.onValueChange(e.target.value)}
-            onSelect={(e) => console.log(e)}
             defaultValue={props.defaultValue ?? ""}
             size={props.size ?? "medium"}
           >

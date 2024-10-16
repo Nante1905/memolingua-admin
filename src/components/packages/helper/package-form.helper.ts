@@ -25,7 +25,6 @@ export const cardMediaSchema = z.object({
     .refine(
       (img) => {
         if (img?.media) {
-          console.log(img.media.size);
           return img.media?.size < MAX_IMG_SIZE;
         }
         return true;
@@ -180,7 +179,6 @@ export const updatePackageSchema = z.object({
 });
 
 export const imgValidation = (file: File) => {
-  console.log(file, file.size > MAX_IMG_SIZE);
   if (!file) {
     return formErrors.fr.required;
   }

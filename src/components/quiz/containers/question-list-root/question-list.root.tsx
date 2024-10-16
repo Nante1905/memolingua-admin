@@ -137,8 +137,6 @@ const QuestionListRoot = () => {
               quizQuery.fetchNextPage();
             }}
             onValueChange={(value) => {
-              console.log(value);
-
               setState((state) => ({ ...state, idQuiz: value }));
             }}
           />

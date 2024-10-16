@@ -65,7 +65,6 @@ const LevelListComponent: FC<LevelListComponentProps> = (props) => {
           rows={props.levels}
           loading={props.levelsLoading}
           hideFooterPagination={true}
-          onRowClick={(r) => console.log(r)}
           localeText={{
             noRowsLabel: "Aucune donnée",
             ...frFR.components.MuiDataGrid.defaultProps.localeText,

@@ -101,8 +101,6 @@ export const addCardsToPackage = (
   idPackage: string,
   cards: Partial<CardWithMedia>[]
 ) => {
-  // console.log(cards);
-
   const data = cards.map((c) => {
     return {
       verso: c.verso,
@@ -114,7 +112,6 @@ export const addCardsToPackage = (
       },
     };
   });
-  console.log(data);
 
   return http.post(`/admin/packages/${idPackage}/add-cards`, { cards: data });
 };

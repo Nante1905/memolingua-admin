@@ -152,11 +152,6 @@ const DetailsDashboardComponent: React.FC<DetailsDashboardProps> = (props) => {
                           display: true,
                         },
                         datalabels: {
-                          listeners: {
-                            click: () => {
-                              console.log("click");
-                            },
-                          },
                           labels: {
                             title: null,
                           },
