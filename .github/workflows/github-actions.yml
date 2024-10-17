@@ -18,6 +18,10 @@ jobs:
       - name: Export environment variables
         run: printf "VITE_API_URL=${{ vars.API_URL }}\n" > .env
       - run: npm run build
+      - name: Compress dist folder
+        run: |
+          cd ./dist
+          tar -cvzf ../dist.tgz *
       - name: SSH Agent initiation
         uses: webfactory/ssh-agent@v0.9.0
         with:
@@ -25,4 +29,5 @@ jobs:
       - name: Copy build file
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} "rm -r /var/www/mem-admin/html/*"
-          scp -o StrictHostKeyChecking=no -r ./dist/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/mem-admin/html
+          scp -o StrictHostKeyChecking=no ./dist.tgz ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/mem-admin/html
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} "cd /var/www/mem-admin/html && tar xvzf ./dist.tgz && rm ./dist.tgz"
