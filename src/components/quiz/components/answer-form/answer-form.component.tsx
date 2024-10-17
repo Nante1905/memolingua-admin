@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import InputComponent from "../../../../shared/components/inputs/text-input/text-input.component";
@@ -9,6 +9,7 @@ import "./answer-form.component.scss";
 
 interface AnswerFormComponentProps {
   defaultValues: Partial<QuizAnswer>;
+  loading: boolean;
 
   onSubmit: (data: object) => void;
 }
@@ -37,7 +38,11 @@ const AnswerFormComponent: FC<AnswerFormComponentProps> = (props) => {
           </div>
           <div className="form-input">
             <Button variant="contained" type="submit">
-              Valider
+              {props.loading ? (
+                <CircularProgress size={"30px"} color="inherit" />
+              ) : (
+                "Valider"
+              )}
             </Button>
           </div>
         </div>

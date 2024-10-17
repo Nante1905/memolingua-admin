@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import { FC } from "react";
@@ -77,7 +77,13 @@ const LevelFormComponent: FC<LevelFormComponentProps> = (props) => {
             label="Point max"
           />
           <Button className="form-input" type="submit" variant="contained">
-            {props.update ? "Mettre à jour" : "Créer"}
+            {createLevelMutation.isPending || updateLevelMutation.isPending ? (
+              <CircularProgress size={"30px"} color="inherit" />
+            ) : props.update ? (
+              "Mettre à jour"
+            ) : (
+              "Créer"
+            )}
           </Button>
         </div>
       </form>
