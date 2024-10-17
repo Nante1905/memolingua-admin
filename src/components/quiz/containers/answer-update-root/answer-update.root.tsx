@@ -40,6 +40,7 @@ const AnswerUpdateRoot = () => {
     <div className="answer-update-root">
       <AppLoaderComponent loading={answerQuery.isFetching}>
         <AnswerFormComponent
+          loading={answerUpdateMutation.isPending}
           onSubmit={handleSubmit}
           defaultValues={answerQuery.data?.data.payload}
         />

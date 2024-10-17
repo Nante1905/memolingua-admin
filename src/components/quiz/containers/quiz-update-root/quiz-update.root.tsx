@@ -66,6 +66,7 @@ const QuizUpdateRoot = () => {
             langs={langsQuery.data?.data.payload}
             levels={levelsQuery.data?.data.payload}
             themes={themesQuery.data?.data.payload}
+            loading={quizUpdateMutation.isPending}
             onSubmit={(data: object): void => {
               quizUpdateMutation.mutate(data);
             }}

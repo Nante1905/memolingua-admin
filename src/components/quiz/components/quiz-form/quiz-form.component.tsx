@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import AppLoaderComponent from "../../../../shared/components/loader/app-loader.component";
 import RichText from "../../../../shared/components/rich-text/rich-text.component";
 import { Langage } from "../../../../shared/types/Langage";
 import { Level } from "../../../../shared/types/Level";
@@ -26,6 +27,7 @@ interface QuizFormComponentProps {
   title?: string;
   action?: string;
   onSubmit: (data: object) => void;
+  loading: boolean;
   update?: boolean;
 }
 
@@ -250,7 +252,9 @@ const QuizFormComponent: React.FC<QuizFormComponentProps> = (props) => {
         </div>
         <div className="form-input">
           <Button variant="contained" type="submit">
-            {props.action}
+            <AppLoaderComponent loading={props.loading}>
+              {props.action}
+            </AppLoaderComponent>
           </Button>
         </div>
       </form>

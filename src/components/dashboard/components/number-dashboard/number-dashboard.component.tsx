@@ -18,7 +18,7 @@ const NumberDashboardComponent: FC<NumberDashboardComponentProps> = (props) => {
         className="number-icon"
       />
       <em>
-        <h3>{props?.nbr}</h3>
+        <h3>{props?.nbr?.toLocaleString()}</h3>
       </em>
       <p>
         <small>{props?.label}</small>
