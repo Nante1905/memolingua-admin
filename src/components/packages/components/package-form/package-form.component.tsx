@@ -36,8 +36,6 @@ interface PackageFormProps {
 }
 
 const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
-  console.log(props.formSubmitting);
-
   const form = useForm({
     resolver: zodResolver(props.pack ? updatePackageSchema : PackageSchema),
   });
