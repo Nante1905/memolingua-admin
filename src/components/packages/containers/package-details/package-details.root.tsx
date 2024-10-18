@@ -133,26 +133,26 @@ const PackageDetailsRoot: React.FC = () => {
             </Button>
           </div>
         )}
-        {openConfirmation && (
-          <ConfirmationDialogComponent
-            title={`Supprimer le paquet ${detailsQuery.data?.data.payload.title}`}
-            onConfirm={() => deletePackageMutation.mutate(idPackage as string)}
-            onClose={() => setOpenConfirmation(false)}
-          >
-            Voulez-vous vraiment supprimer le paquet{" "}
-            <strong>{detailsQuery.data?.data.payload.title} ?</strong>
-          </ConfirmationDialogComponent>
-        )}
-        {!!isUpdateFormOpen && !!idPackage && (
-          <Dialog
-            open={true}
-            onClose={() => setUpdateFormOpening(false)}
-            fullWidth
-          >
-            <UpdatePackageRoot idPackage={idPackage} />
-          </Dialog>
-        )}
       </AppLoaderComponent>
+      {openConfirmation && (
+        <ConfirmationDialogComponent
+          title={`Supprimer le paquet ${detailsQuery.data?.data.payload.title}`}
+          onConfirm={() => deletePackageMutation.mutate(idPackage as string)}
+          onClose={() => setOpenConfirmation(false)}
+        >
+          Voulez-vous vraiment supprimer le paquet{" "}
+          <strong>{detailsQuery.data?.data.payload.title} ?</strong>
+        </ConfirmationDialogComponent>
+      )}
+      {!!isUpdateFormOpen && !!idPackage && (
+        <Dialog
+          open={true}
+          onClose={() => setUpdateFormOpening(false)}
+          fullWidth
+        >
+          <UpdatePackageRoot idPackage={idPackage} />
+        </Dialog>
+      )}
     </div>
   );
 };

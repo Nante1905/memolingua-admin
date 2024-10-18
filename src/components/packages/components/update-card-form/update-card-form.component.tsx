@@ -316,7 +316,12 @@ const UpdateCardForm: React.FC<UpdateCardFormProps> = (props) => {
 
         <div className="form-action text-center">
           <Button variant="contained" type="submit">
-            <AppLoaderComponent loading={!!props.isSubmitting}>
+            <AppLoaderComponent
+              loading={!!props.isSubmitting}
+              width="25px"
+              heigth="25px"
+              color="white"
+            >
               Modifier{" "}
             </AppLoaderComponent>
           </Button>
