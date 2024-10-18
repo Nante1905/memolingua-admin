@@ -67,12 +67,7 @@ const PackageListRoot = lazy(
   () =>
     import("./components/packages/containers/package-list/package-list.root")
 );
-const UpdatePackageRoot = lazy(
-  () =>
-    import(
-      "./components/packages/containers/update-package/update-package.root"
-    )
-);
+
 const AnswerListRoot = lazy(
   () => import("./components/quiz/containers/answer-list-root/answer-list.root")
 );
@@ -231,10 +226,6 @@ export const routes = createBrowserRouter([
       {
         path: "/packages/:id/content",
         element: <PackageDetailsRoot />,
-      },
-      {
-        path: "/packages/:id/update",
-        element: <UpdatePackageRoot />,
       },
       {
         path: "/themes",
