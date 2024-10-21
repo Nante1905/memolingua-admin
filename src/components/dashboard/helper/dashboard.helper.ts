@@ -373,17 +373,21 @@ export const generateDetailsDashboardPDF = (
     doc.text(title, padding, top);
     doc.line(padding, top + 2, doc.getTextWidth(title) + padding, top + 2);
     top += lineHeight;
-    canva = chartRefs.levels.current!.canvas as HTMLCanvasElement;
-    doc.addImage(
-      canva,
-      "png",
-      doc.internal.pageSize.width / 2 - width / 3,
-      top,
-      width / 1.5,
-      width / 1.5
-    );
-    top += height + canvaMargin;
-    count += 1;
+    if (chartRefs.levels.current) {
+      canva = chartRefs.levels.current!.canvas as HTMLCanvasElement;
+      doc.addImage(
+        canva,
+        "png",
+        doc.internal.pageSize.width / 2 - width / 3,
+        top,
+        width / 1.5,
+        width / 1.5
+      );
+      top += height + canvaMargin;
+      count += 1;
+    } else {
+      doc.text("Aucune donnée", padding, top);
+    }
   }
 
   doc.save(
