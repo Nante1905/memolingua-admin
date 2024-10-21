@@ -313,7 +313,6 @@ const DetailsDashboardComponent: React.FC<DetailsDashboardProps> = (props) => {
           <form
             onSubmit={form.handleSubmit((data) => {
               if (props.stats?.stats.lang) {
-                console.log("manomboka");
                 generateDetailsDashboardPDF(
                   data,
                   props.stats?.stats.lang,

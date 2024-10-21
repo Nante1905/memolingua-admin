@@ -10,7 +10,6 @@ import { getPackageById, updatePackage } from "../../services/package.service";
 
 const UpdatePackageRoot: React.FC<{ idPackage: string }> = (props) => {
   const idPackage = props.idPackage;
-  console.log(idPackage, !!idPackage);
 
   const packQuery = useQuery({
     queryKey: ["package-id", idPackage],
