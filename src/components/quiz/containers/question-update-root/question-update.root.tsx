@@ -29,7 +29,6 @@ const QuestionUpdateRoot = () => {
   });
 
   const handleSubmit = (data: any) => {
-    console.log(data);
     questionUpdateMutation.mutate(data);
   };
 

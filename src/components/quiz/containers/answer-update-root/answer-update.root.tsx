@@ -33,7 +33,6 @@ const AnswerUpdateRoot = () => {
   });
 
   const handleSubmit = (data: object) => {
-    console.log(data);
     answerUpdateMutation.mutate(data);
   };
 
@@ -41,6 +40,7 @@ const AnswerUpdateRoot = () => {
     <div className="answer-update-root">
       <AppLoaderComponent loading={answerQuery.isFetching}>
         <AnswerFormComponent
+          loading={answerUpdateMutation.isPending}
           onSubmit={handleSubmit}
           defaultValues={answerQuery.data?.data.payload}
         />

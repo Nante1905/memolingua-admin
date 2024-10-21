@@ -1,5 +1,5 @@
 import { Edit } from "@mui/icons-material";
-import { Badge, Button, Chip, IconButton } from "@mui/material";
+import { Badge, Button, Chip, Dialog, IconButton } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
@@ -19,13 +19,14 @@ import {
   getDetailsPackage,
 } from "../../services/package.service";
 import { PackageContent } from "../../types/PackageLib";
+import UpdatePackageRoot from "../update-package/update-package.root";
 import "./package-details.root.scss";
 
 const PackageDetailsRoot: React.FC = () => {
   const idPackage = useParams().id;
   const [openConfirmation, setOpenConfirmation] = useState<boolean>(false);
   const queryClient = useQueryClient();
-
+  const [isUpdateFormOpen, setUpdateFormOpening] = useState(false);
   const detailsQuery = useQuery({
     queryKey: ["package", idPackage],
     queryFn: () => getDetailsPackage(idPackage as string),
@@ -69,11 +70,12 @@ const PackageDetailsRoot: React.FC = () => {
                   {detailsQuery.data?.data.payload.author.role.code ==
                     ADMIN_ROLE &&
                     detailsQuery.data?.data.payload.state != ENTITY_DELETED && (
-                      <Link to={`/packages/${idPackage}/update`}>
-                        <IconButton color="primary">
-                          <Edit />
-                        </IconButton>
-                      </Link>
+                      <IconButton
+                        color="primary"
+                        onClick={() => setUpdateFormOpening(true)}
+                      >
+                        <Edit />
+                      </IconButton>
                     )}
                 </h1>
               </Badge>
@@ -131,17 +133,26 @@ const PackageDetailsRoot: React.FC = () => {
             </Button>
           </div>
         )}
-        {openConfirmation && (
-          <ConfirmationDialogComponent
-            title={`Supprimer le paquet ${detailsQuery.data?.data.payload.title}`}
-            onConfirm={() => deletePackageMutation.mutate(idPackage as string)}
-            onClose={() => setOpenConfirmation(false)}
-          >
-            Voulez-vous vraiment supprimer le paquet{" "}
-            <strong>{detailsQuery.data?.data.payload.title} ?</strong>
-          </ConfirmationDialogComponent>
-        )}
       </AppLoaderComponent>
+      {openConfirmation && (
+        <ConfirmationDialogComponent
+          title={`Supprimer le paquet ${detailsQuery.data?.data.payload.title}`}
+          onConfirm={() => deletePackageMutation.mutate(idPackage as string)}
+          onClose={() => setOpenConfirmation(false)}
+        >
+          Voulez-vous vraiment supprimer le paquet{" "}
+          <strong>{detailsQuery.data?.data.payload.title} ?</strong>
+        </ConfirmationDialogComponent>
+      )}
+      {!!isUpdateFormOpen && !!idPackage && (
+        <Dialog
+          open={true}
+          onClose={() => setUpdateFormOpening(false)}
+          fullWidth
+        >
+          <UpdatePackageRoot idPackage={idPackage} />
+        </Dialog>
+      )}
     </div>
   );
 };

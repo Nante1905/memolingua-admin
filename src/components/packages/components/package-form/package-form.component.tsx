@@ -32,6 +32,7 @@ interface PackageFormProps {
   onFormSubmit: (data: any) => void;
   reset?: [boolean, () => void];
   pack?: Package;
+  className?: string;
 }
 
 const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
@@ -79,7 +80,7 @@ const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
   );
 
   return (
-    <div className="package-form">
+    <div className={`package-form ${props.className ?? ""}`}>
       <form
         className={`form ${props.formSubmitting && "loading"}`}
         onSubmit={form.handleSubmit(onSubmit)}
@@ -93,7 +94,6 @@ const PackageFormComponent: React.FC<PackageFormProps> = (props) => {
             helperText={form.formState.errors["title"]?.message as string}
           />
         </div>
-
         <div className="form-input">
           {props.pack ? (
             <div className="langs inline-flex">

@@ -118,14 +118,7 @@ const ThemeFormComponent: React.FC<ThemeFormProps> = (props) => {
           </div>
         </div>
         <div className="form-input">
-          <Button
-            variant="contained"
-            type="submit"
-            onClick={() => {
-              console.log(form.formState.errors);
-              console.log(form.getValues());
-            }}
-          >
+          <Button variant="contained" type="submit">
             {props.theme ? "Modifier" : "Créer"}
           </Button>
         </div>

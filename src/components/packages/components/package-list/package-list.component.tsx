@@ -1,14 +1,15 @@
 import { AddCardOutlined, DeleteForever, Edit } from "@mui/icons-material";
-import { Chip, IconButton, Tooltip } from "@mui/material";
+import { Chip, Dialog, IconButton, Tooltip } from "@mui/material";
 import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales";
-import React, { Fragment, useMemo } from "react";
+import React, { Fragment, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import EntityChipStateComponent from "../../../../shared/components/entity-chip-state/entity-chip-state.component";
 import {
   ADMIN_ROLE,
   ENTITY_DELETED,
 } from "../../../../shared/constants/api.constant";
+import UpdatePackageRoot from "../../containers/update-package/update-package.root";
 import { PackageLib } from "../../types/PackageLib";
 import "./package-list.component.scss";
 
@@ -22,6 +23,10 @@ interface PackageListComponentProps {
 
 const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
   const navigate = useNavigate();
+  const [selectedIdPackage, setSelectedIdPackage] = useState<
+    string | undefined
+  >(undefined);
+
   const columns: GridColDef[] = useMemo(
     (): GridColDef[] => [
       { field: "id", headerName: "ID", width: 120, cellClassName: "id" },
@@ -102,15 +107,17 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
                     <AddCardOutlined />
                   </IconButton>
                 </Link>
-                <Link
-                  to={`/packages/${value.row.id}/update`}
-                  onClick={(event) => event.stopPropagation()}
+
+                <IconButton
+                  size="small"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setSelectedIdPackage(value.row?.id);
+                  }}
                 >
-                  <IconButton size="small">
-                    {" "}
-                    <Edit />{" "}
-                  </IconButton>
-                </Link>
+                  {" "}
+                  <Edit />{" "}
+                </IconButton>
               </Fragment>
             ) : (
               <></>
@@ -137,28 +144,39 @@ const PackageListComponent: React.FC<PackageListComponentProps> = (props) => {
   );
 
   return (
-    <div className="package-list">
-      <div className="package-tab">
-        <DataGrid
-          loading={props.loading}
-          columns={columns}
-          rows={props.packages}
-          hideFooterPagination={true}
-          localeText={{
-            noRowsLabel: "Aucune donnée",
-            ...frFR.components.MuiDataGrid.defaultProps.localeText,
-          }}
-          className="package-grid"
-          onRowClick={(params) =>
-            navigate(`/packages/${params.row.id}/content`)
-          }
-          disableColumnFilter
-          filterMode="server"
-          onSortModelChange={props.onSortModelChange}
-          autoHeight
-        />
+    <Fragment>
+      <div className="package-list">
+        <div className="package-tab">
+          <DataGrid
+            loading={props.loading}
+            columns={columns}
+            rows={props.packages}
+            hideFooterPagination={true}
+            localeText={{
+              noRowsLabel: "Aucune donnée",
+              ...frFR.components.MuiDataGrid.defaultProps.localeText,
+            }}
+            className="package-grid"
+            onRowClick={(params) =>
+              navigate(`/packages/${params.row.id}/content`)
+            }
+            disableColumnFilter
+            filterMode="server"
+            onSortModelChange={props.onSortModelChange}
+            autoHeight
+          />
+        </div>
       </div>
-    </div>
+      {!!selectedIdPackage && (
+        <Dialog
+          open={true}
+          onClose={() => setSelectedIdPackage(undefined)}
+          fullWidth
+        >
+          <UpdatePackageRoot idPackage={selectedIdPackage ?? ""} />
+        </Dialog>
+      )}
+    </Fragment>
   );
 };
 

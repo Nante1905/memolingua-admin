@@ -1,11 +1,12 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CheckCircle, DeleteForever, Edit, Error } from "@mui/icons-material";
-import { Chip, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
 import { frFR } from "@mui/x-data-grid/locales";
 import React, { Fragment, useMemo } from "react";
 import { Link } from "react-router-dom";
+import EntityChipStateComponent from "../../../../shared/components/entity-chip-state/entity-chip-state.component";
 import { ENTITY_DELETED } from "../../../../shared/constants/api.constant";
 import { ThemeLib } from "../../../../shared/types/Theme";
 import "./theme-list.component.scss";
@@ -78,12 +79,9 @@ const ThemeListComponent: React.FC<ThemeListProps> = (props) => {
         align: "center",
         width: 120,
         sortable: false,
-        renderCell: (value) =>
-          value.row.state == ENTITY_DELETED ? (
-            <Chip label="Suppr." color="error" />
-          ) : (
-            <></>
-          ),
+        renderCell: (value) => (
+          <EntityChipStateComponent entityState={value.row.state} />
+        ),
       },
       {
         field: "",

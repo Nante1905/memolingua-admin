@@ -9,8 +9,6 @@ export const useFontAwesomePack = () => {
   const [faPack, setFaPack] = useState<IconLookup[]>();
 
   useEffect(() => {
-    console.log("hooks");
-
     if (!faPack) {
       import("@fortawesome/free-solid-svg-icons").then((module) => {
         const fas = { ...module.fas };
@@ -28,7 +26,6 @@ export const useFontAwesomePack = () => {
             });
           }
         });
-        console.log("icon is ready");
 
         setFaPack(icons);
       });

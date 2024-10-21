@@ -15,6 +15,8 @@ jobs:
       - name: Installation
         uses: actions/checkout@v4
       - run: npm i
+      - name: Export environment variables
+        run: printf "VITE_API_URL=${{ vars.API_URL }}\n" > .env
       - run: npm run build
       - name: SSH Agent initiation
         uses: webfactory/ssh-agent@v0.9.0

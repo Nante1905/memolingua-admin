@@ -32,4 +32,12 @@
       }
     }
   }
+  &.update-form {
+    .form {
+      box-shadow: none;
+      @media (width >= $medium-devices) {
+        max-width: 100% !important;
+      }
+    }
+  }
 }

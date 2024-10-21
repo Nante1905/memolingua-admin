@@ -54,6 +54,7 @@ const QuizCreationRoot = () => {
             langs={langsQuery.data?.data.payload}
             levels={levelsQuery.data?.data.payload}
             themes={themesQuery.data?.data.payload}
+            loading={quizCreateMutation.isPending}
             onSubmit={(data) => {
               quizCreateMutation.mutate(data);
             }}

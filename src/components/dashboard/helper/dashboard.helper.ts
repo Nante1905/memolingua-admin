@@ -29,7 +29,6 @@ export const generateGeneralDashboardPDF = (
   // logo
   const logo = new Image();
   logo.src = "/img/logo-memolingua.png";
-  console.log(logo);
   doc.setFillColor("#15cccc");
 
   doc.addImage(logo, "PNG", padding, 20, 90, top);
@@ -219,7 +218,6 @@ export const generateDetailsDashboardPDF = (
   // logo
   const logo = new Image();
   logo.src = "/img/logo-memolingua.png";
-  console.log(logo);
   doc.setFillColor("#15cccc");
 
   doc.addImage(logo, "PNG", padding, 20, 90, top);

@@ -61,8 +61,6 @@ const AnswerListRoot = () => {
     [questionQuery.data]
   );
 
-  // console.log();
-
   return (
     <div className="answer-list-root">
       <header>
@@ -84,8 +82,6 @@ const AnswerListRoot = () => {
               questionQuery.fetchNextPage();
             }}
             onValueChange={(value) => {
-              console.log(value);
-
               setState((state) => ({
                 ...state,
                 idQuestion: value,
