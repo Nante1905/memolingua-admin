@@ -29,5 +29,5 @@ jobs:
       - name: Copy build file
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} "rm -r /var/www/mem-admin/html/*"
-          scp -o StrictHostKeyChecking=no ./dist.tgz ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/mem-admin/html
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} "cd /var/www/mem-admin/html && tar xvzf ./dist.tgz && rm ./dist.tgz"
+          scp ./dist.tgz ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/mem-admin/html
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} "cd /var/www/mem-admin/html && tar xvzf ./dist.tgz && rm ./dist.tgz"
