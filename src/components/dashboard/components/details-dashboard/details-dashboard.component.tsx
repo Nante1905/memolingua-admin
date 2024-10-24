@@ -160,7 +160,7 @@ const DetailsDashboardComponent: React.FC<DetailsDashboardProps> = (props) => {
                       },
                       scales: {
                         y: {
-                          max: 10,
+                          max: 20,
                           title: { text: "Nb", display: true },
                         },
                         x: {
